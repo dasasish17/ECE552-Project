@@ -8,6 +8,9 @@
 module fetch (/* TODO: Add appropriate inputs/outputs for your fetch stage here*/);
 
    // TODO: Your code here
+   input wire [15:0] PC_address;
+   
+
    
 endmodule
 `default_nettype wire
