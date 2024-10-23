@@ -31,14 +31,14 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg);
 
     wire [15:0] Aout, Bout;        // After inversion
     wire [15:0] add_out, shift_out, logic_out;
-    wire alu_ofl, zero_flag, setOut;
+    wire alu_ofl, zero_flag, setOut, carryout, sco_out;
     wire [OPERAND_WIDTH-1:0] bitReverse, slbiOut;
 
     // 1. Inversion Logic
     inv_logic invert(.InA(InA), .InB(InB), .invA(invA), .invB(invB), .Aout(Aout), .Bout(Bout));
 
     // 2. Arithmetic Unit (for ADD and subtraction)
-    cla_adder_subtractor arithmetic(.InA(Aout), .InB(Bout), .Cin(Cin), .sign(sign), .Out(add_out), .Ofl(alu_ofl), .c_out(Cout));
+    cla_adder_subtractor arithmetic(.InA(Aout), .InB(Bout), .Cin(Cin), .sign(sign), .Out(add_out), .Ofl(alu_ofl), .c_out(carryout));
 
     // 3. Barrel Shifter
     shifter shift(.In(Aout), .ShAmt(Bout[3:0]), .Oper(Oper[1:0]), .Out(shift_out));
@@ -59,6 +59,8 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg);
 
     assign slbiOut = Aout | Bout;
 
+    assign sco_out = carryout? 1'b1: 1'b0;
+
     // Comparison logic for SEQ, SLT, SLE based on Oper
         always @(*) begin
             case (Oper)
@@ -71,13 +73,14 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg);
 
     // Overflow is only relevant for ADD operations
     assign Ofl = (Oper == 3'b100) ? alu_ofl : 1'b0;
-
+    assign Cout = carryout;
      always @(*) begin
             case (Oper[3:0])
                 4'b0000, 4'b0001, 4'b0010, 4'b0011: Out = shift_out;  // Shift or rotate
                 4'b0100: Out = add_out;  // ADD
                 4'b1001, 4'b1010, 4'b1100: Out = {15'b0, setOut};  // SEQ, SLT, SLE
                 4'b1111: Out = bitReverse;  // Bit reversal (1111)
+                4'b1011: Out = {15'b0, sco_out};
                 4'b0011, 4'b0010, 4'b1110: Out = logic_out;  // AND, OR, XOR
                 default: Out = 16'b0;  // Default output
             endcase
