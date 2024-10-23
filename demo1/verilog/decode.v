@@ -8,7 +8,10 @@
 module decode (/* TODO: Add appropriate inputs/outputs for your decode stage here*/);
 
    // TODO: Your code here
-   //inputs: instruction 
+   //input
+
+   input wire clk;
+   input wire rst;
    input wire [15:0] instruction;
    input wire [15:0] Write_Data;
 
@@ -17,9 +20,6 @@ module decode (/* TODO: Add appropriate inputs/outputs for your decode stage her
    output wire [15:0] imm5_ext_rst;
    output wire [15:0] imm8_ext_rst;
    output wire [15:0] imm11_sign_ext;
-
-   input clk;
-   input rst;
 
    wire [15:0] imm5_sign_ext;
    wire [15:0] imm5_zero_ext;
@@ -33,6 +33,7 @@ module decode (/* TODO: Add appropriate inputs/outputs for your decode stage her
    wire [2:0] Write_Register;
    wire [1:0] RegDst;
    wire RegWrite; 
+   wire reg_err;
    
    
    assign imm5 = instruction[4:0];
@@ -60,7 +61,7 @@ module decode (/* TODO: Add appropriate inputs/outputs for your decode stage her
    // module regFile (read1Data, read2Data, err, clk, rst, read1RegSel, read2RegSel, writeRegSel, writeData, writeEn
    regFile regFile0 (.read1Data(read_Data1),
                   .read2Data(read_Data2),
-                  .err(1'b0),
+                  .err(reg_err),
                   .clk(clk),
                   .rst(rst),
                   .read1RegSel(instruction[10:8]),
@@ -68,6 +69,12 @@ module decode (/* TODO: Add appropriate inputs/outputs for your decode stage her
                   .writeRegSel(Write_Register),
                   .writeData(Write_Data),
                   .writeEn(RegWrite));
+
+
+   // TODO add the ALU control implementation!!!
+   // assign err = reg_err | control_err;
+   // need control_err 
+
       
    
 endmodule

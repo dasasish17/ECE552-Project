@@ -21,6 +21,7 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, MemWri
    output wire [15:0] final_new_PC;
    input wire clk;
    input wire rst;
+   input wire Halt;
 
    // change the output below 
    // output wire [15:0] PC_value;
@@ -51,7 +52,7 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, MemWri
 
    // read the main memory logic 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
-   memory2c mem (.data_out(Read_Data), .data_in(ReadData2), .addr(ALU_Result), .enable(MemRead), .wr(MemWrite), .createdump(1'b0), .clk(clk), .rst(rst));
+   memory2c mem (.data_out(Read_Data), .data_in(ReadData2), .addr(ALU_Result), .enable(MemRead), .wr(MemWrite), .createdump(Halt), .clk(clk), .rst(rst));
 
    
 endmodule
