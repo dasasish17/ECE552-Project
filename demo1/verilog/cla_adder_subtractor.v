@@ -4,7 +4,8 @@ module cla_adder_subtractor (
     input Cin, 
     input sign, 
     output [15:0] Out, 
-    output Ofl
+    output Ofl,
+    output c_out
 );
     // Perform addition/subtraction with signed or unsigned behavior
     wire [15:0] sum;
@@ -20,4 +21,5 @@ module cla_adder_subtractor (
     assign Ofl = sign ? signed_overflow : carry_out;
     
     assign Out = sum;
+    assign c_out = carry_out;
 endmodule
