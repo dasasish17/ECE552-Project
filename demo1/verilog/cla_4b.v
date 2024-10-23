@@ -4,7 +4,7 @@
     
     a 4-bit CLA module
 */
-module cla_4b(sum, c_out, a, b, c_in);
+module cla_4b(sum, c_out, a, b, c_in); // hi
 
     // declare constant for size of inputs, outputs (N)
     parameter   N = 4;
