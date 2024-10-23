@@ -2,3 +2,5 @@ module inv_logic (input [15:0] InA, input [15:0] InB, input invA, input invB, ou
     assign Aout = invA ? ~InA : InA;
     assign Bout = invB ? ~InB : InB;
 endmodule
+
+// This is a meaningful comment.
