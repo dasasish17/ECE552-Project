@@ -5,7 +5,7 @@
    Description     : This is the overall module for the execute stage of the processor.
 */
 `default_nettype none
-module execute (read1Data, read2Data, PC_incr, signExtendedIns10, signExtendedImm, zeroExtendedImm,
+module execute (read1Data, read2Data, PC_incr, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext,
                                  AluSrc1, AluSrc2,
                                  Oper,
                                  AluCin, InvA, InvB, Beq, Bne, Blt, Bgt, ALUJump, Zero, Neg,
@@ -54,9 +54,6 @@ module execute (read1Data, read2Data, PC_incr, signExtendedIns10, signExtendedIm
        .Zero(Zero),
        .Cout(Cout),
        .Neg(Neg));
-
-//    assign BrnchCnd = (Oper == 1101)? 1'b1: 1'b0;
-//    assign BrnchCnd = (Beq && Zero) | (Bne && ~Zero) | (Blt && Neg) | (Bgt && ~Neg);
 
     assign BrnchCnd = (Oper == 1101)? 1'b1:
                       (Oper == 0100)? ((Beq && Zero) | (Bne && ~Zero) | (Blt && Neg) | (Bgt && ~Neg)): 1'b0;
