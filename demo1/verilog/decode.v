@@ -5,77 +5,141 @@
    Description     : This is the module for the overall decode stage of the processor.
 */
 `default_nettype none
-module decode (/* TODO: Add appropriate inputs/outputs for your decode stage here*/);
-
-   // TODO: Your code here
-   //input
+module decode (
+    clk,           // Clock signal
+    rst,           // Reset signal
+    instruction,   // Instruction input
+    Write_Data,    // Data to write
+    ImmSrc,        // Immediate source control signal
+    MemRead,       // Memory read control signal
+    MemWrite,      // Memory write control signal
+    Branch,        // Branch control signal
+    ALU_jump,      // ALU jump control signal
+    InvA,          // Invert A control signal
+    InvB,          // Invert B control signal
+    Cin,           // Carry input control signal
+    Beq,           // Branch if equal control signal
+    Bne,           // Branch if not equal control signal
+    Blt,           // Branch if less than control signal
+    Bgt,           // Branch if greater than control signal
+    Halt,          // Halt control signal
+    MemToReg,      // Memory to register control signal
+    ALUSrc1,       // ALU source 1 control signal
+    ALUSrc2,       // ALU source 2 control signal
+    ALU_op,        // ALU operation control signal
+    err,           // Error signal
+    read_Data1,    // Read data output 1
+    read_Data2,    // Read data output 2
+    imm5_ext_rst,  // 5-bit immediate extended output
+    imm8_ext_rst,  // 8-bit immediate extended output
+    imm11_sign_ext  // 11-bit immediate signed extended output
+);
 
    input wire clk;
    input wire rst;
    input wire [15:0] instruction;
    input wire [15:0] Write_Data;
-
    output wire [15:0] read_Data1;
    output wire [15:0] read_Data2;
    output wire [15:0] imm5_ext_rst;
    output wire [15:0] imm8_ext_rst;
    output wire [15:0] imm11_sign_ext;
 
+   output reg ImmSrc;
+   output reg MemRead;
+   output reg MemWrite;
+   output reg Branch;
+   output reg ALU_jump;
+   output reg InvA;
+   output reg InvB;
+   output reg Cin;
+   output reg Beq;
+   output reg Bne;
+   output reg Blt;
+   output reg Bgt;
+   output reg Halt;
+   output reg [1:0] MemToReg;
+   output reg [1:0] ALUSrc1;
+   output reg [1:0] ALUSrc2;
+   output reg [3:0] ALU_op;
+   output wire err;
+
    wire [15:0] imm5_sign_ext;
    wire [15:0] imm5_zero_ext;
    wire [15:0] imm8_sign_ext;
    wire [15:0] imm8_zero_ext;
-
-   wire [4:0] imm5;
-   wire [7:0] imm8;
    wire [10:0] imm11;
-   wire zeroExt;
+   wire zeroExt; // signal out of control 
    wire [2:0] Write_Register;
-   wire [1:0] RegDst;
-   wire RegWrite; 
+   wire [1:0] RegDst; // signal out of control
+   wire RegWrite; // signal out of control
    wire reg_err;
-   
-   
+   wire ctrl_err;
+
+   control ctrl_inst (
+        .Opcode(instruction[15:11]),  // Fixed typo here
+        .Func(instruction[1:0]),       // Fixed typo here
+        .err(ctrl_err),
+        .zeroExt(zeroExt),
+        .ImmSrc(ImmSrc),
+        .RegWrite(RegWrite),
+        .MemRead(MemRead),
+        .MemWrite(MemWrite),
+        .Branch(Branch),
+        .ALU_jump(ALU_jump),
+        .InvA(InvA),
+        .InvB(InvB),
+        .Cin(Cin),
+        .Beq(Beq),
+        .Bne(Bne),
+        .Blt(Blt), // Fixed variable name
+        .Bgt(Bgt),
+        .Halt(Halt),
+        .RegDst(RegDst),
+        .MemToReg(MemToReg), // Fixed variable name
+        .ALUSrc1(ALUSrc1),
+        .ALUSrc2(ALUSrc2),
+        .ALU_op(ALU_op)
+    );
+
    assign imm5 = instruction[4:0];
    assign imm8 = instruction[7:0];
    assign imm11 = instruction[10:0];
 
-   //the immediate extend part 
+   // The immediate extend part 
    assign imm5_sign_ext = {{11{imm5[4]}}, imm5};
    assign imm5_zero_ext = {11'b0, imm5};
 
-   assign imm8_sign_ext = {{8{imm5[7]}}, imm8};
+   assign imm8_sign_ext = {{8{imm8[7]}}, imm8}; // Fixed variable from imm5 to imm8
    assign imm8_zero_ext = {8'b0, imm8};
 
-   assign imm11_sign_ext = {{5{imm5[10]}}, imm11};
+   assign imm11_sign_ext = {{5{imm11[10]}}, imm11}; // Fixed variable from imm5 to imm11
 
-   // zeroExt mux 
-   // assign value_to_shift = ImmSrc ? Imm11_Ext : Imm8_Ext;
+   // Zero extension mux 
    assign imm5_ext_rst = zeroExt ? imm5_zero_ext : imm5_sign_ext;
    assign imm8_ext_rst = zeroExt ? imm8_zero_ext : imm8_sign_ext;
 
-   assign Write_Register = (RegDst == 2'b00) : instruction[7:5] ?
-                              (RegDst == 2'b01) : instruction[10:8] ?
-                              (RegDst == 2'b10) : instruction[4:2] ? 3'b111;
-   
-   // module regFile (read1Data, read2Data, err, clk, rst, read1RegSel, read2RegSel, writeRegSel, writeData, writeEn
-   regFile regFile0 (.read1Data(read_Data1),
-                  .read2Data(read_Data2),
-                  .err(reg_err),
-                  .clk(clk),
-                  .rst(rst),
-                  .read1RegSel(instruction[10:8]),
-                  .read2RegSel(instruction[7:5]),
-                  .writeRegSel(Write_Register),
-                  .writeData(Write_Data),
-                  .writeEn(RegWrite));
+   // Corrected Write_Register assignment
+   assign Write_Register = (RegDst == 2'b00) ? instruction[7:5] :
+                           (RegDst == 2'b01) ? instruction[10:8] :
+                           (RegDst == 2'b10) ? instruction[4:2] : 
+                           3'b111; // Default case
 
+   // Register file instantiation
+   regFile regFile0 (
+       .read1Data(read_Data1),
+       .read2Data(read_Data2),
+       .err(reg_err),
+       .clk(clk),
+       .rst(rst),
+       .read1RegSel(instruction[10:8]),
+       .read2RegSel(instruction[7:5]),
+       .writeRegSel(Write_Register),
+       .writeData(Write_Data),
+       .writeEn(RegWrite)
+   );
 
-   // TODO add the ALU control implementation!!!
-   // assign err = reg_err | control_err;
-   // need control_err 
+   assign err = reg_err | ctrl_err; // Correctly assigning err
 
-      
-   
 endmodule
 `default_nettype wire

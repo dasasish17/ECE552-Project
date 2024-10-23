@@ -27,7 +27,6 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, MemWri
    // output wire [15:0] PC_value;
    output wire [15:0] Read_Data;
    // output wire [15:0] ALU;
-
    wire [15:0] value_to_shift;
    wire [15:0] shift_value;
    wire [15:0] sum;

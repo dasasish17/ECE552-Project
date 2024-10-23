@@ -5,14 +5,13 @@
    Description     : This is the module for the overall fetch stage of the processor.
 */
 `default_nettype none
-module fetch (/* TODO: Add appropriate inputs/outputs for your fetch stage here*/);
+module fetch (Halt, clk, rst, PC_address, instantiation, PC_add);
 
    // TODO: Your code here
    input wire Halt, clk, rst;
    input wire [15:0] PC_address;
    output wire [15:0] instruction;
    output wire [15:0] PC_add;
-
    wire [15:0] PC_value;
    wire c_out;
 
