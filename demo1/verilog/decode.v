@@ -66,15 +66,15 @@ module decode (
    output reg [1:0] ALUSrc2;
    output reg [3:0] ALU_op;
 
-   output wire imm5_ext_rst;
-   output wire imm8_ext_rst;
-   output wire imm11_sign_ext;
+   output wire [15:0]imm5_ext_rst;
+   output wire [15:0]imm8_ext_rst;
+   output wire [15:0]imm11_sign_ext;
 
    wire [15:0] imm5_sign_ext;
    wire [15:0] imm5_zero_ext;
    wire [15:0] imm8_sign_ext;
    wire [15:0] imm8_zero_ext;
-   wire [10:0] imm11_sign_ext;
+   // wire [10:0] imm11_sign_ext;
 
    // signals out of control
    wire zeroExt;
