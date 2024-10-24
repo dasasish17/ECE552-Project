@@ -62,7 +62,7 @@ module proc_hier_bench();
                   MemData);
          if (RegWrite) begin
          $display("%h", DUT.p0.wb0.Write_Data);
-         $display("%h", DUT.p0.decode0.Write_Data);
+         $display("decode: %h", DUT.p0.decode0.Write_Data);
             if (MemWrite) begin
                // stu
                $fdisplay(trace_file,"INUM: %8d PC: 0x%04x REG: %d VALUE: 0x%04x ADDR: 0x%04x VALUE: 0x%04x",
