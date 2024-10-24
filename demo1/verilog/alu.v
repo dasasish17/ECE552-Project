@@ -63,12 +63,12 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
     assign slbiOut = Aout | Bout;
 
     assign sco_out = carryout? 1'b1: 1'b0;
-
+    assign Ofl = (Oper == 3'b100) ? alu_ofl : 1'b0;
     // Comparison logic for SEQ, SLT, SLE based on Oper
         always @(*) begin
             case (Oper)
                 4'b1001: setOut = Zero;       // SEQ: Rs == Rt
-                4'b1010: setOut = Neg;        // SLT: Rs < Rt
+                4'b1010: setOut = Neg | alu_ofl;        // SLT: Rs < Rt
                 4'b1100: setOut = Zero | Neg; // SLE: Rs <= Rt
                 default: setOut = 1'b0;       // Default case
             endcase
@@ -77,7 +77,7 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
     assign err = 1'b0;
 
     // Overflow is only relevant for ADD operations
-    assign Ofl = (Oper == 3'b100) ? alu_ofl : 1'b0;
+    // assign Ofl = (Oper == 3'b100) ? alu_ofl : 1'b0;
     assign Cout = carryout;
      always @(*) begin
         //err = 1'b0;
@@ -87,7 +87,9 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
                 4'b1001, 4'b1010, 4'b1100: Out = {15'b0, setOut};  // SEQ, SLT, SLE
                 4'b1111: Out = bitReverse;  // Bit reversal (1111)
                 4'b1011: Out = {15'b0, sco_out};
-                4'b0101, 4'b1110, 4'b0111: Out = logic_out;  // AND, OR, XOR
+                4'b0101: Out = logic_out; 
+                4'b1110: Out = logic_out; 
+                4'b0111: Out = logic_out;  // AND, OR, XOR
                 default: begin
                 Out = 16'b0;
                 //err = 1'b1;

@@ -13,6 +13,7 @@ module decode (
     ImmSrc,        // Immediate source control signal
     MemEnable,       // Memory read control signal
     MemWrite,      // Memory write control signal
+    memRead,
     ALU_jump,      // ALU jump control signal
     InvA,          // Invert A control signal
     InvB,          // Invert B control signal
@@ -46,6 +47,7 @@ module decode (
 
    output wire MemEnable;
    output wire MemWrite;
+   output wire memRead;
 
    output wire ALU_jump;
 
@@ -83,11 +85,11 @@ module decode (
    wire RegWrite;
    wire reg_err;
    wire ctrl_err;
-   wire memRead;
+   //wire memRead;
 
-  wire [15:0] imm5;
-  wire [15:0] imm8;
-  wire [15:0] imm11;
+  wire [4:0] imm5;
+  wire [7:0] imm8;
+  wire [10:0] imm11;
 
 
    control ctrl_inst (

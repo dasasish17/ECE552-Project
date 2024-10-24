@@ -57,6 +57,7 @@ module proc (/*AUTOARG*/
            .ImmSrc(ImmSrc),
            .MemEnable(MemRead),
            .MemWrite(MemWrite),
+           .memRead(actualRead),
            .ALU_jump(ALU_jump),
            .InvA(InvA),
            .InvB(InvB),

@@ -68,16 +68,18 @@ module proc_hier_bench();
                   MemWrite,
                   MemAddress,
                   MemData);
-         if (RegWrite) begin
-         $display("halt1 %h", DUT.p0.fetch.pcCurrent);
-          $display("halt2 %h", DUT.p0.decode0.Halt);
-          $display("ALU result %h", DUT.p0.wb0.ALU_Result);
-          //AluRes
-          $display("ALU result ex %h", DUT.p0.execute0.AluRes);
-          $display("in A ex %h", DUT.p0.execute0.InA);
-          
-         $display("decode: %h", DUT.p0.decode0.Write_Data);
 
+         if (RegWrite) begin
+         // $display("Inb %h", DUT.p0.execute0.InB);
+         //  $display("InA %h", DUT.p0.execute0.InA);
+         //  $display("oper %h", DUT.p0.execute0.Oper);
+         //  //AluRes
+         //  $display("zero", DUT.p0.decode0.zeroExt);
+        
+          
+         // $display("decode: %h", DUT.p0.decode0.Write_Data);
+          
+               // $display("instrcution %h", DUT.p0.decode0.instruction);
          
             if (MemWrite) begin
                // stu
@@ -92,6 +94,8 @@ module proc_hier_bench();
                         MemData);
             end else if (MemRead) begin
                // ld
+               $display("read data: %h", DUT.p0.memory0.Read_Data);
+               $display("alu result: %h", DUT.p0.memory0.aluResult);
                $fdisplay(trace_file,"INUM: %8d PC: 0x%04x REG: %d VALUE: 0x%04x ADDR: 0x%04x",
                          (inst_count-1),
                         PC,
@@ -120,6 +124,10 @@ module proc_hier_bench();
             $finish;
          end else begin // if (RegWrite)
             if (MemWrite) begin
+                $display("instrcution %h", DUT.p0.decode0.instruction);
+                   $display("mem write: %h", DUT.p0.memory0.memWrite);
+              $display("write data: %h", DUT.p0.decode0.Write_Data);
+              $display("mem write: %h", DUT.p0.decode0.MemWrite);
                // st
                $fdisplay(trace_file,"INUM: %8d PC: 0x%04x ADDR: 0x%04x VALUE: 0x%04x",
                          (inst_count-1),

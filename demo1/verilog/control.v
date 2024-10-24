@@ -47,7 +47,7 @@ module control (Opcode, Func, err, Halt,
         // Default values for control signals
 
         RegDst = 2'b00;
-        MemtoReg = 2'b10;
+        MemtoReg = 2'b10; //ALU as default
         ALUSrc1 = 2'b00;
         ALUSrc2 = 2'b00;
         ALU_op = 4'b0000;
@@ -56,7 +56,7 @@ module control (Opcode, Func, err, Halt,
         ImmSrc = 1'b0;
         ALU_jump = 1'b0;
 
-        RegWrite = 1'b1;
+        RegWrite = 1'b1; //writing to register as default
         memReadorWrite = 1'b0;
         memWrite = 1'b0;
         memRead = 1'b0;
@@ -83,7 +83,8 @@ module control (Opcode, Func, err, Halt,
             
             // 2. nop (No operation, do nothing)
             7'b00001_xx: begin
-                // No control signals asserted
+                // not writing to register
+                RegWrite = 1'b0;
             end 
             
             // 3. addi
@@ -148,8 +149,9 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc2 = 2'b01;
                 ALU_op = 4'b0100;
                 RegWrite = 1'b0;
-                memReadorWrite = 1'b1;
+                memReadorWrite = 1'b1;//no longer using it
                 memWrite = 1'b1;
+                RegDst = 2'b00;
             end
             
             // 12. ld (load)
@@ -341,6 +343,8 @@ module control (Opcode, Func, err, Halt,
             // Default case
             default: begin
             err = 1'b1;
+            RegWrite = 1'b0;
+            
             end
         endcase
     end

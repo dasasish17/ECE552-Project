@@ -37,11 +37,11 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jum
    //write the ImmSrc Mux logic 
    //assign y = sel ? b : a; 
    assign value_to_shift = ImmSrc ? Imm11_Ext : Imm8_Ext;
-   assign shift_value = value_to_shift << 1;
+   // assign shift_value = value_to_shift << 1;
 
    // module cla_16b(sum, c_out, a, b, c_in);
    // instantiate the cla_16b for additon 
-   cla_16b add0(.sum(sum), .c_out(c_out), .a(PC_add), .b(shift_value), .c_in(1'b0));
+   cla_16b add0(.sum(sum), .c_out(c_out), .a(PC_add), .b(value_to_shift), .c_in(1'b0));
 
    //BrchCnd mux 
    assign address = BrchCnd ? sum : PC_add;
@@ -51,10 +51,12 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jum
    // assign ALU = ALU_Result;
 
    wire enable; 
-   assign enable = ~halt;
+   assign memRead = ~halt;
+  
    // read the main memory logic 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
-   memory2c mem (.data_out(Read_Data), .data_in(writeData), .addr(aluResult), .enable(enable), .wr(memWrite), .createdump(halt), .clk(clk), .rst(rst));
+   //enable = 1'b1 or ????
+   memory2c mem (.data_out(Read_Data), .data_in(writeData), .addr(aluResult), .enable(memReadorWrite), .wr(memWrite), .createdump(halt), .clk(clk), .rst(rst));
 
    
 endmodule

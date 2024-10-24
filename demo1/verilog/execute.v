@@ -29,14 +29,13 @@ module execute (read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext
    // Mux for InA
    assign InA = (AluSrc1 == 2'b00) ? read1Data :
                 (AluSrc1 == 2'b01) ? 16'b0 :
-                (read1Data << 3); // else (AluSrc1 == 2'b10) ?
+                (read1Data << 8); // else (AluSrc1 == 2'b10) ?
 
 
    // Mux for InB
      assign InB = (AluSrc2 == 2'b00) ? read2Data :
                      (AluSrc2 == 2'b01) ? imm5_ext_rst :
                      (AluSrc2 == 2'b10) ? imm8_ext_rst : 16'b0;
-
 
    // Instantiate the ALU module
    alu alu_inst (
