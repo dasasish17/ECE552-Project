@@ -85,7 +85,7 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
                 4'b1001, 4'b1010, 4'b1100: Out = {15'b0, setOut};  // SEQ, SLT, SLE
                 4'b1111: Out = bitReverse;  // Bit reversal (1111)
                 4'b1011: Out = {15'b0, sco_out};
-                4'b0011, 4'b0010, 4'b1110: Out = logic_out;  // AND, OR, XOR
+                4'b0101, 4'b1110, 4'b0111: Out = logic_out;  // AND, OR, XOR
                 default: begin
                 Out = 16'b0;
                 err = 1'b1;
