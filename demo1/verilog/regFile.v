@@ -7,7 +7,7 @@
    input.  All register state changes occur on the rising edge of the
    clock.
 */
-module regFile #(parameter WIDTH = 16)
+module regFile
                (
                 // Outputs
                 read1Data, read2Data, err,
