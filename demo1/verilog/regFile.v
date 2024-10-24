@@ -7,50 +7,59 @@
    input.  All register state changes occur on the rising edge of the
    clock.
 */
-module regFile (
+module regFile #(parameter WIDTH = 16)
+               (
                 // Outputs
                 read1Data, read2Data, err,
                 // Inputs
-                clk, rst, read1RegSel, read2RegSel, writeregsel, writedata, write
+                clk, rst, read1RegSel, read2RegSel, writeRegSel, writeData, writeEn
                 );
-
-   parameter WIDTH = 16;
 
    input        clk, rst;
    input [2:0]  read1RegSel;
    input [2:0]  read2RegSel;
-   input [2:0]  writeregsel;
-   input [WIDTH-1:0] writedata;
-   input        write;
+   input [2:0]  writeRegSel;
+   input [15:0] writeData;
+   input        writeEn;
 
-   output [WIDTH-1:0] read1Data;
-   output [WIDTH-1:0] read2Data;
+   output [15:0] read1Data;
+   output [15:0] read2Data;
    output        err;
 
    /* YOUR CODE HERE */
 
+   wire [7:0] errors;
+   wire [WIDTH-1:0]reg0, reg1, reg2, reg3, reg4, reg5, reg6, reg7;
+   register #(.WIDTH(WIDTH)) reg_0(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b000)), .data_out(reg0), .err(errors[0]));
+   register #(.WIDTH(WIDTH)) reg_1(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b001)), .data_out(reg1), .err(errors[1]));
+   register #(.WIDTH(WIDTH)) reg_2(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b010)), .data_out(reg2), .err(errors[2]));
+   register #(.WIDTH(WIDTH)) reg_3(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b011)), .data_out(reg3), .err(errors[3]));
+   register #(.WIDTH(WIDTH)) reg_4(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b100)), .data_out(reg4), .err(errors[4]));
+   register #(.WIDTH(WIDTH)) reg_5(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b101)), .data_out(reg5), .err(errors[5]));
+   register #(.WIDTH(WIDTH)) reg_6(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b110)), .data_out(reg6), .err(errors[6]));
+   register #(.WIDTH(WIDTH)) reg_7(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b111)), .data_out(reg7), .err(errors[7]));
 
-   wire [WIDTH-1:0] regs[7:0]; // Array of 8 registers with width bits each
+   assign read1Data =   (read1RegSel == 3'h0) ? reg0 :
+                        (read1RegSel == 3'h1) ? reg1 :
+                        (read1RegSel == 3'h2) ? reg2 :
+                        (read1RegSel == 3'h3) ? reg3 :
+                        (read1RegSel == 3'h4) ? reg4 :
+                        (read1RegSel == 3'h5) ? reg5 :
+                        (read1RegSel == 3'h6) ? reg6 :
+                        (read1RegSel == 3'h7) ? reg7 :
+                        16'h0000;
 
-   //error logic
-   assign err = (^read1RegSel === 1'bx) ? 1'b1 :
-             (^read2RegSel === 1'bx) ? 1'b1 :
-             (^writeregsel === 1'bx) ? 1'b1 :
-             (^writedata === 1'bx) ? 1'b1 :
-             (^write === 1'bx) ? 1'b1 : 1'b0;
+   assign read2Data =   (read2RegSel == 3'h0) ? reg0 :
+                        (read2RegSel == 3'h1) ? reg1 :
+                        (read2RegSel == 3'h2) ? reg2 :
+                        (read2RegSel == 3'h3) ? reg3 :
+                        (read2RegSel == 3'h4) ? reg4 :
+                        (read2RegSel == 3'h5) ? reg5 :
+                        (read2RegSel == 3'h6) ? reg6 :
+                        (read2RegSel == 3'h7) ? reg7 :
+                        16'h0000;
 
-   // instantiating the 8 registers with decoder write logic
-   register #(.WIDTH(WIDTH)) reg_0 (.out(regs[0]), .in(writedata), .wr_en(write & (writeregsel == 0)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_1 (.out(regs[1]), .in(writedata), .wr_en(write & (writeregsel == 1)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_2 (.out(regs[2]), .in(writedata), .wr_en(write & (writeregsel == 2)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_3 (.out(regs[3]), .in(writedata), .wr_en(write & (writeregsel == 3)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_4 (.out(regs[4]), .in(writedata), .wr_en(write & (writeregsel == 4)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_5 (.out(regs[5]), .in(writedata), .wr_en(write & (writeregsel == 5)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_6 (.out(regs[6]), .in(writedata), .wr_en(write & (writeregsel == 6)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_7 (.out(regs[7]), .in(writedata), .wr_en(write & (writeregsel == 7)), .clk(clk), .rst(rst));
-
-
-   assign read1Data = regs[read1RegSel];
-   assign read2Data = regs[read2RegSel];
+assign err = |errors | ^read1RegSel == 1'bx | ^read2RegSel == 1'bx | ^writeRegSel == 1'bx | writeRegSel == 1'bx |
+                      ^read1RegSel == 1'bz | ^read2RegSel == 1'bz | ^writeRegSel == 1'bz | writeRegSel == 1'bz;
 
 endmodule
