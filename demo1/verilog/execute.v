@@ -16,7 +16,7 @@ module execute (read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext
    input wire [1:0]AluSrc1, AluSrc2;
    input wire [3:0] Oper;
    input wire AluCin, InvA, InvB, Beq, Bne, Blt, Bgt;
-   output wire BrnchCnd,
+   output wire BrnchCnd;
    output wire [15:0] AluRes;
    output wire err;
 
