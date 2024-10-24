@@ -32,7 +32,8 @@ module regFile (
 
    // Error
    //assign err = (clk === 1'bx | rst === 1'bx | write === 1'bx | writedata === 16'hxxxx | writeregsel === 3'bx | read1RegSel === 3'bx | read2RegSel === 3'bx) ? 1'b1 : 1'b0;
-   assign err = (writedata === 16'hxxxx) ? 1'b1 : 1'b0;
+   // assign err = (writedata === 16'hxxxx) ? 1'b1 : 1'b0;
+   assign err = 1'b0;
 
    // Instantiaitng 8 registers
    register i_reg_1(.out(reg_out_0), .in(writedata), .wr_en(write & (writeregsel === 3'b000)), .clk(clk), .rst(rst));
@@ -54,7 +55,7 @@ module regFile (
                         (read1RegSel == 3'b101) ? reg_out_5 :
                         (read1RegSel == 3'b110) ? reg_out_6 :
                         (read1RegSel == 3'b111) ? reg_out_7 :
-                        16'hxxxx;
+                        16'h0000;
 
    assign read2Data = (read2RegSel == 3'b000) ? reg_out_0 :
                      (read2RegSel == 3'b001) ? reg_out_1 :
@@ -64,7 +65,7 @@ module regFile (
                      (read2RegSel == 3'b101) ? reg_out_5 :
                      (read2RegSel == 3'b110) ? reg_out_6 :
                      (read2RegSel == 3'b111) ? reg_out_7 :
-                     16'hxxxx;
+                     16'h0000;
 
 
 endmodule

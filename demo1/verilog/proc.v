@@ -27,7 +27,7 @@ module proc (/*AUTOARG*/
        wire [15:0] write_data;
        wire [15:0] read_data1, read_data2;
        wire [15:0] imm5_ext_rst, imm8_ext_rst, imm11_sign_ext;
-       wire ImmSrc, MemRead, MemWrite, ALU_jump, InvA, InvB, Cin, Beq, Bne, Blt, Bgt, Halt;
+       wire ImmSrc, MemRead, MemWrite, ALU_jump, InvA, InvB, Cin, Beq, Bne, Blt, Bgt;
        wire [1:0]MemToReg;
        wire [1:0] ALUSrc1, ALUSrc2;
        wire [3:0] ALU_op;
@@ -43,9 +43,9 @@ module proc (/*AUTOARG*/
            .clk(clk),
            .rst(rst),
            .halt(halt),
-           .pcCurrent(PC_current),
+           .PC_intermediary(PC_updated),
            .instr(instruction),
-           .PC_updated(PC_updated)
+           .PC_updated(PC_current)
        );
 
        // Instantiate decode stage
@@ -104,7 +104,7 @@ module proc (/*AUTOARG*/
        memory memory0 (
            .clk(clk),
            .rst(rst),
-           .PC_add(PC_updated),
+           .PC_add(PC_current),
            .ImmSrc(ImmSrc),
            .Imm8_Ext(imm8_ext_rst),
            .Imm11_Ext(imm11_sign_ext),
@@ -115,14 +115,14 @@ module proc (/*AUTOARG*/
            .memReadorWrite(MemRead),
            .writeData(read_data2),
            .BrchCnd(BrnchCnd),
-           .final_new_PC(finalPC),
+           .final_new_PC(PC_updated),
            .Read_Data(mem_data_out),
            .halt(halt)
        );
 
        // Instantiate write back stage
        wb wb0 (
-           .PC_address(PC_updated),
+           .PC_address(PC_current),
            .Read_Data(mem_data_out),
            .ALU_Result(ALU_result),
            .MemToReg(MemToReg),

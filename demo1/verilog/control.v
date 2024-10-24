@@ -78,6 +78,7 @@ module control (Opcode, Func, err, Halt,
             // 1. halt
             7'b00000_xx: begin
                 Halt = 1'b1;
+                RegWrite = 1'b0;
             end
             
             // 2. nop (No operation, do nothing)

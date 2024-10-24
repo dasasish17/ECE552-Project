@@ -32,7 +32,7 @@ module proc_hier_bench();
 
    proc_hier DUT();
    
-
+   reg [31:0] cycle_count;
    initial begin
       $display("Hello world...simulation starting");
       $display("%h", DUT.p0.wb0.Write_Data);
@@ -41,6 +41,14 @@ module proc_hier_bench();
       trace_file = $fopen("verilogsim.trace");
       sim_log_file = $fopen("verilogsim.log");
       
+      cycle_count = 0;
+   while (cycle_count < 1000) begin  // Example: Stop after 10,000 cycles
+      #10;
+      cycle_count = cycle_count + 1;
+   end
+   $display("Simulation stopped after %0d cycles", cycle_count);
+   $finish; // Stops the simulation
+
    end
 
    always @ (posedge DUT.c0.clk) begin
@@ -61,10 +69,20 @@ module proc_hier_bench();
                   MemAddress,
                   MemData);
          if (RegWrite) begin
-         $display("%h", DUT.p0.wb0.Write_Data);
+         $display("halt1 %h", DUT.p0.fetch.pcCurrent);
+          $display("halt2 %h", DUT.p0.decode0.Halt);
+          $display("ALU result %h", DUT.p0.wb0.ALU_Result);
+          //AluRes
+          $display("ALU result ex %h", DUT.p0.execute0.AluRes);
+          $display("in A ex %h", DUT.p0.execute0.InA);
+          
          $display("decode: %h", DUT.p0.decode0.Write_Data);
+
+         
             if (MemWrite) begin
                // stu
+               $display("what the ????: %h", DUT.p0.decode0.Write_Data);
+
                $fdisplay(trace_file,"INUM: %8d PC: 0x%04x REG: %d VALUE: 0x%04x ADDR: 0x%04x VALUE: 0x%04x",
                          (inst_count-1),
                         PC,
