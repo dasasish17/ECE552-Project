@@ -12,15 +12,15 @@ module regFile #(parameter WIDTH = 16)
                 // Outputs
                 read1Data, read2Data, err,
                 // Inputs
-                clk, rst, read1RegSel, read2RegSel, writeRegSel, writeData, writeEn
+                clk, rst, read1RegSel, read2RegSel, writeregsel, writedata, writeEn
                 );
 
    input        clk, rst;
    input [2:0]  read1RegSel;
    input [2:0]  read2RegSel;
-   input [2:0]  writeRegSel;
-   input [15:0] writeData;
-   input        writeEn;
+   input [2:0]  writeregsel;
+   input [15:0] writedata;
+   input        write;
 
    output [15:0] read1Data;
    output [15:0] read2Data;
@@ -30,14 +30,14 @@ module regFile #(parameter WIDTH = 16)
 
    wire [7:0] errors;
    wire [WIDTH-1:0]reg0, reg1, reg2, reg3, reg4, reg5, reg6, reg7;
-   register #(.WIDTH(WIDTH)) reg_0(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b000)), .data_out(reg0), .err(errors[0]));
-   register #(.WIDTH(WIDTH)) reg_1(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b001)), .data_out(reg1), .err(errors[1]));
-   register #(.WIDTH(WIDTH)) reg_2(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b010)), .data_out(reg2), .err(errors[2]));
-   register #(.WIDTH(WIDTH)) reg_3(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b011)), .data_out(reg3), .err(errors[3]));
-   register #(.WIDTH(WIDTH)) reg_4(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b100)), .data_out(reg4), .err(errors[4]));
-   register #(.WIDTH(WIDTH)) reg_5(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b101)), .data_out(reg5), .err(errors[5]));
-   register #(.WIDTH(WIDTH)) reg_6(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b110)), .data_out(reg6), .err(errors[6]));
-   register #(.WIDTH(WIDTH)) reg_7(.clk(clk), .rst(rst), .data_in(writeData), .write_en(writeEn & (writeRegSel == 3'b111)), .data_out(reg7), .err(errors[7]));
+   register #(.WIDTH(WIDTH)) reg_0(.clk(clk), .rst(rst), .data_in(writedata), .write_en(write & (writeregsel == 3'b000)), .data_out(reg0), .err(errors[0]));
+   register #(.WIDTH(WIDTH)) reg_1(.clk(clk), .rst(rst), .data_in(writedata), .write_en(write & (writeregsel == 3'b001)), .data_out(reg1), .err(errors[1]));
+   register #(.WIDTH(WIDTH)) reg_2(.clk(clk), .rst(rst), .data_in(writedata), .write_en(write & (writeregsel == 3'b010)), .data_out(reg2), .err(errors[2]));
+   register #(.WIDTH(WIDTH)) reg_3(.clk(clk), .rst(rst), .data_in(writedata), .write_en(write & (writeregsel == 3'b011)), .data_out(reg3), .err(errors[3]));
+   register #(.WIDTH(WIDTH)) reg_4(.clk(clk), .rst(rst), .data_in(writedata), .write_en(write & (writeregsel == 3'b100)), .data_out(reg4), .err(errors[4]));
+   register #(.WIDTH(WIDTH)) reg_5(.clk(clk), .rst(rst), .data_in(writedata), .write_en(write & (writeregsel == 3'b101)), .data_out(reg5), .err(errors[5]));
+   register #(.WIDTH(WIDTH)) reg_6(.clk(clk), .rst(rst), .data_in(writedata), .write_en(write & (writeregsel == 3'b110)), .data_out(reg6), .err(errors[6]));
+   register #(.WIDTH(WIDTH)) reg_7(.clk(clk), .rst(rst), .data_in(writedata), .write_en(write & (writeregsel == 3'b111)), .data_out(reg7), .err(errors[7]));
 
    assign read1Data =   (read1RegSel == 3'h0) ? reg0 :
                         (read1RegSel == 3'h1) ? reg1 :
@@ -59,7 +59,7 @@ module regFile #(parameter WIDTH = 16)
                         (read2RegSel == 3'h7) ? reg7 :
                         16'h0000;
 
-assign err = |errors | ^read1RegSel == 1'bx | ^read2RegSel == 1'bx | ^writeRegSel == 1'bx | writeRegSel == 1'bx |
-                      ^read1RegSel == 1'bz | ^read2RegSel == 1'bz | ^writeRegSel == 1'bz | writeRegSel == 1'bz;
+assign err = |errors | ^read1RegSel == 1'bx | ^read2RegSel == 1'bx | ^writeregsel == 1'bx | writeregsel == 1'bx |
+                      ^read1RegSel == 1'bz | ^read2RegSel == 1'bz | ^writeregsel == 1'bz | writeregsel == 1'bz;
 
 endmodule
