@@ -33,9 +33,7 @@ module regFile (
    wire [WIDTH-1:0] regs[7:0]; // Array of 8 registers with width bits each
 
    //error logic
-   assign err = (^clk === 1'bx) ? 1'b1 :
-             (^rst === 1'bx) ? 1'b1 :
-             (^read1RegSel === 1'bx) ? 1'b1 :
+   assign err = (^read1RegSel === 1'bx) ? 1'b1 :
              (^read2RegSel === 1'bx) ? 1'b1 :
              (^writeregsel === 1'bx) ? 1'b1 :
              (^writedata === 1'bx) ? 1'b1 :
