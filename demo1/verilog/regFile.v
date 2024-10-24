@@ -14,43 +14,57 @@ module regFile (
                 clk, rst, read1RegSel, read2RegSel, writeregsel, writedata, write
                 );
 
-   parameter WIDTH = 16;
-
    input        clk, rst;
    input [2:0]  read1RegSel;
    input [2:0]  read2RegSel;
    input [2:0]  writeregsel;
-   input [WIDTH-1:0] writedata;
+   input [15:0] writedata;
    input        write;
 
-   output [WIDTH-1:0] read1Data;
-   output [WIDTH-1:0] read2Data;
+   output [15:0] read1Data;
+   output [15:0] read2Data;
    output        err;
 
    /* YOUR CODE HERE */
 
+   // Intermediary logic
+   wire [15:0] reg_out_1, reg_out_2, reg_out_3, reg_out_4, reg_out_5, reg_out_6, reg_out_7, reg_out_0;
 
-   wire [WIDTH-1:0] regs[7:0]; // Array of 8 registers with width bits each
-
-   //error logic
-   assign err = (^read1RegSel === 1'bx) ? 1'b1 :
-             (^read2RegSel === 1'bx) ? 1'b1 :
-             (^writeregsel === 1'bx) ? 1'b1 :
-             (^writedata === 1'bx) ? 1'b1 :
-             (^write === 1'bx) ? 1'b1 : 1'b0;
-
-   // instantiating the 8 registers with decoder write logic
-   register #(.WIDTH(WIDTH)) reg_0 (.out(regs[0]), .in(writedata), .wr_en(write & (writeregsel == 0)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_1 (.out(regs[1]), .in(writedata), .wr_en(write & (writeregsel == 1)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_2 (.out(regs[2]), .in(writedata), .wr_en(write & (writeregsel == 2)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_3 (.out(regs[3]), .in(writedata), .wr_en(write & (writeregsel == 3)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_4 (.out(regs[4]), .in(writedata), .wr_en(write & (writeregsel == 4)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_5 (.out(regs[5]), .in(writedata), .wr_en(write & (writeregsel == 5)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_6 (.out(regs[6]), .in(writedata), .wr_en(write & (writeregsel == 6)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_7 (.out(regs[7]), .in(writedata), .wr_en(write & (writeregsel == 7)), .clk(clk), .rst(rst));
+   // Error
+   assign err = (clk === 1'bx | rst === 1'bx | write === 1'bx | writedata === 16'hxxxx | writeregsel === 3'bx | read1RegSel === 3'bx | read2RegSel === 3'bx) ? 1'b1 : 1'b0;
 
 
-   assign read1Data = regs[read1RegSel];
-   assign read2Data = regs[read2RegSel];
+   // Instantiaitng 8 registers
+   register i_reg_1(.out(reg_out_0), .in(writedata), .wr_en(write & (writeregsel === 3'b000)), .clk(clk), .rst(rst));
+   register i_reg_2(.out(reg_out_1), .in(writedata), .wr_en(write & (writeregsel === 3'b001)), .clk(clk), .rst(rst));
+   register i_reg_3(.out(reg_out_2), .in(writedata), .wr_en(write & (writeregsel === 3'b010)), .clk(clk), .rst(rst));
+   register i_reg_4(.out(reg_out_3), .in(writedata), .wr_en(write & (writeregsel === 3'b011)), .clk(clk), .rst(rst));
+   register i_reg_5(.out(reg_out_4), .in(writedata), .wr_en(write & (writeregsel === 3'b100)), .clk(clk), .rst(rst));
+   register i_reg_6(.out(reg_out_5), .in(writedata), .wr_en(write & (writeregsel === 3'b101)), .clk(clk), .rst(rst));
+   register i_reg_7(.out(reg_out_6), .in(writedata), .wr_en(write & (writeregsel === 3'b110)), .clk(clk), .rst(rst));
+   register i_reg_8(.out(reg_out_7), .in(writedata), .wr_en(write & (writeregsel === 3'b111)), .clk(clk), .rst(rst));
+
+
+   // Muxes for selecting read
+   assign read1Data = (read1RegSel == 3'b000) ? reg_out_0 :
+                        (read1RegSel == 3'b001) ? reg_out_1 :
+                        (read1RegSel == 3'b010) ? reg_out_2 :
+                        (read1RegSel == 3'b011) ? reg_out_3 :
+                        (read1RegSel == 3'b100) ? reg_out_4 :
+                        (read1RegSel == 3'b101) ? reg_out_5 :
+                        (read1RegSel == 3'b110) ? reg_out_6 :
+                        (read1RegSel == 3'b111) ? reg_out_7 :
+                        16'hxxxx;
+
+   assign read2Data = (read2RegSel == 3'b000) ? reg_out_0 :
+                     (read2RegSel == 3'b001) ? reg_out_1 :
+                     (read2RegSel == 3'b010) ? reg_out_2 :
+                     (read2RegSel == 3'b011) ? reg_out_3 :
+                     (read2RegSel == 3'b100) ? reg_out_4 :
+                     (read2RegSel == 3'b101) ? reg_out_5 :
+                     (read2RegSel == 3'b110) ? reg_out_6 :
+                     (read2RegSel == 3'b111) ? reg_out_7 :
+                     16'hxxxx;
+
 
 endmodule
