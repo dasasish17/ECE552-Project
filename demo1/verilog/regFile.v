@@ -11,7 +11,7 @@ module regFile (
                 // Outputs
                 read1Data, read2Data, err,
                 // Inputs
-                clk, rst, read1RegSel, read2RegSel, writeRegSel, writeData, writeEn
+                clk, rst, read1RegSel, read2RegSel, writeRegSel, writeData, write
                 );
 
    parameter WIDTH = 16;
@@ -21,7 +21,7 @@ module regFile (
    input [2:0]  read2RegSel;
    input [2:0]  writeRegSel;
    input [WIDTH-1:0] writeData;
-   input        writeEn;
+   input        write;
 
    output [WIDTH-1:0] read1Data;
    output [WIDTH-1:0] read2Data;
@@ -39,17 +39,17 @@ module regFile (
              (^read2RegSel === 1'bx) ? 1'b1 :
              (^writeRegSel === 1'bx) ? 1'b1 :
              (^writeData === 1'bx) ? 1'b1 :
-             (^writeEn === 1'bx) ? 1'b1 : 1'b0;
+             (^write === 1'bx) ? 1'b1 : 1'b0;
 
    // instantiating the 8 registers with decoder write logic
-   register #(.WIDTH(WIDTH)) reg_0 (.out(regs[0]), .in(writeData), .wr_en(writeEn & (writeRegSel == 0)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_1 (.out(regs[1]), .in(writeData), .wr_en(writeEn & (writeRegSel == 1)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_2 (.out(regs[2]), .in(writeData), .wr_en(writeEn & (writeRegSel == 2)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_3 (.out(regs[3]), .in(writeData), .wr_en(writeEn & (writeRegSel == 3)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_4 (.out(regs[4]), .in(writeData), .wr_en(writeEn & (writeRegSel == 4)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_5 (.out(regs[5]), .in(writeData), .wr_en(writeEn & (writeRegSel == 5)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_6 (.out(regs[6]), .in(writeData), .wr_en(writeEn & (writeRegSel == 6)), .clk(clk), .rst(rst));
-   register #(.WIDTH(WIDTH)) reg_7 (.out(regs[7]), .in(writeData), .wr_en(writeEn & (writeRegSel == 7)), .clk(clk), .rst(rst));
+   register #(.WIDTH(WIDTH)) reg_0 (.out(regs[0]), .in(writeData), .wr_en(write & (writeRegSel == 0)), .clk(clk), .rst(rst));
+   register #(.WIDTH(WIDTH)) reg_1 (.out(regs[1]), .in(writeData), .wr_en(write & (writeRegSel == 1)), .clk(clk), .rst(rst));
+   register #(.WIDTH(WIDTH)) reg_2 (.out(regs[2]), .in(writeData), .wr_en(write & (writeRegSel == 2)), .clk(clk), .rst(rst));
+   register #(.WIDTH(WIDTH)) reg_3 (.out(regs[3]), .in(writeData), .wr_en(write & (writeRegSel == 3)), .clk(clk), .rst(rst));
+   register #(.WIDTH(WIDTH)) reg_4 (.out(regs[4]), .in(writeData), .wr_en(write & (writeRegSel == 4)), .clk(clk), .rst(rst));
+   register #(.WIDTH(WIDTH)) reg_5 (.out(regs[5]), .in(writeData), .wr_en(write & (writeRegSel == 5)), .clk(clk), .rst(rst));
+   register #(.WIDTH(WIDTH)) reg_6 (.out(regs[6]), .in(writeData), .wr_en(write & (writeRegSel == 6)), .clk(clk), .rst(rst));
+   register #(.WIDTH(WIDTH)) reg_7 (.out(regs[7]), .in(writeData), .wr_en(write & (writeRegSel == 7)), .clk(clk), .rst(rst));
 
 
    assign read1Data = regs[read1RegSel];

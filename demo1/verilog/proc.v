@@ -49,8 +49,8 @@ module proc (/*AUTOARG*/
            .clk(clk),
            .rst(rst),
            .halt(halt),
-           .PC_current(PC_current),
-           .instruction(instruction),
+           .pcCurrent(PC_current),
+           .instr(instruction),
            .PC_updated(PC_updated)
        );
 

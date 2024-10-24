@@ -147,7 +147,7 @@ module decode (
        .read2RegSel(instruction[7:5]),
        .writeRegSel(Write_Register),
        .writeData(Write_Data),
-       .writeEn(RegWrite)
+       .write(RegWrite)
    );
 
    assign err = reg_err | ctrl_err; // assigning err
