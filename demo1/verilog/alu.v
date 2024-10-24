@@ -25,7 +25,7 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg);
     output                      Ofl ; // Signal if overflow occured
     output                      Zero; // Signal if Out is 0
     output wire                     Cout; // Carry out
-    output wire                     Neg;  // Sign flag
+    output wire                     Neg, err;  // Sign flag
 
     /* YOUR CODE HERE */
 
@@ -33,6 +33,8 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg);
     wire [15:0] add_out, shift_out, logic_out;
     wire alu_ofl, zero_flag, setOut, carryout, sco_out;
     wire [OPERAND_WIDTH-1:0] bitReverse, slbiOut;
+
+    assign err = 1'b0;
 
     // 1. Inversion Logic
     inv_logic invert(.InA(InA), .InB(InB), .invA(invA), .invB(invB), .Aout(Aout), .Bout(Bout));
@@ -82,7 +84,10 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg);
                 4'b1111: Out = bitReverse;  // Bit reversal (1111)
                 4'b1011: Out = {15'b0, sco_out};
                 4'b0011, 4'b0010, 4'b1110: Out = logic_out;  // AND, OR, XOR
-                default: Out = 16'b0;  // Default output
+                default: begin
+                Out = 16'b0;
+                err = 1'b1;
+                end  // Default output
             endcase
         end
     
