@@ -5,7 +5,6 @@
    Description     : This module contains all components in the Memory stage of the 
                      processor.
 */
-`default_nettype none
 //Inputs: ImmSrc, PC_add, I
 module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, ALU_Jump, MemWrite, MemEnable, ReadData2, BrchCnd, final_new_PC, Read_Data, Halt);
 
@@ -56,4 +55,3 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, ALU_Ju
 
    
 endmodule
-`default_nettype wire

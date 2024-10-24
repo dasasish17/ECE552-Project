@@ -9,7 +9,7 @@
     of the operation, as well as drive the output signals Zero and Overflow
     (OFL).
 */
-`default_nettype none
+//`default_nettype none
 module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, err);
 
     parameter OPERAND_WIDTH = 16;    
@@ -95,4 +95,3 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
         end
     
 endmodule
-`default_nettype wire

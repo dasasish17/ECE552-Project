@@ -1,4 +1,3 @@
-`default_nettype none
 
 module cla_adder_subtractor (
     input [15:0] InA, 
@@ -25,4 +24,3 @@ module cla_adder_subtractor (
     assign Out = sum;
     assign c_out = carry_out;
 endmodule
-`default_nettype wire
