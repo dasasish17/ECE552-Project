@@ -19,7 +19,7 @@ module fetch (halt, clk, rst, pcCurrent, instr, PC_updated);
    // use the register to set when we are changing the PC
    // module register(out, in, wr_en, clk, rst);
    // if not halt, we want to update the PC
-   register reg0 (.out(PC_intermediary), .in(pcCurrent), .wr_en(~halt), .clk(clk), .rst(rst));
+   register reg0 (.out(PC_intermediary), .in(pcCurrent), .wr_en(1'b1), .clk(clk), .rst(rst));
 
    // implement the instrcution memeory 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
