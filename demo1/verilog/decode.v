@@ -42,11 +42,6 @@ module decode (
    output wire [15:0] read_Data1;
    output wire [15:0] read_Data2;
 
-   // ?
-   output wire [15:0] imm5;
-   output wire [15:0] imm8;
-   output wire [15:0] imm11;
-
    output reg ImmSrc;
 
    output reg MemEnable;
@@ -71,6 +66,10 @@ module decode (
    output reg [1:0] ALUSrc2;
    output reg [3:0] ALU_op;
 
+   output imm5_ext_rst;
+   output imm8_ext_rst;
+   output imm11_sign_ext;
+
    wire [15:0] imm5_sign_ext;
    wire [15:0] imm5_zero_ext;
    wire [15:0] imm8_sign_ext;
@@ -84,6 +83,10 @@ module decode (
    wire RegWrite;
    wire reg_err;
    wire ctrl_err;
+
+  wire [15:0] imm5;
+  wire [15:0] imm8;
+  wire [15:0] imm11;
 
    control ctrl_inst (
         .Opcode(instruction[15:11]),

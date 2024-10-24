@@ -10,7 +10,7 @@
     (OFL).
 */
 `default_nettype none
-module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg);
+module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, err);
 
     parameter OPERAND_WIDTH = 16;    
     parameter NUM_OPERATIONS = 4;
@@ -26,13 +26,15 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg);
     output                      Ofl ; // Signal if overflow occured
     output                      Zero; // Signal if Out is 0
     output wire                     Cout; // Carry out
-    output wire                     Neg, err;  // Sign flag
+    output wire                     Neg; // Sign flag
+    output reg                      err;
 
     /* YOUR CODE HERE */
 
     wire [15:0] Aout, Bout;        // After inversion
     wire [15:0] add_out, shift_out, logic_out;
-    wire alu_ofl, zero_flag, setOut, carryout, sco_out;
+    wire alu_ofl, zero_flag, carryout, sco_out;
+    reg setOut;
     wire [OPERAND_WIDTH-1:0] bitReverse, slbiOut;
 
     assign err = 1'b0;

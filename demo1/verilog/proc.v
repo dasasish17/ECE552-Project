@@ -16,12 +16,7 @@ module proc (/*AUTOARG*/
 
    // None of the above lines can be modified
 
-   // OR all the err ouputs for every sub-module and assign it as this
-   // err output
-   
-   // As desribed in the homeworks, use the err signal to trap corner
-   // cases that you think are illegal in your statemachines
-   assign err = decode_err | alu_err | mem_err;
+
    
    /* your code here -- should include instantiations of fetch, decode, execute, mem and wb modules */
 
@@ -40,6 +35,13 @@ module proc (/*AUTOARG*/
        wire BrnchCnd, ALUJump;
        wire mem_err, alu_err, decode_err;
        wire finalPC;
+
+      // OR all the err ouputs for every sub-module and assign it as this
+      // err output
+
+      // As desribed in the homeworks, use the err signal to trap corner
+      // cases that you think are illegal in your statemachines
+      assign err = decode_err | alu_err | mem_err;
 
        // Instantiate fetch stage
        fetch ifetch (

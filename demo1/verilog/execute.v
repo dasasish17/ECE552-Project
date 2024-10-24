@@ -15,7 +15,7 @@ module execute (read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext
    input wire [OPERAND_WIDTH-1:0] read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext;
    input wire [1:0]AluSrc1, AluSrc2;
    input wire [3:0] Oper;
-   input wire Cin, InvA, InvB, Beq, Bne, Blt, Bgt;
+   input wire AluCin, InvA, InvB, Beq, Bne, Blt, Bgt;
    output wire BrnchCnd, AluRes;
    output wire err;
 
@@ -38,13 +38,10 @@ module execute (read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext
 
 
    // Instantiate the ALU module
-   alu #(
-       .OPERAND_WIDTH(OPERAND_WIDTH),
-       .NUM_OPERATIONS(NUM_OPERATIONS)
-   ) alu_inst (
+   alu alu_inst (
        .InA(InA),
        .InB(InB),
-       .Cin(Cin),
+       .Cin(AluCin),
        .Oper(Oper),
        .invA(InvA),
        .invB(InvB),

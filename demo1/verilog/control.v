@@ -2,7 +2,7 @@
 
 module control (Opcode, Func, err, Halt,
                 zeroExt, ImmSrc, ALU_jump, RegWrite, MemEnable, MemWrite,
-                InvA, InvB, Cin, Beq, Bne, Bit, Bgt,
+                InvA, InvB, Cin, Beq, Bne, Blt, Bgt,
                 RegDst, MemtoReg, ALUSrc1, ALUSrc2, ALU_op);
 
     // inputs
@@ -68,7 +68,7 @@ module control (Opcode, Func, err, Halt,
 
         Beq = 1'b0;
         Bne = 1'b0;
-        Bit = 1'b0;
+        Blt = 1'b0;
         Bgt = 1'b0;
 
         // casex statement based on Opcode and Func
