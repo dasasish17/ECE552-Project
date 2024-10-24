@@ -88,7 +88,7 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
                 4'b0101, 4'b1110, 4'b0111: Out = logic_out;  // AND, OR, XOR
                 default: begin
                 Out = 16'b0;
-                err = 1'b1;
+                //err = 1'b1;
                 end  // Default output
             endcase
         end
