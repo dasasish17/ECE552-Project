@@ -153,7 +153,7 @@ module decode (
        .write(RegWrite)
    );
 
-   assign err = reg_err; //| ctrl_err; // assigning err
+   assign err = ctrl_err; //reg_err | ctrl_err; // assigning err
 
 endmodule
 `default_nettype wire
