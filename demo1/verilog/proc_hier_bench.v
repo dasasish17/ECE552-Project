@@ -35,7 +35,7 @@ module proc_hier_bench();
 
    initial begin
       $display("Hello world...simulation starting");
-      $display("%h", DUT.p0.wb0.WriteData);
+      $display("%h", DUT.p0.wb0.Write_Data);
       $display("See verilogsim.log and verilogsim.trace for output");
       inst_count = 0;
       trace_file = $fopen("verilogsim.trace");
