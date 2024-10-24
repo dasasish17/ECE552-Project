@@ -7,7 +7,7 @@
 */
 `default_nettype none
 //Inputs: ImmSrc, PC_add, I
-module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, MemWrite, MemRead, ReadData2, BrchCnd, final_new_PC, PC_value, Read_Data, ALU /* TODO: Add appropriate inputs/outputs for your memory stage here*/);
+module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, ALU_Jump, MemWrite, MemEnable, ReadData2, BrchCnd, final_new_PC, PC_value, Read_Data, ALU);
 
    input wire [15:0] PC_add;
    input wire ImmSrc;
@@ -15,7 +15,7 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, MemWri
    input wire [15:0] Imm11_Ext;
    input wire [15:0] ALU_Result;
    input wire MemWrite;
-   input wire MemRead;
+   input wire MemEnable;
    input wire [15:0] ReadData2;
    input wire BrchCnd;
    output wire [15:0] final_new_PC;
@@ -45,13 +45,13 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, MemWri
    //BrchCnd mux 
    assign address = BrchCnd ? sum : PC_add;
    // ALU_jump mux
-   assign final_new_PC = ALU_jump ? ALU_Result : address;
+   assign final_new_PC = ALU_Jump ? ALU_Result : address;
    // assign PC_value = PC_add;
    // assign ALU = ALU_Result;
 
    // read the main memory logic 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
-   memory2c mem (.data_out(Read_Data), .data_in(ReadData2), .addr(ALU_Result), .enable(MemRead), .wr(MemWrite), .createdump(Halt), .clk(clk), .rst(rst));
+   memory2c mem (.data_out(Read_Data), .data_in(ReadData2), .addr(ALU_Result), .enable(MemEnable), .wr(MemWrite), .createdump(Halt), .clk(clk), .rst(rst));
 
    
 endmodule

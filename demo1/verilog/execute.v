@@ -27,12 +27,12 @@ module execute (read1Data, read2Data, PC_incr, imm5_ext_rst, imm8_ext_rst, imm11
 
    // Mux for InA
    assign InA = (AluSrc1 == 2'b00) ? read1Data :
-                  (AluSrc1 == 2'b01) ? 16'b0 :
-                  (read1Data << 3); // else (AluSrc1 == 2'b10) ?
+                (AluSrc1 == 2'b01) ? 16'b0 :
+                (read1Data << 3); // else (AluSrc1 == 2'b10) ?
 
 
    // Mux for InB
-     assign InA = (AluSrc2 == 2'b00) ? read2Data :
+     assign InB = (AluSrc2 == 2'b00) ? read2Data :
                      (AluSrc2 == 2'b01) ? imm5_ext_rst :
                      (AluSrc2 == 2'b10) ? imm8_ext_rst : 16'b0;
 
@@ -53,10 +53,12 @@ module execute (read1Data, read2Data, PC_incr, imm5_ext_rst, imm8_ext_rst, imm11
        .Ofl(Ofl),
        .Zero(Zero),
        .Cout(Cout),
-       .Neg(Neg));
+       .Neg(Neg)
+       .err(err));
 
-    assign BrnchCnd = (Oper == 1101)? 1'b1:
-                      (Oper == 0100)? ((Beq && Zero) | (Bne && ~Zero) | (Blt && Neg) | (Bgt && ~Neg)): 1'b0;
+
+    assign BrnchCnd = (Oper == 4'b1101) ? 1'b1 :
+                      (Oper == 4'b0100) ? ((Beq && Zero) | (Bne && ~Zero) | (Blt && Neg) | (Bgt && ~Neg)) : 1'b0;
 
    
 endmodule

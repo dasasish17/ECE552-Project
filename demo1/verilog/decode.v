@@ -39,53 +39,62 @@ module decode (
    input wire rst;
    input wire [15:0] instruction;
    input wire [15:0] Write_Data;
+
    output wire [15:0] read_Data1;
    output wire [15:0] read_Data2;
-   output wire [15:0] imm5_ext_rst;
-   output wire [15:0] imm8_ext_rst;
-   output wire [15:0] imm11_sign_ext;
+
+   // ?
+   output wire [15:0] imm5;
+   output wire [15:0] imm8;
+   output wire [15:0] imm11;
 
    output reg ImmSrc;
+
    output reg MemRead;
    output reg MemWrite;
-   output reg Branch;
+
    output reg ALU_jump;
+
    output reg InvA;
    output reg InvB;
    output reg Cin;
+
    output reg Beq;
    output reg Bne;
    output reg Blt;
    output reg Bgt;
+
    output reg Halt;
+   output wire err;
+
    output reg [1:0] MemToReg;
    output reg [1:0] ALUSrc1;
    output reg [1:0] ALUSrc2;
    output reg [3:0] ALU_op;
-   output wire err;
 
    wire [15:0] imm5_sign_ext;
    wire [15:0] imm5_zero_ext;
    wire [15:0] imm8_sign_ext;
    wire [15:0] imm8_zero_ext;
-   wire [10:0] imm11;
-   wire zeroExt; // signal out of control 
+   wire [10:0] imm11_sign_ext;
+
+   // signals out of control
+   wire zeroExt;
    wire [2:0] Write_Register;
-   wire [1:0] RegDst; // signal out of control
-   wire RegWrite; // signal out of control
+   wire [1:0] RegDst;
+   wire RegWrite;
    wire reg_err;
    wire ctrl_err;
 
    control ctrl_inst (
-        .Opcode(instruction[15:11]),  // Fixed typo here
-        .Func(instruction[1:0]),       // Fixed typo here
+        .Opcode(instruction[15:11]),
+        .Func(instruction[1:0]),
         .err(ctrl_err),
         .zeroExt(zeroExt),
         .ImmSrc(ImmSrc),
         .RegWrite(RegWrite),
         .MemRead(MemRead),
         .MemWrite(MemWrite),
-        .Branch(Branch),
         .ALU_jump(ALU_jump),
         .InvA(InvA),
         .InvB(InvB),
@@ -96,7 +105,7 @@ module decode (
         .Bgt(Bgt),
         .Halt(Halt),
         .RegDst(RegDst),
-        .MemToReg(MemToReg), // Fixed variable name
+        .MemtoReg(MemToReg), // Fixed variable name
         .ALUSrc1(ALUSrc1),
         .ALUSrc2(ALUSrc2),
         .ALU_op(ALU_op)
@@ -110,10 +119,10 @@ module decode (
    assign imm5_sign_ext = {{11{imm5[4]}}, imm5};
    assign imm5_zero_ext = {11'b0, imm5};
 
-   assign imm8_sign_ext = {{8{imm8[7]}}, imm8}; // Fixed variable from imm5 to imm8
+   assign imm8_sign_ext = {{8{imm8[7]}}, imm8};
    assign imm8_zero_ext = {8'b0, imm8};
 
-   assign imm11_sign_ext = {{5{imm11[10]}}, imm11}; // Fixed variable from imm5 to imm11
+   assign imm11_sign_ext = {{5{imm11[10]}}, imm11};
 
    // Zero extension mux 
    assign imm5_ext_rst = zeroExt ? imm5_zero_ext : imm5_sign_ext;
@@ -139,7 +148,7 @@ module decode (
        .writeEn(RegWrite)
    );
 
-   assign err = reg_err | ctrl_err; // Correctly assigning err
+   assign err = reg_err | ctrl_err; // assigning err
 
 endmodule
 `default_nettype wire

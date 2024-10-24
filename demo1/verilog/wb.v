@@ -5,7 +5,7 @@
    Description     : This is the module for the overall Write Back stage of the processor.
 */
 `default_nettype none
-module wb (PC_address, Read_Data, ALU_Result, MemToReg, Write_Data/* TODO: Add appropriate inputs/outputs for your WB stage here*/);
+module wb (PC_address, Read_Data, ALU_Result, MemToReg, Write_Data);
 
    input wire [15:0] PC_address;
    input wire [15:0] Read_Data;
@@ -14,8 +14,8 @@ module wb (PC_address, Read_Data, ALU_Result, MemToReg, Write_Data/* TODO: Add a
    output wire [15:0] Write_Data;
 
    assign Write_Data = (MemToReg == 2'b00) ? PC_address :
-                     (MemToReg == 2'b01) ? Read_Data :
-                     (MemToReg == 2'b10) ? ALU_Result : 16'h0000;
+                       (MemToReg == 2'b01) ? Read_Data :
+                       (MemToReg == 2'b10) ? ALU_Result : 16'h0000;
 
 endmodule
 `default_nettype wire
