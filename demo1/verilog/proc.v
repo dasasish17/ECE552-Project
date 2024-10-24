@@ -38,14 +38,6 @@ module proc (/*AUTOARG*/
        wire [15:0]finalPC;
        wire actualRead;
 
-      // OR all the err ouputs for every sub-module and assign it as this
-      // err output
-
-      // As desribed in the homeworks, use the err signal to trap corner
-      // cases that you think are illegal in your statemachines
-      // assign err = decode_err | alu_err | mem_err;
-      assign err = 1'b0;
-
        // Instantiate fetch stage
        fetch fetch0 (
            .clk(clk),
@@ -136,6 +128,14 @@ module proc (/*AUTOARG*/
            .MemToReg(MemToReg),
            .Write_Data(write_data)
        );
+
+        // OR all the err ouputs for every sub-module and assign it as this
+      // err output
+
+      // As desribed in the homeworks, use the err signal to trap corner
+      // cases that you think are illegal in your statemachines
+      assign err = decode_err | alu_err; // | mem_err;
+      // assign err = 1'b0;
 
 endmodule // proc
 `default_nettype wire
