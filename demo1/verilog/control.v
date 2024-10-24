@@ -1,7 +1,7 @@
 `default_nettype none
 
 module control (Opcode, Func, err, Halt,
-                zeroExt, ImmSrc, ALU_jump, RegWrite, MemEnable, MemWrite,
+                zeroExt, ImmSrc, ALU_jump, RegWrite, memReadorWrite, memRead, memWrite,
                 InvA, InvB, Cin, Beq, Bne, Blt, Bgt,
                 RegDst, MemtoReg, ALUSrc1, ALUSrc2, ALU_op);
 
@@ -25,8 +25,9 @@ module control (Opcode, Func, err, Halt,
 
     // Read/write
     output reg RegWrite;
-    output reg MemEnable;
-    output reg MemWrite;
+    output reg memReadorWrite;
+    output reg memRead;
+    output reg memWrite;
 
     // Add/subtract
     output reg InvA;
@@ -56,8 +57,9 @@ module control (Opcode, Func, err, Halt,
         ALU_jump = 1'b0;
 
         RegWrite = 1'b1;
-        MemEnable = 1'b0;
-        MemWrite = 1'b0;
+        memReadorWrite = 1'b0;
+        memWrite = 1'b0;
+        memRead = 1'b0;
 
         err = 1'b0;
         Halt = 1'b0;
@@ -145,8 +147,8 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc2 = 2'b01;
                 ALU_op = 4'b0100;
                 RegWrite = 1'b0;
-                MemEnable = 1'b1;
-                MemWrite = 1'b1;
+                memReadorWrite = 1'b1;
+                memWrite = 1'b1;
             end
             
             // 12. ld (load)
@@ -154,7 +156,8 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc2 = 2'b01;
                 MemtoReg = 2'b01;
                 ALU_op = 4'b0100;
-                MemEnable = 1'b1;
+                memReadorWrite = 1'b1;
+                memRead = 1'b1;
             end
             
             // 13. stu (store with update)
@@ -162,8 +165,8 @@ module control (Opcode, Func, err, Halt,
                 RegDst = 2'b01;
                 ALUSrc2 = 2'b01;
                 ALU_op = 4'b0100;
-                MemEnable = 1'b1;
-                MemWrite = 1'b1;
+                memReadorWrite = 1'b1;
+                memWrite = 1'b1;
             end
             
             // 14. btr (bit reverse)

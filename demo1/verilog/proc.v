@@ -35,7 +35,7 @@ module proc (/*AUTOARG*/
        wire Zero, Neg, Ofl, Cout;
        wire BrnchCnd, ALUJump;
        wire mem_err, alu_err, decode_err;
-       wire finalPC;
+       wire [15:0]finalPC;
 
       // OR all the err ouputs for every sub-module and assign it as this
       // err output
@@ -114,15 +114,15 @@ module proc (/*AUTOARG*/
            .ImmSrc(ImmSrc),
            .Imm8_Ext(imm8_ext_rst),
            .Imm11_Ext(imm11_sign_ext),
-           .ALU_Result(ALU_result),
+           .aluResult(ALU_result),
            .ALU_Jump(ALU_jump),
-           .MemWrite(MemWrite),
-           .MemEnable(MemRead),
-           .ReadData2(read_data2),
+           .memWrite(MemWrite),
+           .memReadorWrite(MemRead),
+           .writeData(read_data2),
            .BrchCnd(BrnchCnd),
            .final_new_PC(finalPC),
            .Read_Data(mem_data_out),
-           .Halt(halt)
+           .halt(halt)
        );
 
        // Instantiate write back stage

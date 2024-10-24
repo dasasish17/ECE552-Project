@@ -6,22 +6,23 @@
                      processor.
 */
 //Inputs: ImmSrc, PC_add, I
-module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, ALU_Jump, MemWrite, MemEnable, ReadData2, BrchCnd, final_new_PC, Read_Data, Halt);
+module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jump, memReadorWrite, memWrite, memRead, writeData, BrchCnd, final_new_PC, Read_Data, halt);
 
    input wire [15:0] PC_add;
    input wire ImmSrc;
    input wire [15:0] Imm8_Ext;
    input wire [15:0] Imm11_Ext;
-   input wire [15:0] ALU_Result;
-   input wire MemWrite;
-   input wire MemEnable;
-   input wire [15:0] ReadData2;
+   input wire [15:0] aluResult;
+   input wire memReadorWrite;
+   input wire memWrite;
+   input wire memRead;
+   input wire [15:0] writeData;
    input wire BrchCnd;
    input wire ALU_Jump;
    output wire [15:0] final_new_PC;
    input wire clk;
    input wire rst;
-   input wire Halt;
+   input wire halt;
 
    // change the output below 
    // output wire [15:0] PC_value;
@@ -45,13 +46,13 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, ALU_Ju
    //BrchCnd mux 
    assign address = BrchCnd ? sum : PC_add;
    // ALU_jump mux
-   assign final_new_PC = ALU_Jump ? ALU_Result : address;
+   assign final_new_PC = ALU_Jump ? aluResult : address;
    // assign PC_value = PC_add;
    // assign ALU = ALU_Result;
 
    // read the main memory logic 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
-   memory2c mem (.data_out(Read_Data), .data_in(ReadData2), .addr(ALU_Result), .enable(MemEnable), .wr(MemWrite), .createdump(Halt), .clk(clk), .rst(rst));
+   memory2c mem (.data_out(Read_Data), .data_in(writeData), .addr(aluResult), .enable(memReadorWrite), .wr(memWrite), .createdump(halt), .clk(clk), .rst(rst));
 
    
 endmodule
