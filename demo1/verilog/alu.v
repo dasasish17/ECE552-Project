@@ -37,8 +37,6 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
     reg setOut;
     wire [OPERAND_WIDTH-1:0] bitReverse, slbiOut;
 
-    assign err = 1'b0;
-
     // 1. Inversion Logic
     inv_logic invert(.InA(InA), .InB(InB), .invA(invA), .invB(invB), .Aout(Aout), .Bout(Bout));
 
@@ -80,6 +78,7 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
     assign Ofl = (Oper == 3'b100) ? alu_ofl : 1'b0;
     assign Cout = carryout;
      always @(*) begin
+        err = 1'b0;
             case (Oper[3:0])
                 4'b0000, 4'b0001, 4'b0010, 4'b0011: Out = shift_out;  // Shift or rotate
                 4'b0100: Out = add_out;  // ADD
