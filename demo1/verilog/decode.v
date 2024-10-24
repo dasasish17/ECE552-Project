@@ -83,10 +83,12 @@ module decode (
    wire RegWrite;
    wire reg_err;
    wire ctrl_err;
+   wire memRead;
 
   wire [15:0] imm5;
   wire [15:0] imm8;
   wire [15:0] imm11;
+
 
    control ctrl_inst (
         .Opcode(instruction[15:11]),
@@ -95,8 +97,9 @@ module decode (
         .zeroExt(zeroExt),
         .ImmSrc(ImmSrc),
         .RegWrite(RegWrite),
-        .MemEnable(MemEnable),
-        .MemWrite(MemWrite),
+        .memReadorWrite(MemEnable),
+        .memWrite(MemWrite),
+        .memRead(memRead),
         .ALU_jump(ALU_jump),
         .InvA(InvA),
         .InvB(InvB),
@@ -145,8 +148,8 @@ module decode (
        .rst(rst),
        .read1RegSel(instruction[10:8]),
        .read2RegSel(instruction[7:5]),
-       .writeRegSel(Write_Register),
-       .writeData(Write_Data),
+       .writeregsel(Write_Register),
+       .writedata(Write_Data),
        .write(RegWrite)
    );
 

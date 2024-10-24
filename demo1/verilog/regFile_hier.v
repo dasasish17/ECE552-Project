@@ -38,8 +38,8 @@ module regFile_hier (
                 .rst                          (rst),
                 .read1RegSel                  (read1RegSel[2:0]),
                 .read2RegSel                  (read2RegSel[2:0]),
-                .writeRegSel                  (writeRegSel[2:0]),
-                .writeData                    (writeData[15:0]),
-                .writeEn                      (writeEn));
+                .writeregsel                  (writeRegSel[2:0]),
+                .writedata                    (writeData[15:0]),
+                .write                      (writeEn));
 
 endmodule

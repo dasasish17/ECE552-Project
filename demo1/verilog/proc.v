@@ -36,6 +36,7 @@ module proc (/*AUTOARG*/
        wire BrnchCnd, ALUJump;
        wire mem_err, alu_err, decode_err;
        wire [15:0]finalPC;
+       wire actualRead;
 
       // OR all the err ouputs for every sub-module and assign it as this
       // err output
@@ -117,6 +118,7 @@ module proc (/*AUTOARG*/
            .aluResult(ALU_result),
            .ALU_Jump(ALU_jump),
            .memWrite(MemWrite),
+           .memRead(actualRead),
            .memReadorWrite(MemRead),
            .writeData(read_data2),
            .BrchCnd(BrnchCnd),
