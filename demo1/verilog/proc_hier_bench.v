@@ -86,6 +86,7 @@ module proc_hier_bench();
                         PC,
                         WriteRegister,
                         WriteData );
+                        $display("decode2: %h", DUT.p0.decode0.Write_Data);
             end
          end else if (Halt) begin
             $fdisplay(sim_log_file, "SIMLOG:: Processor halted\n");
