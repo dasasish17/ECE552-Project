@@ -27,7 +27,8 @@ module proc (/*AUTOARG*/
        wire [15:0] write_data;
        wire [15:0] read_data1, read_data2;
        wire [15:0] imm5_ext_rst, imm8_ext_rst, imm11_sign_ext;
-       wire ImmSrc, MemRead, MemWrite, ALU_jump, InvA, InvB, Cin, Beq, Bne, Blt, Bgt, Halt, MemToReg;
+       wire ImmSrc, MemRead, MemWrite, ALU_jump, InvA, InvB, Cin, Beq, Bne, Blt, Bgt, Halt;
+       wire [1:0]MemToReg;
        wire [1:0] ALUSrc1, ALUSrc2;
        wire [3:0] ALU_op;
        wire [15:0] ALU_result, nextPC, mem_data_out;
@@ -44,7 +45,7 @@ module proc (/*AUTOARG*/
       assign err = decode_err | alu_err | mem_err;
 
        // Instantiate fetch stage
-       fetch ifetch (
+       fetch fetch0 (
            .clk(clk),
            .rst(rst),
            .halt(halt),
@@ -54,7 +55,7 @@ module proc (/*AUTOARG*/
        );
 
        // Instantiate decode stage
-       decode idecode (
+       decode decode0 (
            .clk(clk),
            .rst(rst),
            .instruction(instruction),
@@ -84,7 +85,7 @@ module proc (/*AUTOARG*/
        );
 
        // Instantiate execute stage
-       execute iexecute (
+       execute execute0 (
            .read1Data(read_data1),
            .read2Data(read_data2),
            .imm5_ext_rst(imm5_ext_rst),
@@ -106,7 +107,7 @@ module proc (/*AUTOARG*/
        );
 
        // Instantiate memory stage
-       memory imemory (
+       memory memory0 (
            .clk(clk),
            .rst(rst),
            .PC_add(PC_updated),
@@ -125,7 +126,7 @@ module proc (/*AUTOARG*/
        );
 
        // Instantiate write back stage
-       wb iwb (
+       wb wb0 (
            .PC_address(PC_updated),
            .Read_Data(mem_data_out),
            .ALU_Result(ALU_result),
