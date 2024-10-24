@@ -42,29 +42,29 @@ module decode (
    output wire [15:0] read_Data1;
    output wire [15:0] read_Data2;
 
-   output reg ImmSrc;
+   output wire ImmSrc;
 
-   output reg MemEnable;
-   output reg MemWrite;
+   output wire MemEnable;
+   output wire MemWrite;
 
-   output reg ALU_jump;
+   output wire ALU_jump;
 
-   output reg InvA;
-   output reg InvB;
-   output reg Cin;
+   output wire InvA;
+   output wire InvB;
+   output wire Cin;
 
-   output reg Beq;
-   output reg Bne;
-   output reg Blt;
-   output reg Bgt;
+   output wire Beq;
+   output wire Bne;
+   output wire Blt;
+   output wire Bgt;
 
-   output reg Halt;
+   output wire Halt;
    output wire err;
 
-   output reg [1:0] MemToReg;
-   output reg [1:0] ALUSrc1;
-   output reg [1:0] ALUSrc2;
-   output reg [3:0] ALU_op;
+   output wire [1:0] MemToReg;
+   output wire [1:0] ALUSrc1;
+   output wire [1:0] ALUSrc2;
+   output wire [3:0] ALU_op;
 
    output wire [15:0]imm5_ext_rst;
    output wire [15:0]imm8_ext_rst;
