@@ -27,7 +27,7 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
     output                      Zero; // Signal if Out is 0
     output wire                     Cout; // Carry out
     output wire                     Neg; // Sign flag
-    output reg                      err;
+    output wire                      err;
 
     /* YOUR CODE HERE */
 
@@ -74,11 +74,13 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
             endcase
         end
 
+    assign err = 1'b0;
+
     // Overflow is only relevant for ADD operations
     assign Ofl = (Oper == 3'b100) ? alu_ofl : 1'b0;
     assign Cout = carryout;
      always @(*) begin
-        err = 1'b0;
+        //err = 1'b0;
             case (Oper[3:0])
                 4'b0000, 4'b0001, 4'b0010, 4'b0011: Out = shift_out;  // Shift or rotate
                 4'b0100: Out = add_out;  // ADD
