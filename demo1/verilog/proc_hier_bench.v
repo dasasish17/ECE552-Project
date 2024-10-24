@@ -44,6 +44,7 @@ module proc_hier_bench();
    end
 
    always @ (posedge DUT.c0.clk) begin
+   $display("%h", DUT.p0.wb0.Write_Data);
       if (!DUT.c0.rst) begin
          if (Halt || RegWrite || MemWrite) begin
             inst_count = inst_count + 1;
@@ -60,6 +61,7 @@ module proc_hier_bench();
                   MemAddress,
                   MemData);
          if (RegWrite) begin
+         $display("%h", DUT.p0.wb0.Write_Data);
             if (MemWrite) begin
                // stu
                $fdisplay(trace_file,"INUM: %8d PC: 0x%04x REG: %d VALUE: 0x%04x ADDR: 0x%04x VALUE: 0x%04x",
