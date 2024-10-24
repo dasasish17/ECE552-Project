@@ -11,9 +11,8 @@ module decode (
     instruction,   // Instruction input
     Write_Data,    // Data to write
     ImmSrc,        // Immediate source control signal
-    MemRead,       // Memory read control signal
+    MemEnable,       // Memory read control signal
     MemWrite,      // Memory write control signal
-    Branch,        // Branch control signal
     ALU_jump,      // ALU jump control signal
     InvA,          // Invert A control signal
     InvB,          // Invert B control signal
@@ -50,7 +49,7 @@ module decode (
 
    output reg ImmSrc;
 
-   output reg MemRead;
+   output reg MemEnable;
    output reg MemWrite;
 
    output reg ALU_jump;
@@ -93,7 +92,7 @@ module decode (
         .zeroExt(zeroExt),
         .ImmSrc(ImmSrc),
         .RegWrite(RegWrite),
-        .MemRead(MemRead),
+        .MemEnable(MemEnable),
         .MemWrite(MemWrite),
         .ALU_jump(ALU_jump),
         .InvA(InvA),

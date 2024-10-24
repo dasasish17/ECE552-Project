@@ -5,21 +5,21 @@
    Description     : This is the overall module for the execute stage of the processor.
 */
 `default_nettype none
-module execute (read1Data, read2Data, PC_incr, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext,
-                                 AluSrc1, AluSrc2,
-                                 Oper,
-                                 AluCin, InvA, InvB, Beq, Bne, Blt, Bgt, ALUJump, Zero, Neg,
-                                 nextPC, AluRes, err);
+module execute (read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext,
+                AluSrc1, AluSrc2, Oper, AluCin, InvA, InvB, Beq, Bne, Blt, Bgt,
+                AluRes, err, BrnchCnd);
 
 
    // TODO: Your code here
    parameter OPERAND_WIDTH = 16;
-   input wire [OPERAND_WIDTH-1:0] read1Data, read2Data, PC_incr, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext;
+   input wire [OPERAND_WIDTH-1:0] read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext;
    input wire [1:0]AluSrc1, AluSrc2;
    input wire [3:0] Oper;
-   input wire Cin, InvA, InvB, Beq, Bne, Blt, Bgt, Zero, Neg, Ofl, Cout;
-   output wire BrnchCnd, Out;
+   input wire Cin, InvA, InvB, Beq, Bne, Blt, Bgt;
+   output wire BrnchCnd, AluRes;
    output wire err;
+
+   wire Zero, Neg, Ofl, Cout;
 
    // HALT not implemented in ALU yet
 
@@ -49,14 +49,14 @@ module execute (read1Data, read2Data, PC_incr, imm5_ext_rst, imm8_ext_rst, imm11
        .invA(InvA),
        .invB(InvB),
        .sign(1'b1),
-       .Out(Out),
+       .Out(AluRes),
        .Ofl(Ofl),
        .Zero(Zero),
        .Cout(Cout),
-       .Neg(Neg)
+       .Neg(Neg),
        .err(err));
 
-
+    // j, jal, branch
     assign BrnchCnd = (Oper == 4'b1101) ? 1'b1 :
                       (Oper == 4'b0100) ? ((Beq && Zero) | (Bne && ~Zero) | (Blt && Neg) | (Bgt && ~Neg)) : 1'b0;
 

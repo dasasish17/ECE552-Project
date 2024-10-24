@@ -21,10 +21,116 @@ module proc (/*AUTOARG*/
    
    // As desribed in the homeworks, use the err signal to trap corner
    // cases that you think are illegal in your statemachines
-   
+   assign err = decode_err | alu_err | mem_err;
    
    /* your code here -- should include instantiations of fetch, decode, execute, mem and wb modules */
-   
+
+      // Internal signal declarations
+       wire halt;
+       wire [15:0] PC_current, PC_updated;
+       wire [15:0] instruction;
+       wire [15:0] write_data;
+       wire [15:0] read_data1, read_data2;
+       wire [15:0] imm5_ext_rst, imm8_ext_rst, imm11_sign_ext;
+       wire ImmSrc, MemRead, MemWrite, ALU_jump, InvA, InvB, Cin, Beq, Bne, Blt, Bgt, Halt, MemToReg;
+       wire [1:0] ALUSrc1, ALUSrc2;
+       wire [3:0] ALU_op;
+       wire [15:0] ALU_result, nextPC, mem_data_out;
+       wire Zero, Neg, Ofl, Cout;
+       wire BrnchCnd, ALUJump;
+       wire mem_err, alu_err, decode_err;
+       wire finalPC;
+
+       // Instantiate fetch stage
+       fetch ifetch (
+           .clk(clk),
+           .rst(rst),
+           .halt(halt),
+           .PC_current(PC_current),
+           .instruction(instruction),
+           .PC_updated(PC_updated)
+       );
+
+       // Instantiate decode stage
+       decode idecode (
+           .clk(clk),
+           .rst(rst),
+           .instruction(instruction),
+           .Write_Data(write_data),
+           .ImmSrc(ImmSrc),
+           .MemEnable(MemRead),
+           .MemWrite(MemWrite),
+           .ALU_jump(ALU_jump),
+           .InvA(InvA),
+           .InvB(InvB),
+           .Cin(Cin),
+           .Beq(Beq),
+           .Bne(Bne),
+           .Blt(Blt),
+           .Bgt(Bgt),
+           .Halt(halt),
+           .MemToReg(MemToReg),
+           .ALUSrc1(ALUSrc1),
+           .ALUSrc2(ALUSrc2),
+           .ALU_op(ALU_op),
+           .err(decode_err),
+           .read_Data1(read_data1),
+           .read_Data2(read_data2),
+           .imm5_ext_rst(imm5_ext_rst),
+           .imm8_ext_rst(imm8_ext_rst),
+           .imm11_sign_ext(imm11_sign_ext)
+       );
+
+       // Instantiate execute stage
+       execute iexecute (
+           .read1Data(read_data1),
+           .read2Data(read_data2),
+           .imm5_ext_rst(imm5_ext_rst),
+           .imm8_ext_rst(imm8_ext_rst),
+           .imm11_sign_ext(imm11_sign_ext),
+           .AluSrc1(ALUSrc1),
+           .AluSrc2(ALUSrc2),
+           .Oper(ALU_op),
+           .AluCin(Cin),
+           .InvA(InvA),
+           .InvB(InvB),
+           .Beq(Beq),
+           .Bne(Bne),
+           .Blt(Blt),
+           .Bgt(Bgt),
+           .AluRes(ALU_result),
+           .err(alu_err),
+           .BrnchCnd(BrnchCnd)
+       );
+
+       // Instantiate memory stage
+       memory imemory (
+           .clk(clk),
+           .rst(rst),
+           .PC_add(PC_updated),
+           .ImmSrc(ImmSrc),
+           .Imm8_Ext(imm8_ext_rst),
+           .Imm11_Ext(imm11_sign_ext),
+           .ALU_Result(ALU_result),
+           .ALU_Jump(ALU_jump),
+           .MemWrite(MemWrite),
+           .MemEnable(MemRead),
+           .ReadData2(read_data2),
+           .BrchCnd(BrnchCnd),
+           .final_new_PC(finalPC),
+           .Read_Data(mem_data_out),
+           .Halt(halt)
+       );
+
+       // Instantiate write back stage
+       wb iwb (
+           .PC_address(PC_updated),
+           .Read_Data(mem_data_out),
+           .ALU_Result(ALU_result),
+           .MemToReg(MemToReg),
+           .Write_Data(write_data)
+       );
+
 endmodule // proc
 `default_nettype wire
 // DUMMY LINE FOR REV CONTROL :0:

@@ -12,6 +12,7 @@ module fetch (halt, clk, rst, PC_current, instruction, PC_updated);
    input wire [15:0] PC_current;
    output wire [15:0] instruction;
    output wire [15:0] PC_updated;
+
    wire [15:0] PC_intermediary;
    wire c_out;
 

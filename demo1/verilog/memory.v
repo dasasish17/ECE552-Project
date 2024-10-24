@@ -7,7 +7,7 @@
 */
 `default_nettype none
 //Inputs: ImmSrc, PC_add, I
-module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, ALU_Jump, MemWrite, MemEnable, ReadData2, BrchCnd, final_new_PC, PC_value, Read_Data, ALU);
+module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, ALU_Result, ALU_Jump, MemWrite, MemEnable, ReadData2, BrchCnd, final_new_PC, Read_Data, ALU);
 
    input wire [15:0] PC_add;
    input wire ImmSrc;
