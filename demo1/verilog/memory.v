@@ -50,8 +50,8 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jum
    // assign PC_value = PC_add;
    // assign ALU = ALU_Result;
 
-   wire enable; 
-   assign memRead = ~halt;
+   // wire enable; 
+   // assign memRead = ~halt;
   
    // read the main memory logic 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);

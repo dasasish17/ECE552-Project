@@ -20,5 +20,3 @@ module dff (q, d, clk, rst);
 endmodule
 `default_nettype wire
 // DUMMY LINE FOR REV CONTROL :0:
-
-

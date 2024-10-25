@@ -62,17 +62,32 @@ module alu (InA, InB, Cin, Oper, invA, invB, sign, Out, Zero, Ofl, Cout, Neg, er
 
     assign slbiOut = Aout | Bout;
 
+    // wire case1;
+    // wire case2;
+    // wire case3;
+
+    // assign case1 = ~Neg & ~InA[15] & ~InB[15];
+    // assign case2 = ~InA[15] & InB[15];
+    // assign case3 = InA[15]  & InB[15] & Neg;
+    wire Rs_Neg_Rt_Pos, Rs_Pos_Rt_Neg;
+    assign Rs_Pos_Rt_Neg = ~InA[15] & InB[15];
+    assign Rs_Neg_Rt_Pos = InA[15] & ~InB[15];
+
+    wire isLess = Rs_Neg_Rt_Pos ? 1'b1 : (Rs_Pos_Rt_Neg ? 1'b0 : Neg);
+
     assign sco_out = carryout? 1'b1: 1'b0;
     assign Ofl = (Oper == 3'b100) ? alu_ofl : 1'b0;
     // Comparison logic for SEQ, SLT, SLE based on Oper
         always @(*) begin
             case (Oper)
                 4'b1001: setOut = Zero;       // SEQ: Rs == Rt
-                4'b1010: setOut = Neg | alu_ofl;        // SLT: Rs < Rt
-                4'b1100: setOut = Zero | Neg; // SLE: Rs <= Rt
+                4'b1010: setOut = isLess;        // SLT: Rs < Rt
+                4'b1100: setOut = Zero | isLess; // SLE: Rs <= Rt
                 default: setOut = 1'b0;       // Default case
             endcase
         end
+
+
 
     assign err = 1'b0;
 

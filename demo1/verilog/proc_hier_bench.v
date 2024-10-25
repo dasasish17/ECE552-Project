@@ -32,27 +32,17 @@ module proc_hier_bench();
 
    proc_hier DUT();
    
-   reg [31:0] cycle_count;
+
    initial begin
       $display("Hello world...simulation starting");
-      $display("%h", DUT.p0.wb0.Write_Data);
       $display("See verilogsim.log and verilogsim.trace for output");
       inst_count = 0;
       trace_file = $fopen("verilogsim.trace");
       sim_log_file = $fopen("verilogsim.log");
       
-      cycle_count = 0;
-   while (cycle_count < 1000) begin  // Example: Stop after 10,000 cycles
-      #10;
-      cycle_count = cycle_count + 1;
-   end
-   $display("Simulation stopped after %0d cycles", cycle_count);
-   $finish; // Stops the simulation
-
    end
 
    always @ (posedge DUT.c0.clk) begin
-   $display("%h", DUT.p0.wb0.Write_Data);
       if (!DUT.c0.rst) begin
          if (Halt || RegWrite || MemWrite) begin
             inst_count = inst_count + 1;
@@ -68,23 +58,9 @@ module proc_hier_bench();
                   MemWrite,
                   MemAddress,
                   MemData);
-
          if (RegWrite) begin
-         // $display("Inb %h", DUT.p0.execute0.InB);
-         //  $display("InA %h", DUT.p0.execute0.InA);
-         //  $display("oper %h", DUT.p0.execute0.Oper);
-         //  //AluRes
-         //  $display("zero", DUT.p0.decode0.zeroExt);
-        
-          
-         // $display("decode: %h", DUT.p0.decode0.Write_Data);
-          
-               // $display("instrcution %h", DUT.p0.decode0.instruction);
-         
             if (MemWrite) begin
                // stu
-               $display("what the ????: %h", DUT.p0.decode0.Write_Data);
-
                $fdisplay(trace_file,"INUM: %8d PC: 0x%04x REG: %d VALUE: 0x%04x ADDR: 0x%04x VALUE: 0x%04x",
                          (inst_count-1),
                         PC,
@@ -94,8 +70,6 @@ module proc_hier_bench();
                         MemData);
             end else if (MemRead) begin
                // ld
-               $display("read data: %h", DUT.p0.memory0.Read_Data);
-               $display("alu result: %h", DUT.p0.memory0.aluResult);
                $fdisplay(trace_file,"INUM: %8d PC: 0x%04x REG: %d VALUE: 0x%04x ADDR: 0x%04x",
                          (inst_count-1),
                         PC,
@@ -108,7 +82,6 @@ module proc_hier_bench();
                         PC,
                         WriteRegister,
                         WriteData );
-                        $display("decode2: %h", DUT.p0.decode0.Write_Data);
             end
          end else if (Halt) begin
             $fdisplay(sim_log_file, "SIMLOG:: Processor halted\n");
@@ -124,10 +97,6 @@ module proc_hier_bench();
             $finish;
          end else begin // if (RegWrite)
             if (MemWrite) begin
-                $display("instrcution %h", DUT.p0.decode0.instruction);
-                   $display("mem write: %h", DUT.p0.memory0.memWrite);
-              $display("write data: %h", DUT.p0.decode0.Write_Data);
-              $display("mem write: %h", DUT.p0.decode0.MemWrite);
                // st
                $fdisplay(trace_file,"INUM: %8d PC: 0x%04x ADDR: 0x%04x VALUE: 0x%04x",
                          (inst_count-1),
