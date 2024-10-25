@@ -55,7 +55,7 @@ module execute (read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext
 
     // j, jal, branch
     assign BrnchCnd = (Oper == 4'b1101) ? 1'b1 :
-                      (Oper == 4'b0100) ? ((Beq && Zero) | (Bne && ~Zero) | (Blt && Neg) | (Bgt && ~Neg)) : 1'b0;
+                      (Oper == 4'b0100) ? ((Beq & Zero) | (Bne & ~Zero) | (Blt & Neg) | (Bgt & ~Neg)) : 1'b0;
 
    
 endmodule

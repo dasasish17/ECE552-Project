@@ -1,0 +1,16 @@
+Line 52: Bad keyword integer
+Line 53: Bad keyword integer
+Line 62: Bad keyword initial
+Line 63: begin without always/case
+Line 65: Bad keyword for
+Line 66: begin without always/case
+Line 70: Bad keyword posedge
+Line 71: Bad keyword if
+Line 73: Bad keyword if
+Line 78: Bad keyword else
+Line 79: Bad keyword if
+Line 82: Bad keyword if
+Line 84: Bad keyword if
+Line 86: Bad keyword for
+Line 70: Always without case(x)
+End of file /home/asish/private/aditi/ECE552-Project/demo1/verilog/memory2c.v. Hash = 1337867994
