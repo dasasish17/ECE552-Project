@@ -6,7 +6,7 @@
                      processor.
 */
 //Inputs: ImmSrc, PC_add, I
-module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jump, memReadorWrite, memWrite, memRead, writeData, BrchCnd, final_new_PC, Read_Data, halt);
+module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jump, memReadorWrite, memWrite, memRead, writeData, BrchCnd, final_new_PC, Read_Data, halt, flush);
 
    input wire [15:0] PC_add;
    input wire ImmSrc;
@@ -23,6 +23,7 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jum
    input wire clk;
    input wire rst;
    input wire halt;
+   output wire flush;
 
    // change the output below 
    // output wire [15:0] PC_value;
@@ -57,6 +58,6 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jum
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
    //enable = 1'b1 or ????
    memory2c mem (.data_out(Read_Data), .data_in(writeData), .addr(aluResult), .enable(memReadorWrite), .wr(memWrite), .createdump(halt), .clk(clk), .rst(rst));
-
+   assign flush = ALU_Result | BrchCnd;
    
 endmodule

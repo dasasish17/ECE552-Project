@@ -142,7 +142,7 @@ module decode (
                            3'b111; // Default case
 
    // Register file instantiation
-   regFile regFile0 (
+   regFile_bypass regFile0 (
        .read1Data(read_Data1),
        .read2Data(read_Data2),
        .err(reg_err),
