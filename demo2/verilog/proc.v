@@ -38,6 +38,8 @@ module proc (/*AUTOARG*/
        wire [15:0]finalPC;
        wire actualRead;
 
+       wire potRAW;
+
        // Instantiate fetch stage
        fetch fetch0 (
            .clk(clk),
@@ -59,6 +61,7 @@ module proc (/*AUTOARG*/
            .MemWrite(MemWrite),
            .memRead(actualRead),
            .ALU_jump(ALU_jump),
+           .potRAW(potRAW),
            .InvA(InvA),
            .InvB(InvB),
            .Cin(Cin),

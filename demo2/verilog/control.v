@@ -1,7 +1,7 @@
 `default_nettype none
 
 module control (Opcode, Func, err, Halt,
-                zeroExt, ImmSrc, ALU_jump, RegWrite, memReadorWrite, memRead, memWrite,
+                zeroExt, ImmSrc, ALU_jump, RegWrite, memReadorWrite, memRead, memWrite, potRAW,
                 InvA, InvB, Cin, Beq, Bne, Blt, Bgt,
                 RegDst, MemtoReg, ALUSrc1, ALUSrc2, ALU_op);
 
@@ -28,6 +28,7 @@ module control (Opcode, Func, err, Halt,
     output reg memReadorWrite;
     output reg memRead;
     output reg memWrite;
+    output reg potRAW;
 
     // Add/subtract
     output reg InvA;
@@ -60,6 +61,7 @@ module control (Opcode, Func, err, Halt,
         memReadorWrite = 1'b0;
         memWrite = 1'b0;
         memRead = 1'b0;
+        potRAW = 1'b0;
 
         err = 1'b0;
         Halt = 1'b0;
@@ -91,6 +93,7 @@ module control (Opcode, Func, err, Halt,
             7'b01000_xx: begin
                 ALUSrc2 = 2'b01;
                 ALU_op = 4'b0100;
+                potRAW = 1'b1;
             end
             
             // 4. subi
@@ -99,6 +102,7 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b0100;
                 InvA = 1'b1;
                 Cin = 1'b1;
+                potRAW = 1'b1;
             end
             
             // 5. xori
@@ -106,6 +110,7 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc2 = 2'b01;
                 zeroExt = 1'b1;
                 ALU_op = 4'b0111;
+                potRAW = 1'b1;
             end
             
             // 6. andni
@@ -114,6 +119,7 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b0101;
                 zeroExt = 1'b1;
                 InvB = 1'b1;
+                potRAW = 1'b1;
             end
             
             // 7. roli
@@ -121,6 +127,7 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc2 = 2'b01;
                 ALU_op = 4'b0000;
                 zeroExt = 1'b1;
+                potRAW = 1'b1;
             end
             
             // 8. slli
@@ -128,6 +135,7 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc2 = 2'b01;
                 ALU_op = 4'b0001;
                 zeroExt = 1'b1;
+                potRAW = 1'b1;
             end
             
             // 9. rori
@@ -135,6 +143,7 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc2 = 2'b01;
                 ALU_op = 4'b0010;
                 zeroExt = 1'b1;
+                potRAW = 1'b1;
             end
             
             // 10. srli
@@ -142,6 +151,7 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc2 = 2'b01;
                 ALU_op = 4'b0011;
                 zeroExt = 1'b1;
+                potRAW = 1'b1;
             end
             
             // 11. st (store)
@@ -152,6 +162,7 @@ module control (Opcode, Func, err, Halt,
                 memReadorWrite = 1'b1;//no longer using it
                 memWrite = 1'b1;
                 RegDst = 2'b00;
+                potRAW = 1'b1;
             end
             
             // 12. ld (load)
@@ -161,6 +172,7 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b0100;
                 memReadorWrite = 1'b1;
                 memRead = 1'b1;
+                potRAW = 1'b1;
             end
             
             // 13. stu (store with update)
@@ -170,18 +182,21 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b0100;
                 memReadorWrite = 1'b1;
                 memWrite = 1'b1;
+                potRAW = 1'b1;
             end
             
             // 14. btr (bit reverse)
             7'b11001_xx: begin
                 RegDst = 2'b10;
                 ALU_op = 4'b1111;
+                potRAW = 1'b1;
             end
             // (Add other instructions as needed)
             // 15. add
             7'b11011_00: begin
                 RegDst = 2'b10;
                 ALU_op = 4'b0100;
+                potRAW = 1'b1;
             end
 
             // 16. sub
@@ -190,12 +205,14 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b0100;
                 Cin = 1'b1;
                 InvA = 1'b1;
+                potRAW = 1'b1;
             end
 
             // 17. xor
             7'b11011_10: begin
                 RegDst = 2'b10;
                 ALU_op = 4'b0111;
+                potRAW = 1'b1;
             end
 
             // 18. andn
@@ -203,30 +220,35 @@ module control (Opcode, Func, err, Halt,
                 RegDst = 2'b10;
                 ALU_op = 4'b0101;
                 InvB = 1'b1;
+                potRAW = 1'b1;
             end
 
             // 19. rol
             7'b11010_00: begin
                 RegDst = 2'b10;
                 ALU_op = 4'b0000;
+                potRAW = 1'b1;
             end
 
             // 20. sll
             7'b11010_01: begin
                 RegDst = 2'b10;
                 ALU_op = 4'b0001;
+                potRAW = 1'b1;
             end
 
             // 22. ror
             7'b11010_10: begin
                 RegDst = 2'b10;
                 ALU_op = 4'b0010;
+                potRAW = 1'b1;
             end
 
             // 23. srl
             7'b11010_11: begin
                 RegDst = 2'b10;
                 ALU_op = 4'b0011;
+                potRAW = 1'b1;
             end
 
             // 24. seq
@@ -235,6 +257,7 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b1001;
                 InvB = 1'b1;
                 Cin = 1'b1;
+                potRAW = 1'b1;
             end
 
             // 25. slt
@@ -243,6 +266,7 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b1010;
                 InvB = 1'b1;
                 Cin = 1'b1;
+                potRAW = 1'b1;
             end
 
             // 26. sle
@@ -251,12 +275,14 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b1100;
                 InvB = 1'b1;
                 Cin = 1'b1;
+                potRAW = 1'b1;
             end
 
             // 27. sco
             7'b11111_xx: begin
                 RegDst = 2'b10;
                 ALU_op = 4'b1011;
+                potRAW = 1'b1;
             end
 
             // 28. beqz
@@ -297,6 +323,7 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc1 = 2'b01;
                 ALUSrc2 = 2'b10;
                 ALU_op = 4'b0100;
+                potRAW = 1'b1;
             end
 
             // 33. slbi
@@ -306,6 +333,7 @@ module control (Opcode, Func, err, Halt,
                 RegDst = 2'b01;
                 ALU_op = 4'b1110;
                 zeroExt = 1'b1;
+                potRAW = 1'b1;
             end
 
             // 34. j
@@ -321,6 +349,7 @@ module control (Opcode, Func, err, Halt,
                 ALU_op = 4'b0100;
                 RegWrite = 1'b0;
                 ALU_jump = 1'b1;
+                potRAW = 1'b1;
             end
 
             // 36. jal
@@ -338,6 +367,7 @@ module control (Opcode, Func, err, Halt,
                 MemtoReg = 2'b00;
                 ALU_op = 4'b0100;
                 ALU_jump = 1'b1;
+                potRAW = 1'b1;
             end
 
             // Default case

@@ -48,6 +48,7 @@ module decode (
    output wire MemEnable;
    output wire MemWrite;
    output wire memRead;
+   output wire potRAW;
 
    output wire ALU_jump;
 
@@ -103,6 +104,7 @@ module decode (
         .memWrite(MemWrite),
         .memRead(memRead),
         .ALU_jump(ALU_jump),
+        .potRAW(potRAW),
         .InvA(InvA),
         .InvB(InvB),
         .Cin(Cin),
