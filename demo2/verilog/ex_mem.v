@@ -30,7 +30,7 @@ module ex_mem (
     ex_mem_halt;
 );
 
-    input wire [15:0] id_ex_PC_add,   // PC + offset
+    input wire [15:0] id_ex_PC_Updated,   // PC + offset
     input wire        id_ex_ImmSrc,   // Immediate source control signal
     input wire [15:0] id_ex_Imm8_Ext, // 8-bit Immediate extension
     input wire [15:0] id_ex_Imm11_Ext, // 11-bit Immediate extension
@@ -44,7 +44,10 @@ module ex_mem (
     input wire        clk,              // Clock signal
     input wire        rst,              // Reset signal
     input wire        id_ex_halt        // Halt signal
-    output wire [15:0] ex_mem_PC_add,   // PC + offset
+    input wire [2:0]  id_ex_Write_Register;
+    input wire        id_ex_RegWrite;
+
+    output wire [15:0] ex_mem_PC_Updated,   // PC + offset
     output wire        ex_mem_ImmSrc,   // Immediate source control signal
     output wire [15:0] ex_mem_Imm8_Ext, // 8-bit Immediate extension
     output wire [15:0] ex_mem_Imm11_Ext, // 11-bit Immediate extension
@@ -56,9 +59,11 @@ module ex_mem (
     output wire        ex_mem_ALU_Jump,   // Jump control signal
     output wire [15:0] ex_mem_writeData,  // Data to write to memory
     output wire        ex_mem_halt;
+    output wire [2:0]  ex_mem_Write_Register;
+    output wire        ex_mem_RegWrite;
 
     //module register(out, in, wr_en, clk, rst);
-    register register0 (.out(ex_mem_PC_add), .in(id_ex_PC_add), .wr_en(1'b1), .clk(clk), .rst(rst));
+    register register0 (.out(ex_mem_PC_Updated), .in(id_ex_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst));
     register register1 (.out(ex_mem_ImmSrc), .in(id_ex_ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst));
     register register2 (.out(ex_mem_Imm8_Ext), .in(id_ex_Imm8_Ext), .wr_en(1'b1), .clk(clk), .rst(rst));
     register register3 (.out(ex_mem_Imm11_Ext), .in(id_ex_Imm11_Ext), .wr_en(1'b1), .clk(clk), .rst(rst));
@@ -70,7 +75,8 @@ module ex_mem (
     register register9 (.out(ex_mem_ALU_Jump), .in(id_ex_ALU_Jump), .wr_en(1'b1), .clk(clk), .rst(rst));
     register register10 (.out(ex_mem_writeData), .in(id_ex_writeData), .wr_en(1'b1), .clk(clk), .rst(rst));
     register register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(1'b1), .clk(clk), .rst(rst));
-        
+    register register12 (.out(ex_mem_Write_Register), .in(id_ex_Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst));
+    register register12 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst));
 
     
 
