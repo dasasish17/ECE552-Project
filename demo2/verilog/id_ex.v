@@ -3,58 +3,57 @@
 module id_ex (
     clk, 
     rst,
-    Flush;
-    read_Data1;
-    read_Data2;
-    ImmSrc;
-    MemEnable;
-    MemWrite;
-    memRead;
-    ALU_jump;
-    InvA;
-    InvB;
-    Cin;
-    Beq;
-    Bne;
-    Blt;
-    Bgt;
-    Halt;
-    MemToReg;
-    ALUSrc1;
-    ALUSrc2;
-    ALU_op;
-    imm5_ext_rst;
-    imm8_ext_rst;
-    imm11_sign_ext;
-    Write_Register; //writeRegSel
-    RegWrite;
-    if_id_PC_updated;
-    id_ex_PC_updated;
-    id_ex_read_Data1;
-    id_ex_read_Data2;
-    id_ex_ImmSrc;
-    id_ex_MemEnable;
-    id_ex_MemWrite;
-    id_ex_memRead;
-    id_ex_ALU_jump;
-    id_ex_InvA;
-    id_ex_InvB;
-    id_ex_Cin;
-    id_ex_Beq;
-    id_ex_Bne;
-    id_ex_Blt;
-    id_ex_Bgt;
-    id_ex_Halt;
-    id_ex_MemToReg;
-    id_ex_ALUSrc1;
-    id_ex_ALUSrc2;
-    id_ex_ALU_op;
-    id_ex_imm5_ext_rst;
-    id_ex_imm8_ext_rst;
-    id_ex_imm11_sign_ext;
-    id_ex_Write_Register; // id_ex_writeRegSel
-    id_ex_RegWrite;
-
+    Flush,
+    read_Data1,
+    read_Data2,
+    ImmSrc,
+    MemEnable,
+    MemWrite,
+    memRead,
+    ALU_jump,
+    InvA,
+    InvB,
+    Cin,
+    Beq,
+    Bne,
+    Blt,
+    Bgt,
+    Halt,
+    MemToReg,
+    ALUSrc1,
+    ALUSrc2,
+    ALU_op,
+    imm5_ext_rst,
+    imm8_ext_rst,
+    imm11_sign_ext,
+    Write_Register, //writeRegSel
+    RegWrite,
+    if_id_PC_updated,
+    id_ex_PC_updated,
+    id_ex_read_Data1,
+    id_ex_read_Data2,
+    id_ex_ImmSrc,
+    id_ex_MemEnable,
+    id_ex_MemWrite,
+    id_ex_memRead,
+    id_ex_ALU_jump,
+    id_ex_InvA,
+    id_ex_InvB,
+    id_ex_Cin,
+    id_ex_Beq,
+    id_ex_Bne,
+    id_ex_Blt,
+    id_ex_Bgt,
+    id_ex_Halt,
+    id_ex_MemToReg,
+    id_ex_ALUSrc1,
+    id_ex_ALUSrc2,
+    id_ex_ALU_op,
+    id_ex_imm5_ext_rst,
+    id_ex_imm8_ext_rst,
+    id_ex_imm11_sign_ext,
+    id_ex_Write_Register, // id_ex_writeRegSel
+    id_ex_RegWrite
 );
     input wire clk;
     input wire rst;

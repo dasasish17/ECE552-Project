@@ -15,6 +15,7 @@ module ex_mem (
     id_ex_ALU_Jump,
     clk,
     rst,
+    Flush,
     id_ex_halt,
     ex_mem_PC_add,
     ex_mem_ImmSrc,
@@ -27,57 +28,56 @@ module ex_mem (
     ex_mem_writeData,
     ex_mem_BrchCnd,
     ex_mem_ALU_Jump,
-    ex_mem_halt;
+    ex_mem_halt
 );
-
-    input wire [15:0] id_ex_PC_Updated,   // PC + offset
-    input wire        id_ex_ImmSrc,   // Immediate source control signal
-    input wire [15:0] id_ex_Imm8_Ext, // 8-bit Immediate extension
-    input wire [15:0] id_ex_Imm11_Ext, // 11-bit Immediate extension
-    input wire [15:0] aluResult,        // ALU computation result
-    input wire        id_ex_memReaderWrite,
-    input wire        id_ex_memRead,    // Memory read enable
-    input wire        id_ex_memWrite,   // Memory write enable
-    input wire        BrchCnd,          // Branch condition flag
-    input wire        id_ex_ALU_Jump,   // Jump control signal
-    input wire [15:0] id_ex_writeData,  // Data to write to memory
-    input wire        clk,              // Clock signal
-    input wire        rst,              // Reset signal
-    input wire        id_ex_halt        // Halt signal
+    input Flush;
+    input wire [15:0] id_ex_PC_Updated;   // PC + offset
+    input wire        id_ex_ImmSrc;   // Immediate source control signal
+    input wire [15:0] id_ex_Imm8_Ext; // 8-bit Immediate extension
+    input wire [15:0] id_ex_Imm11_Ext; // 11-bit Immediate extension
+    input wire [15:0] aluResult;        // ALU computation result
+    input wire        id_ex_memReaderWrite;
+    input wire        id_ex_memRead;    // Memory read enable
+    input wire        id_ex_memWrite;   // Memory write enable
+    input wire        BrchCnd;         // Branch condition flag
+    input wire        id_ex_ALU_Jump;   // Jump control signal
+    input wire [15:0] id_ex_writeData;  // Data to write to memory
+    input wire        clk;              // Clock signal
+    input wire        rst;              // Reset signal
+    input wire        id_ex_halt;        // Halt signal
     input wire [2:0]  id_ex_Write_Register;
     input wire        id_ex_RegWrite;
 
-    output wire [15:0] ex_mem_PC_Updated,   // PC + offset
-    output wire        ex_mem_ImmSrc,   // Immediate source control signal
-    output wire [15:0] ex_mem_Imm8_Ext, // 8-bit Immediate extension
-    output wire [15:0] ex_mem_Imm11_Ext, // 11-bit Immediate extension
-    output wire [15:0] ex_mem_aluResult, // ALU computation result
-    output wire        ex_mem_memReaderWrite,
-    output wire        ex_mem_memRead,    // Memory read enable
-    output wire        ex_mem_memWrite,   // Memory write enable
-    output wire        ex_mem_BrchCnd, // Branch condition flag
-    output wire        ex_mem_ALU_Jump,   // Jump control signal
-    output wire [15:0] ex_mem_writeData,  // Data to write to memory
+    output wire [15:0] ex_mem_PC_Updated;   // PC + offset
+    output wire        ex_mem_ImmSrc;   // Immediate source control signal
+    output wire [15:0] ex_mem_Imm8_Ext; // 8-bit Immediate extension
+    output wire [15:0] ex_mem_Imm11_Ext; // 11-bit Immediate extension
+    output wire [15:0] ex_mem_aluResult; // ALU computation result
+    output wire        ex_mem_memReaderWrite;
+    output wire        ex_mem_memRead;    // Memory read enable
+    output wire        ex_mem_memWrite;   // Memory write enable
+    output wire        ex_mem_BrchCnd; // Branch condition flag
+    output wire        ex_mem_ALU_Jump;   // Jump control signal
+    output wire [15:0] ex_mem_writeData;  // Data to write to memory
     output wire        ex_mem_halt;
     output wire [2:0]  ex_mem_Write_Register;
     output wire        ex_mem_RegWrite;
 
     //module register(out, in, wr_en, clk, rst);
-    register register0 (.out(ex_mem_PC_Updated), .in(id_ex_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register1 (.out(ex_mem_ImmSrc), .in(id_ex_ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register2 (.out(ex_mem_Imm8_Ext), .in(id_ex_Imm8_Ext), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register3 (.out(ex_mem_Imm11_Ext), .in(id_ex_Imm11_Ext), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register4 (.out(ex_mem_aluResult), .in(id_ex_aluResult), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register5 (.out(ex_mem_memReaderWrite), .in(id_ex_memReaderWrite), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register6 (.out(ex_mem_memRead), .in(id_ex_memRead), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register7 (.out(ex_mem_memWrite), .in(id_ex_memWrite), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register8 (.out(ex_mem_BrchCnd), .in(BrchCnd), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register9 (.out(ex_mem_ALU_Jump), .in(id_ex_ALU_Jump), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register10 (.out(ex_mem_writeData), .in(id_ex_writeData), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register12 (.out(ex_mem_Write_Register), .in(id_ex_Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst));
-    register register12 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst));
+    register register0 (.out(ex_mem_PC_Updated), .in(id_ex_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register1 (.out(ex_mem_ImmSrc), .in(id_ex_ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register2 (.out(ex_mem_Imm8_Ext), .in(id_ex_Imm8_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register3 (.out(ex_mem_Imm11_Ext), .in(id_ex_Imm11_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register4 (.out(ex_mem_aluResult), .in(id_ex_aluResult), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register5 (.out(ex_mem_memReaderWrite), .in(id_ex_memReaderWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register6 (.out(ex_mem_memRead), .in(id_ex_memRead), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register7 (.out(ex_mem_memWrite), .in(id_ex_memWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register8 (.out(ex_mem_BrchCnd), .in(BrchCnd), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register9 (.out(ex_mem_ALU_Jump), .in(id_ex_ALU_Jump), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register10 (.out(ex_mem_writeData), .in(id_ex_writeData), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //read2Data
+    register register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register12 (.out(ex_mem_Write_Register), .in(id_ex_Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register12 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //data to register
 
-    
 
 endmodule
