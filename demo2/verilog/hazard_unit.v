@@ -6,7 +6,7 @@ parameter OPERAND_WIDTH = 16;
 
 input wire [OPERAND_WIDTH-1:0] instruction;
 input wire [2:0] id_ex_reg_dst;
-input wire [2:0] ex_mem_reg_dst;
+input wire [2:0] ex_mem_reg_dst; //write register
 input wire id_ex_reg_write, ex_mem_reg_write;
 output wire stall;
 input wire potRAW;

@@ -33,7 +33,9 @@ module decode (
     imm5_ext_rst,  // 5-bit immediate extended output
     imm8_ext_rst,  // 8-bit immediate extended output
     imm11_sign_ext,  // 11-bit immediate signed extended output
-    potRAW
+    potRAW,
+    RegWrite,
+    Write_Register
 );
 
    input wire clk;
@@ -50,6 +52,8 @@ module decode (
    output wire MemWrite;
    output wire memRead;
    output wire potRAW;
+   output wire RegWrite;
+   output wire [2:0] Write_Register;
 
    output wire ALU_jump;
 
@@ -82,9 +86,8 @@ module decode (
 
    // signals out of control
    wire zeroExt;
-   wire [2:0] Write_Register;
    wire [1:0] RegDst;
-   wire RegWrite;
+
    wire reg_err;
    wire ctrl_err;
    //wire memRead;
