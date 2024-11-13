@@ -323,7 +323,7 @@ module control (Opcode, Func, err, Halt,
                 ALUSrc1 = 2'b01;
                 ALUSrc2 = 2'b10;
                 ALU_op = 4'b0100;
-                potRAW = 1'b1;
+                potRAW = 1'b1;// need to check
             end
 
             // 33. slbi

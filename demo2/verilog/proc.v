@@ -57,6 +57,8 @@ module proc (/*AUTOARG*/
            .Write_Data(write_data),
            .ImmSrc(ImmSrc),
            .MemEnable(MemRead),
+           .mem_wb_RegWrite(),
+           .mem_wb_Write_Register(),
            .MemWrite(MemWrite),
            .memRead(actualRead),
            .ALU_jump(ALU_jump),

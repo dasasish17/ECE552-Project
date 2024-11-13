@@ -35,13 +35,17 @@ module decode (
     imm11_sign_ext,  // 11-bit immediate signed extended output
     potRAW,
     RegWrite,
-    Write_Register
+    Write_Register,
+    mem_wb_RegWrite,
+    mem_wb_Write_Register
 );
 
    input wire clk;
    input wire rst;
    input wire [15:0] instruction;
    input wire [15:0] Write_Data;
+   input wire mem_wb_RegWrite;
+   input wire [2:0] mem_wb_Write_Register;
 
    output wire [15:0] read_Data1;
    output wire [15:0] read_Data2;
@@ -156,9 +160,9 @@ module decode (
        .rst(rst),
        .read1RegSel(instruction[10:8]),
        .read2RegSel(instruction[7:5]),
-       .writeRegSel(Write_Register),
+       .writeRegSel(mem_wb_Write_Register),
        .writeData(Write_Data),
-       .writeEn(RegWrite)
+       .writeEn(mem_wb_RegWrite)
    );
 
    assign err = reg_err | ctrl_err; // assigning err

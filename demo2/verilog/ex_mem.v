@@ -17,6 +17,8 @@ module ex_mem (
     rst,
     Flush,
     id_ex_halt,
+    id_ex_MemToReg,
+    ex_mem_MemToReg,
     ex_mem_PC_Updated,
     ex_mem_ImmSrc,
     ex_mem_Imm8_Ext,
@@ -43,6 +45,7 @@ module ex_mem (
     input wire [15:0] id_ex_Imm11_Ext; // 11-bit Immediate extension
     input wire [15:0] aluResult;        // ALU computation result
     input wire        id_ex_memReaderWrite;
+    input wire [1:0] id_ex_MemToReg;
     input wire        id_ex_memRead;    // Memory read enable
     input wire        id_ex_memWrite;   // Memory write enable
     input wire        BrchCnd;         // Branch condition flag
@@ -54,6 +57,7 @@ module ex_mem (
     input wire [2:0]  id_ex_Write_Register;
     input wire        id_ex_RegWrite;
 
+    output wire [1:0] ex_mem_MemToReg;
     output wire [15:0] ex_mem_PC_Updated;   // PC + offset
     output wire        ex_mem_ImmSrc;   // Immediate source control signal
     output wire [15:0] ex_mem_Imm8_Ext; // 8-bit Immediate extension

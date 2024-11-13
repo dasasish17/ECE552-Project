@@ -32,8 +32,10 @@ module fetch (halt, stall, clk, rst, PC_intermediary, instr, PC_updated);
 
    // implement the instrcution memeory 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
+   
    memory2c mem0 (.data_out(intermediate_instruction), .data_in(16'b0), .addr(pcCurrent), .enable(1'b1), .wr(1'b0), .createdump(halt), .clk(clk), .rst(rst));
-   assign instr = (halt| rst)? 16'b0000_1000_0000_0000 : intermediate_instruction; // ouput instruction
+   
+   assign instr = (halt | rst) ? 16'b0000_1000_0000_0000 : intermediate_instruction; // ouput instruction
     
 endmodule
 `default_nettype wire
