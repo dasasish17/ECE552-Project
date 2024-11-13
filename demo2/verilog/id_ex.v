@@ -28,8 +28,6 @@ module id_ex (
     imm11_sign_ext,
     Write_Register, //writeRegSel
     RegWrite,
-    if_id_PC_updated,
-    id_ex_PC_updated,
     id_ex_read_Data1,
     id_ex_read_Data2,
     id_ex_ImmSrc,
@@ -53,7 +51,9 @@ module id_ex (
     id_ex_imm8_ext_rst,
     id_ex_imm11_sign_ext,
     id_ex_Write_Register, // id_ex_writeRegSel
-    id_ex_RegWrite
+    id_ex_RegWrite,
+    if_id_PC_Updated,
+    id_ex_PC_Updated
 );
     input wire clk;
     input wire rst;
@@ -73,7 +73,7 @@ module id_ex (
     input wire Blt;
     input wire Bgt;
     input wire Halt;
-    input wire err;
+
     input wire [1:0] MemToReg;
     input wire [1:0] ALUSrc1;
     input wire [1:0] ALUSrc2;
@@ -99,7 +99,7 @@ module id_ex (
     output wire id_ex_Blt;
     output wire id_ex_Bgt;
     output wire id_ex_Halt;
-    output wire id_ex_err;
+   
     output wire [1:0] id_ex_MemToReg;
     output wire [1:0] id_ex_ALUSrc1;
     output wire [1:0] id_ex_ALUSrc2;
@@ -109,6 +109,9 @@ module id_ex (
     output wire [15:0] id_ex_imm11_sign_ext;
     output wire [2:0] id_ex_Write_Register;
     output wire id_ex_RegWrite;
+
+    input wire [15:0] if_id_PC_Updated;
+    output wire [15:0] id_ex_PC_Updated;
 
     //module register(out, in, wr_en, clk, rst);
     register register0 (.out(id_ex_read_Data1), .in(read_Data1), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
@@ -127,7 +130,7 @@ module id_ex (
     register register12 (.out(id_ex_Blt), .in(Blt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register13 (.out(id_ex_Bgt), .in(Bgt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register14 (.out(id_ex_Halt), .in(Halt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register15 (.out(id_ex_err), .in(err), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+   
     register register16 (.out(id_ex_MemToReg), .in(MemToReg), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register17 (.out(id_ex_ALUSrc1), .in(ALUSrc1), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register18 (.out(id_ex_ALUSrc2), .in(ALUSrc2), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
@@ -138,6 +141,6 @@ module id_ex (
  
     register register23 (.out(id_ex_Write_Register), .in(Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register24 (.out(id_ex_RegWrite), .in(RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register25 (.out(id_ex_PC_updated), .in(if_id_PC_updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register25 (.out(id_ex_PC_Updated), .in(if_id_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
 
 endmodule

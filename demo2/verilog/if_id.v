@@ -1,10 +1,10 @@
 `default_nettype none
 
-module if_id (instruction, PC_updated, clk, rst, stall, flush, if_id_instruction, if_id_PC_updated);
+module if_id (instruction, PC_updated, clk, rst, if_id_instruction, if_id_PC_updated, flush, stall);
 
     parameter INSTRUCTION_SIZE = 16;
 
-    input wire clk, rst, Stall, Flush;
+    input wire clk, rst, stall, flush;
     input wire [INSTRUCTION_SIZE-1:0] instruction, PC_updated;
     output wire [INSTRUCTION_SIZE-1:0] if_id_instruction, if_id_PC_updated;
 

@@ -32,7 +32,8 @@ module decode (
     read_Data2,    // Read data output 2
     imm5_ext_rst,  // 5-bit immediate extended output
     imm8_ext_rst,  // 8-bit immediate extended output
-    imm11_sign_ext  // 11-bit immediate signed extended output
+    imm11_sign_ext,  // 11-bit immediate signed extended output
+    potRAW
 );
 
    input wire clk;

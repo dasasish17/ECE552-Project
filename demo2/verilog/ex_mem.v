@@ -2,7 +2,7 @@
 
 module ex_mem (
     //flops all inputs to mem 
-    id_ex_PC_add, 
+    id_ex_PC_Updated, 
     id_ex_ImmSrc,
     id_ex_Imm8_Ext,
     id_ex_Imm11_Ext,
@@ -17,7 +17,7 @@ module ex_mem (
     rst,
     Flush,
     id_ex_halt,
-    ex_mem_PC_add,
+    ex_mem_PC_Updated,
     ex_mem_ImmSrc,
     ex_mem_Imm8_Ext,
     ex_mem_Imm11_Ext,
@@ -28,9 +28,15 @@ module ex_mem (
     ex_mem_writeData,
     ex_mem_BrchCnd,
     ex_mem_ALU_Jump,
-    ex_mem_halt
+    ex_mem_halt,
+    id_ex_RegWrite,
+    ex_mem_RegWrite,
+    id_ex_Write_Register,
+    ex_mem_Write_Register
+
+
 );
-    input Flush;
+    input wire Flush;
     input wire [15:0] id_ex_PC_Updated;   // PC + offset
     input wire        id_ex_ImmSrc;   // Immediate source control signal
     input wire [15:0] id_ex_Imm8_Ext; // 8-bit Immediate extension
@@ -68,7 +74,7 @@ module ex_mem (
     register register1 (.out(ex_mem_ImmSrc), .in(id_ex_ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register2 (.out(ex_mem_Imm8_Ext), .in(id_ex_Imm8_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register3 (.out(ex_mem_Imm11_Ext), .in(id_ex_Imm11_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register4 (.out(ex_mem_aluResult), .in(id_ex_aluResult), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register4 (.out(ex_mem_aluResult), .in(aluResult), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register5 (.out(ex_mem_memReaderWrite), .in(id_ex_memReaderWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register6 (.out(ex_mem_memRead), .in(id_ex_memRead), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register7 (.out(ex_mem_memWrite), .in(id_ex_memWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
@@ -77,7 +83,7 @@ module ex_mem (
     register register10 (.out(ex_mem_writeData), .in(id_ex_writeData), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //read2Data
     register register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register12 (.out(ex_mem_Write_Register), .in(id_ex_Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register12 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //data to register
+    register register13 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //data to register
 
 
 endmodule
