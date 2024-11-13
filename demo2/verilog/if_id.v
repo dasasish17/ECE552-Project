@@ -12,7 +12,7 @@ module if_id (instruction, PC_updated, clk, rst, stall, flush, if_id_instruction
 
     assign inter_instr = flush ? 16'b0000_1000_0000_0000 : instruction;
 
-    register instr_register (.out(if_id_instruction), .in(inter_instr), .wr_en(~stall), .clk(clk), .rst(rst | flush));
+    register instr_register (.out(if_id_instruction), .in(inter_instr), .wr_en(~stall), .clk(clk), .rst(1'b0));
     register pc_update_register (.out(if_id_PC_updated), .in(PC_updated), .wr_en(~stall), .clk(clk), .rst(rst | flush));
 
 endmodule

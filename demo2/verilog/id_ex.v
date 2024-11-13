@@ -114,6 +114,7 @@ module id_ex (
     //module register(out, in, wr_en, clk, rst);
     register register0 (.out(id_ex_read_Data1), .in(read_Data1), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register1 (.out(id_ex_read_Data2), .in(read_Data2), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+   
     register register2 (.out(id_ex_ImmSrc), .in(ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register3 (.out(id_ex_MemEnable), .in(MemEnable), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register4 (.out(id_ex_MemWrite), .in(MemWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
@@ -135,6 +136,7 @@ module id_ex (
     register register20 (.out(id_ex_imm5_ext_rst), .in(imm5_ext_rst), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register21 (.out(id_ex_imm8_ext_rst), .in(imm8_ext_rst), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register22 (.out(id_ex_imm11_sign_ext), .in(imm11_sign_ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+ 
     register register23 (.out(id_ex_Write_Register), .in(Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register24 (.out(id_ex_RegWrite), .in(RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register25 (.out(id_ex_PC_updated), .in(if_id_PC_updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));

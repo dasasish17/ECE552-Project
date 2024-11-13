@@ -11,7 +11,6 @@ module proc (/*AUTOARG*/
 
    input wire clk;
    input wire rst;
-
    output wire err;
 
    // None of the above lines can be modified
