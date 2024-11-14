@@ -74,7 +74,7 @@ module proc (/*AUTOARG*/
   wire [2:0] mem_wb_Write_Register;
   wire mem_wb_RegWrite;
 
-  wire PC_flush;
+  wire [15:0] PC_flush;
 
   wire flush;
   wire hu_stall;
