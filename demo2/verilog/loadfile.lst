@@ -1,8 +1,8 @@
-          // Original test: ./benson/hw4/problem6/andni_2.asm
-          // Author: benson
+          // Original test: ./ullmer/hw4/problem6/jal_3.asm
+          // Author: ullmer
           // Test source code follows
           
           
-0000 c1ff lbi r1, 255
-0002 5940 andni r2, r1, 0
-0004 0000 halt
+          //tests jump and link 
+          //with unaligned target
+0000 3251 jal 593

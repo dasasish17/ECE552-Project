@@ -1,8 +1,9 @@
-INST:    1100 0001 0000 0000 lbi r1, 0
-ARCH:    REG: 1 VALUE: 0x0000 ***DIFF***
-VERILOG: REG: 1 VALUE: 0xxxxx
-INST:    0101 1001 0101 1111 andni r2, r1, 31
-ARCH:    REG: 2 VALUE: 0x0000 ***DIFF***
-VERILOG: REG: 2 VALUE: 0xxxxx
-INST:    0000 0000 0000 0000 halt
-FAIL: 2 differences
+INST:    0011 0000 1111 1111 jal 255
+ARCH:    REG: 7 VALUE: 0x0002 ***DIFF***
+VERILOG: REG: 7 VALUE: 0xzzzz
+Warning: Arch trace has a PC not defined in binary image. Assuming it is a halt. Bad binary "/afs/cs.wisc.edu/u/s/w/swamit/public/html/courses/cs552/fall2024/handouts/testprograms/public/inst_tests/unaligned/jal_21.asm". Panic.
+0101 INUM:        1 PC: 0x0101
+INST:                        
+ARCH:      
+VERILOG: 
+FAIL: 1 differences

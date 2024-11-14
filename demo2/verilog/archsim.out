@@ -5,11 +5,9 @@ Type "help" for more information
 
 Loading program...
 Executing...
-lbi r1, 0
-INUM:        0 PC: 0x0000 REG: 1 VALUE: 0x0000
-andni r2, r1, 31
-INUM:        1 PC: 0x0002 REG: 2 VALUE: 0x0000
+jal 255
+INUM:        0 PC: 0x0000 REG: 7 VALUE: 0x0002
 halt
 program halted
-INUM:        2 PC: 0x0004
+INUM:        1 PC: 0x0101
 Program Finished

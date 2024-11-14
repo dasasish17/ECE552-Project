@@ -88,6 +88,7 @@ module ex_mem (
     register #(.WIDTH(1)) register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register #(.WIDTH(3)) register12 (.out(ex_mem_Write_Register), .in(id_ex_Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register #(.WIDTH(1)) register13 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //data to register
+    register #(.WIDTH(2)) register14 (.out(ex_mem_MemToReg), .in(id_ex_MemToReg), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //data to register
 
 
 endmodule

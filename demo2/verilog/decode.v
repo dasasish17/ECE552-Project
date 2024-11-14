@@ -14,6 +14,7 @@ module decode (
     MemEnable,       // Memory read control signal
     MemWrite,      // Memory write control signal
     memRead,
+    PC_Updated,
     ALU_jump,      // ALU jump control signal
     InvA,          // Invert A control signal
     InvB,          // Invert B control signal
@@ -43,7 +44,7 @@ module decode (
    input wire clk;
    input wire rst;
    input wire [15:0] instruction;
-   input wire [15:0] Write_Data;
+   input wire [15:0] Write_Data, PC_Updated;
    input wire mem_wb_RegWrite;
    input wire [2:0] mem_wb_Write_Register;
 
