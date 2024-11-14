@@ -80,7 +80,7 @@ module proc (/*AUTOARG*/
   wire hu_stall;
 
   wire final_halt, id_ex_halt, ex_mem_halt, mem_wb_halt;
-  wire final_PC_incr;
+  wire [15:0] final_PC_incr;
   wire final_stall;
 
   // final halt logic

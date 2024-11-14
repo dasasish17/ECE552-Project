@@ -74,20 +74,20 @@ module ex_mem (
     output wire        ex_mem_RegWrite;
 
     //module register(out, in, wr_en, clk, rst);
-    register register0 (.out(ex_mem_PC_Updated), .in(id_ex_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register1 (.out(ex_mem_ImmSrc), .in(id_ex_ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register2 (.out(ex_mem_Imm8_Ext), .in(id_ex_Imm8_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register3 (.out(ex_mem_Imm11_Ext), .in(id_ex_Imm11_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register4 (.out(ex_mem_aluResult), .in(aluResult), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register5 (.out(ex_mem_memReadorWrite), .in(id_ex_memReadorWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register6 (.out(ex_mem_memRead), .in(id_ex_memRead), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register7 (.out(ex_mem_memWrite), .in(id_ex_memWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register8 (.out(ex_mem_BrchCnd), .in(BrchCnd), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register9 (.out(ex_mem_ALU_Jump), .in(id_ex_ALU_Jump), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register10 (.out(ex_mem_writeData), .in(id_ex_writeData), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //read2Data
-    register register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register12 (.out(ex_mem_Write_Register), .in(id_ex_Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register13 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //data to register
+    register #(.WIDTH(16)) register0 (.out(ex_mem_PC_Updated), .in(id_ex_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register1 (.out(ex_mem_ImmSrc), .in(id_ex_ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register2 (.out(ex_mem_Imm8_Ext), .in(id_ex_Imm8_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register3 (.out(ex_mem_Imm11_Ext), .in(id_ex_Imm11_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register4 (.out(ex_mem_aluResult), .in(aluResult), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register5 (.out(ex_mem_memReadorWrite), .in(id_ex_memReadorWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register6 (.out(ex_mem_memRead), .in(id_ex_memRead), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register7 (.out(ex_mem_memWrite), .in(id_ex_memWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register8 (.out(ex_mem_BrchCnd), .in(BrchCnd), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register9 (.out(ex_mem_ALU_Jump), .in(id_ex_ALU_Jump), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register10 (.out(ex_mem_writeData), .in(id_ex_writeData), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //read2Data
+    register #(.WIDTH(1)) register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(3)) register12 (.out(ex_mem_Write_Register), .in(id_ex_Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register13 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush)); //data to register
 
 
 endmodule

@@ -160,9 +160,9 @@ module decode (
        .rst(rst),
        .read1RegSel(instruction[10:8]),
        .read2RegSel(instruction[7:5]),
-       .writeRegSel(mem_wb_Write_Register),
-       .writeData(Write_Data),
-       .writeEn(mem_wb_RegWrite)
+       .writeregsel(mem_wb_Write_Register),
+       .writedata(Write_Data),
+       .write(mem_wb_RegWrite)
    );
 
    assign err = reg_err | ctrl_err; // assigning err

@@ -114,33 +114,33 @@ module id_ex (
     output wire [15:0] id_ex_PC_Updated;
 
     //module register(out, in, wr_en, clk, rst);
-    register register0 (.out(id_ex_read_Data1), .in(read_Data1), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register1 (.out(id_ex_read_Data2), .in(read_Data2), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register0 (.out(id_ex_read_Data1), .in(read_Data1), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register1 (.out(id_ex_read_Data2), .in(read_Data2), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
    
-    register register2 (.out(id_ex_ImmSrc), .in(ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register3 (.out(id_ex_MemEnable), .in(MemEnable), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register4 (.out(id_ex_MemWrite), .in(MemWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register5 (.out(id_ex_memRead), .in(memRead), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register6 (.out(id_ex_ALU_jump), .in(ALU_jump), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register7 (.out(id_ex_InvA), .in(InvA), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register8 (.out(id_ex_InvB), .in(InvB), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register9 (.out(id_ex_Cin), .in(Cin), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register10 (.out(id_ex_Beq), .in(Beq), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register11 (.out(id_ex_Bne), .in(Bne), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register12 (.out(id_ex_Blt), .in(Blt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register13 (.out(id_ex_Bgt), .in(Bgt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register14 (.out(id_ex_Halt), .in(Halt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register2 (.out(id_ex_ImmSrc), .in(ImmSrc), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register3 (.out(id_ex_MemEnable), .in(MemEnable), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register4 (.out(id_ex_MemWrite), .in(MemWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register5 (.out(id_ex_memRead), .in(memRead), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register6 (.out(id_ex_ALU_jump), .in(ALU_jump), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register7 (.out(id_ex_InvA), .in(InvA), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register8 (.out(id_ex_InvB), .in(InvB), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register9 (.out(id_ex_Cin), .in(Cin), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register10 (.out(id_ex_Beq), .in(Beq), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register11 (.out(id_ex_Bne), .in(Bne), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register12 (.out(id_ex_Blt), .in(Blt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register13 (.out(id_ex_Bgt), .in(Bgt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register14 (.out(id_ex_Halt), .in(Halt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
    
-    register register16 (.out(id_ex_MemToReg), .in(MemToReg), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register17 (.out(id_ex_ALUSrc1), .in(ALUSrc1), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register18 (.out(id_ex_ALUSrc2), .in(ALUSrc2), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register19 (.out(id_ex_ALU_op), .in(ALU_op), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register20 (.out(id_ex_imm5_ext_rst), .in(imm5_ext_rst), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register21 (.out(id_ex_imm8_ext_rst), .in(imm8_ext_rst), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register22 (.out(id_ex_imm11_sign_ext), .in(imm11_sign_ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(2)) register16 (.out(id_ex_MemToReg), .in(MemToReg), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(2)) register17 (.out(id_ex_ALUSrc1), .in(ALUSrc1), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(2)) register18 (.out(id_ex_ALUSrc2), .in(ALUSrc2), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(4)) register19 (.out(id_ex_ALU_op), .in(ALU_op), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register20 (.out(id_ex_imm5_ext_rst), .in(imm5_ext_rst), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register21 (.out(id_ex_imm8_ext_rst), .in(imm8_ext_rst), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register22 (.out(id_ex_imm11_sign_ext), .in(imm11_sign_ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
  
-    register register23 (.out(id_ex_Write_Register), .in(Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register24 (.out(id_ex_RegWrite), .in(RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register25 (.out(id_ex_PC_Updated), .in(if_id_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(3)) register23 (.out(id_ex_Write_Register), .in(Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(1)) register24 (.out(id_ex_RegWrite), .in(RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register25 (.out(id_ex_PC_Updated), .in(if_id_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
 
 endmodule
