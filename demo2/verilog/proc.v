@@ -40,7 +40,7 @@ module proc (/*AUTOARG*/
    wire [2:0] WriteRegister;
 
    // if_id flop signals
-   wire [15:0]if_id_instruction, if_id_PC_updated;
+   wire [15:0]if_id_instruction;
 
   // id_ex flop signals
   wire [15:0] id_ex_read_Data1, id_ex_read_Data2;
@@ -106,7 +106,7 @@ module proc (/*AUTOARG*/
    fetch fetch0 (.clk(clk), .rst(rst), .halt(final_halt), .PC_intermediary(final_PC_incr), .instr(instruction), .PC_updated(PC_current), .stall(final_stall));
 
    // Instantiate the if_id flop
-   if_id if_id_0 (.instruction(instruction), .PC_updated(PC_current), .clk(clk), .rst(rst), .if_id_instruction(if_id_instruction), .if_id_PC_updated(if_id_PC_updated), .flush(flush), .stall(final_stall));
+   if_id if_id_0 (.instruction(instruction), .PC_updated(PC_current), .clk(clk), .rst(rst), .if_id_instruction(if_id_instruction), .if_id_PC_Updated(if_id_PC_Updated), .flush(flush), .stall(final_stall));
 
    // Instantiate decode stage
    decode decode0 (.clk(clk), .rst(rst), .PC_Updated(if_id_PC_Updated), .instruction(if_id_instruction), .Write_Data(write_data), .ImmSrc(ImmSrc), .MemEnable(MemRead),

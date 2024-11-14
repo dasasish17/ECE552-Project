@@ -74,7 +74,7 @@ module proc_hier_pbench();
          end    
          if (ICacheReq) begin
             ICacheReq_count = ICacheReq_count + 1;      
-         end    
+         end   
 
          $fdisplay(sim_log_file, "SIMLOG:: Cycle %d PC: %8x I: %8x R: %d %3d %8x M: %d %d %8x %8x",
                    DUT.c0.cycle_count,
