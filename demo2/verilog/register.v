@@ -7,7 +7,7 @@ module register(out, in, wr_en, clk, rst);
     input rst;
 
     // Input holder
-    wire [15:0] in_holder;
+    wire [WIDTH-1:0] in_holder;
 
     assign in_holder = wr_en ? in : out; // if wr_en is high, pass in in, else retain out
 

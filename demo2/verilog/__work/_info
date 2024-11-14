@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 d/home/asish/private/aditi/ECE552-Project/demo2/verilog
 valu
-Z1 !s110 1731547143
+Z1 !s110 1731551217
 !i10b 1
 !s100 C34T3]@mMo1P_8EF5n`6f0
 ISe`XW=6LeB5g:g7JoZ7M43
@@ -23,9 +23,9 @@ Z5 OP;L;10.7c;67
 r1
 !s85 0
 31
-Z6 !s108 1731547142.000000
-!s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile.v|regFile_hier.v|regFile_bypass.v|proc.v|proc_hier.v|proc_hier_bench.v|not1.v|nor2.v|nand2.v|mem_wb.v|memory.v|memory2c.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|ex_mem.v|execute.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu.v|alu_hier.v|
-Z7 !s90 +define+RANDSEED=3|-work|__work|alu_hier.v|alu.v|cla_16b.v|cla_4b.v|cla_adder_subtractor.v|clkrst.v|control.v|decode.v|dff.v|execute.v|ex_mem.v|fetch.v|fullAdder_1b.v|hazard_unit.v|id_ex.v|if_id.v|inv_logic.v|logic_unit.v|memory2c.v|memory.v|mem_wb.v|nand2.v|nor2.v|not1.v|proc_hier_bench.v|proc_hier.v|proc.v|regFile_bypass.v|regFile_hier.v|regFile.v|register.v|shifter.v|wb.v|xor2.v|zero_flag.v|
+Z6 !s108 1731551217.000000
+!s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile.v|regFile_hier.v|regFile_bypass.v|proc.v|proc_hier.v|proc_hier_pbench.v|proc_hier_bench.v|not1.v|nor2.v|nand2.v|mem_wb.v|memory.v|memory2c.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|ex_mem.v|execute.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu.v|alu_hier.v|
+Z7 !s90 +define+RANDSEED=3|-work|__work|alu_hier.v|alu.v|cla_16b.v|cla_4b.v|cla_adder_subtractor.v|clkrst.v|control.v|decode.v|dff.v|execute.v|ex_mem.v|fetch.v|fullAdder_1b.v|hazard_unit.v|id_ex.v|if_id.v|inv_logic.v|logic_unit.v|memory2c.v|memory.v|mem_wb.v|nand2.v|nor2.v|not1.v|proc_hier_bench.v|proc_hier_pbench.v|proc_hier.v|proc.v|regFile_bypass.v|regFile_hier.v|regFile.v|register.v|shifter.v|wb.v|xor2.v|zero_flag.v|
 !i113 1
 Z8 o-work __work
 Z9 !s92 +define+RANDSEED=3 -work __work
@@ -46,7 +46,7 @@ r1
 !s85 0
 31
 R6
-Z11 !s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile.v|regFile_hier.v|regFile_bypass.v|proc.v|proc_hier.v|proc_hier_bench.v|not1.v|nor2.v|nand2.v|mem_wb.v|memory.v|memory2c.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|ex_mem.v|execute.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu.v|alu_hier.v|
+Z11 !s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile.v|regFile_hier.v|regFile_bypass.v|proc.v|proc_hier.v|proc_hier_pbench.v|proc_hier_bench.v|not1.v|nor2.v|nand2.v|mem_wb.v|memory.v|memory2c.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|ex_mem.v|execute.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu.v|alu_hier.v|
 R7
 !i113 1
 R8
@@ -165,11 +165,11 @@ R10
 vdecode
 R1
 !i10b 1
-!s100 R7O]TYbn0aL^GO^BAn1EQ0
-IY3Ge<Z2eG;6b>d6;cz2BK0
+!s100 78@nYQj0K^Tmc08DDSXHA1
+I73iU]eJ[>WMD?ZIm^FHc33
 R2
 R0
-w1731472571
+Z12 w1731548469
 8decode.v
 Fdecode.v
 L0 8
@@ -209,11 +209,11 @@ R10
 vex_mem
 R1
 !i10b 1
-!s100 oFZUekbG1aYoLhRHka:HA2
-ITkPfm[0``AJIM`B5KXSiW0
+!s100 HRHZf1@dUSo87FGB9fSBi3
+I]H>JKjF[8>K_XQ`UX6XdM3
 R2
 R0
-w1731546662
+R12
 8ex_mem.v
 Fex_mem.v
 L0 3
@@ -298,11 +298,11 @@ nfull@adder_1b
 vhazard_unit
 R1
 !i10b 1
-!s100 hIFhMeFUZ<XTeo=7hWLcS0
-Ib>h9cN^ek@zZ=Lm:kDXl<3
+!s100 1a`EgiV30J]]5oLi]JV7W1
+IaH93oOoMN`7KnBGY3ReN]2
 R2
 R0
-w1731462925
+w1731550984
 8hazard_unit.v
 Fhazard_unit.v
 L0 3
@@ -320,11 +320,11 @@ R10
 vid_ex
 R1
 !i10b 1
-!s100 i[`XjFYHJJn`<DbBzZ@RF0
-I0zY3_CFmWAQF@V?Hi6STn0
+!s100 _nC?_zic`bM@`6W=BZ=2]3
+ICePVAa^Q[OHQ?5LVDOoc_1
 R2
 R0
-w1731537578
+w1731550575
 8id_ex.v
 Fid_ex.v
 L0 3
@@ -408,11 +408,11 @@ R10
 vmem_wb
 R1
 !i10b 1
-!s100 @[Qc^mB[N2XRVdeKobzP93
-IJLAiMggiS8BMPfIbH<RUS2
+!s100 ^A:RA;Fi=N`bCG=2Y@@Q92
+I3RALEV`^Rb]JD^:gRFLE73
 R2
 R0
-w1731475909
+R12
 8mem_wb.v
 Fmem_wb.v
 L0 3
@@ -540,11 +540,11 @@ R10
 vproc
 R1
 !i10b 1
-!s100 Y`S=?5QCY2Xk=D?SO2_g^3
-I58d<ZkQ?5VI1260AL^Om83
+!s100 5klkbghSM?9bQ8MMN^^`Y3
+IXGc:?LT?lIHaN7EF2mKd?1
 R2
 R0
-w1731547135
+w1731548892
 8proc.v
 Fproc.v
 L0 5
@@ -603,6 +603,28 @@ R7
 R8
 R9
 R10
+vproc_hier_pbench
+R1
+!i10b 1
+!s100 Vd=fa:S=l=SzfB@OHGRBL3
+IXHEQMP1PJzk0N9:jhEGU<1
+R2
+R0
+w1731550795
+8proc_hier_pbench.v
+Fproc_hier_pbench.v
+L0 5
+R5
+r1
+!s85 0
+31
+R6
+R11
+R7
+!i113 1
+R8
+R9
+R10
 vregFile
 R1
 !i10b 1
@@ -613,7 +635,7 @@ R0
 R3
 8regFile.v
 FregFile.v
-Z12 L0 10
+Z13 L0 10
 R5
 r1
 !s85 0
@@ -629,11 +651,11 @@ nreg@file
 vregFile_bypass
 R1
 !i10b 1
-!s100 ^HOI<QzkiV`L:L6GXPX[N2
-ImKZ61GT:E6k5W`9<n4`L63
+!s100 @o<>XkCE@DaO]NnWEbXNc2
+I:[kUU@bJ[:Y?n6HCb0dhG0
 R2
 R0
-R3
+R12
 8regFile_bypass.v
 FregFile_bypass.v
 L0 8
@@ -659,7 +681,7 @@ R0
 R3
 8regFile_hier.v
 FregFile_hier.v
-R12
+R13
 R5
 r1
 !s85 0
@@ -675,11 +697,11 @@ nreg@file_hier
 vregister
 R1
 !i10b 1
-!s100 EbB`0]A>BmCloa9acYaF[2
-I]OcWj3c2=OF^K4Sc?X72C0
+!s100 j[c97CQ`AmmRO^_>T[FHF2
+IEDB:A6Q9TC[?[_UJP:1ko1
 R2
 R0
-R3
+w1731550632
 8register.v
 Fregister.v
 L0 1
@@ -704,7 +726,7 @@ R0
 R3
 8shifter.v
 Fshifter.v
-R12
+R13
 R5
 r1
 !s85 0

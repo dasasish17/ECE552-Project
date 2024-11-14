@@ -1,6 +1,6 @@
 `default_nettype none
 
-module hazard_unit(instruction, id_ex_reg_write, ex_mem_reg_write, id_ex_reg_dst, ex_mem_reg_dst, potRAW, stall, potRAW);
+module hazard_unit(instruction, id_ex_reg_write, ex_mem_reg_write, id_ex_reg_dst, ex_mem_reg_dst, potRAW, stall);
 
 parameter OPERAND_WIDTH = 16;
 

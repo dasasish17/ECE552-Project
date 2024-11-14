@@ -1,11 +1,8 @@
-          // Original test: ./divya/hw4/problem6/bgez_0.asm
-          // Author: divya
+          // Original test: ./benson/hw4/problem6/andni_2.asm
+          // Author: benson
           // Test source code follows
           
           
-0000 c1fd  lbi  r1,-3
-0002 7903  bgez r1,3
-0004 c200  lbi r2,0
-0006 7a09  bgez r2,9
-          
-           
+0000 c1ff lbi r1, 255
+0002 5940 andni r2, r1, 0
+0004 0000 halt
