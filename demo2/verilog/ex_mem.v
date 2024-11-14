@@ -7,7 +7,7 @@ module ex_mem (
     id_ex_Imm8_Ext,
     id_ex_Imm11_Ext,
     aluResult,
-    id_ex_memReaderWrite,
+    id_ex_memReadeorWrite,
     id_ex_memWrite,
     id_ex_memRead,
     id_ex_writeData,
@@ -24,7 +24,7 @@ module ex_mem (
     ex_mem_Imm8_Ext,
     ex_mem_Imm11_Ext,
     ex_mem_aluResult,
-    ex_mem_memReaderWrite,
+    ex_mem_memReadorWrite,
     ex_mem_memWrite,
     ex_mem_memRead,
     ex_mem_writeData,
@@ -44,13 +44,13 @@ module ex_mem (
     input wire [15:0] id_ex_Imm8_Ext; // 8-bit Immediate extension
     input wire [15:0] id_ex_Imm11_Ext; // 11-bit Immediate extension
     input wire [15:0] aluResult;        // ALU computation result
-    input wire        id_ex_memReaderWrite;
+    input wire        id_ex_memReadorWrite;
     input wire [1:0] id_ex_MemToReg;
     input wire        id_ex_memRead;    // Memory read enable
     input wire        id_ex_memWrite;   // Memory write enable
+    input wire [15:0] id_ex_writeData;
     input wire        BrchCnd;         // Branch condition flag
     input wire        id_ex_ALU_Jump;   // Jump control signal
-    input wire [15:0] id_ex_writeData;  // Data to write to memory
     input wire        clk;              // Clock signal
     input wire        rst;              // Reset signal
     input wire        id_ex_halt;        // Halt signal
@@ -63,12 +63,12 @@ module ex_mem (
     output wire [15:0] ex_mem_Imm8_Ext; // 8-bit Immediate extension
     output wire [15:0] ex_mem_Imm11_Ext; // 11-bit Immediate extension
     output wire [15:0] ex_mem_aluResult; // ALU computation result
-    output wire        ex_mem_memReaderWrite;
+    output wire        ex_mem_memReadorWrite;
     output wire        ex_mem_memRead;    // Memory read enable
     output wire        ex_mem_memWrite;   // Memory write enable
+    output wire [15:0] ex_mem_writeData;
     output wire        ex_mem_BrchCnd; // Branch condition flag
     output wire        ex_mem_ALU_Jump;   // Jump control signal
-    output wire [15:0] ex_mem_writeData;  // Data to write to memory
     output wire        ex_mem_halt;
     output wire [2:0]  ex_mem_Write_Register;
     output wire        ex_mem_RegWrite;
@@ -79,7 +79,7 @@ module ex_mem (
     register register2 (.out(ex_mem_Imm8_Ext), .in(id_ex_Imm8_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register3 (.out(ex_mem_Imm11_Ext), .in(id_ex_Imm11_Ext), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register4 (.out(ex_mem_aluResult), .in(aluResult), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
-    register register5 (.out(ex_mem_memReaderWrite), .in(id_ex_memReaderWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register register5 (.out(ex_mem_memReadorWrite), .in(id_ex_memReadorWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register6 (.out(ex_mem_memRead), .in(id_ex_memRead), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register7 (.out(ex_mem_memWrite), .in(id_ex_memWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register register8 (.out(ex_mem_BrchCnd), .in(BrchCnd), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
