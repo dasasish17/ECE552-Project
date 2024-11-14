@@ -74,8 +74,28 @@ module proc_hier_pbench();
          end    
          if (ICacheReq) begin
             ICacheReq_count = ICacheReq_count + 1;      
-         end   
+         end  
 
+         if((DUT.p0.decode0.ctrl_inst.ALU_op == 4'b0100) & (DUT.p0.decode0.ctrl_inst.ALUSrc2 == 2'b11)) begin
+            $display("we are here");
+            //$display("ex brnchcnd %h", DUT.p0.execute0.BrnchCnd); 
+            //$display("mem brnchcnd %h", DUT.p0.memory0.ImmSrc);
+            //$display("mem 11 %h", DUT.p0.memory0.Imm11_Ext);
+            //$display("mem 8 %h", DUT.p0.memory0.Imm8_Ext);
+            //$display("brnch cnd %h", DUT.p0.memory0.BrchCnd);
+            $display("sum %h", DUT.p0.memory0.sum);
+            $display("addr %h", DUT.p0.memory0.address);
+            $display("final pc incr %h", DUT.p0.final_PC_incr);
+            $display("ifid pc %h", DUT.p0.if_id_PC_Updated);   
+            $display("idex pc %h", DUT.p0.id_ex_PC_Updated);
+            $display("exmem pc %h", DUT.p0.ex_mem_PC_Updated);
+            $display("idex pc %h", DUT.p0.PC_flush);
+            $display("pcadd %h", DUT.p0.memory0.PC_add);
+            $display("pc_incr %h", DUT.p0.final_PC_incr);
+            //$display("proc brnchcnd %h", DUT.p0.ex_mem_BrchCnd);
+            //$display("pc_incr %h", DUT.p0.final_PC_incr);
+            //$display("final beq %h", DUT.p0.final_Beq);   
+         end
          $fdisplay(sim_log_file, "SIMLOG:: Cycle %d PC: %8x I: %8x R: %d %3d %8x M: %d %d %8x %8x",
                    DUT.c0.cycle_count,
                    PC,
@@ -88,9 +108,12 @@ module proc_hier_pbench();
                    MemAddress,
                    MemDataIn);
          if (RegWrite) begin
+            //$display("hello");
+            //$display(DUT.p0.final_stall);
+            //$display(DUT.p0.hu_stall);
             $fdisplay(trace_file,"REG: %d VALUE: 0x%04x",
                       WriteRegister,
-                      WriteData );            
+                      WriteData );          
          end
          if (MemRead) begin
             $fdisplay(trace_file,"LOAD: ADDR: 0x%04x VALUE: 0x%04x",

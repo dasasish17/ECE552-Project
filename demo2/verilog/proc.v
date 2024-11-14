@@ -34,7 +34,7 @@ module proc (/*AUTOARG*/
    wire mem_err, alu_err, decode_err;
    wire [15:0] finalPC;
    wire actualRead;
-   wire potRAW;
+   wire potRAW_R, potRAW_I;
 
    wire RegWrite;
    wire [2:0] WriteRegister;
@@ -109,9 +109,9 @@ module proc (/*AUTOARG*/
    if_id if_id_0 (.instruction(instruction), .PC_updated(PC_current), .clk(clk), .rst(rst), .if_id_instruction(if_id_instruction), .if_id_PC_Updated(if_id_PC_Updated), .flush(flush), .stall(final_stall));
 
    // Instantiate decode stage
-   decode decode0 (.clk(clk), .rst(rst), .PC_Updated(if_id_PC_Updated), .instruction(if_id_instruction), .Write_Data(write_data), .ImmSrc(ImmSrc), .MemEnable(MemRead),
+   decode decode0 (.clk(clk), .rst(rst), .instruction(if_id_instruction), .Write_Data(write_data), .ImmSrc(ImmSrc), .MemEnable(MemRead),
                     .mem_wb_RegWrite(mem_wb_RegWrite), .mem_wb_Write_Register(mem_wb_Write_Register), .MemWrite(MemWrite), .memRead(actualRead), .ALU_jump(ALU_jump),
-                    .potRAW(potRAW), .InvA(InvA), .InvB(InvB), .Cin(Cin), .Beq(Beq), .Bne(Bne), .Blt(Blt), .Bgt(Bgt), .Halt(halt),
+                    .potRAW_R(potRAW_R), .potRAW_I(potRAW_I), .InvA(InvA), .InvB(InvB), .Cin(Cin), .Beq(Beq), .Bne(Bne), .Blt(Blt), .Bgt(Bgt), .Halt(halt),
                     .MemToReg(MemToReg), .ALUSrc1(ALUSrc1), .ALUSrc2(ALUSrc2), .ALU_op(ALU_op), .err(decode_err), .read_Data1(read_data1),
                     .read_Data2(read_data2), .imm5_ext_rst(imm5_ext_rst), .imm8_ext_rst(imm8_ext_rst), .imm11_sign_ext(imm11_sign_ext),
                     .RegWrite(RegWrite), .Write_Register(WriteRegister));
@@ -129,7 +129,7 @@ module proc (/*AUTOARG*/
                  .id_ex_Write_Register(id_ex_Write_Register), .id_ex_RegWrite(id_ex_RegWrite), .id_ex_PC_Updated(id_ex_PC_Updated));
 
    hazard_unit hu0 (.instruction(if_id_instruction), .id_ex_reg_write(id_ex_RegWrite), .ex_mem_reg_write(ex_mem_RegWrite), .id_ex_reg_dst(id_ex_Write_Register),
-                    .ex_mem_reg_dst(ex_mem_Write_Register), .potRAW(potRAW), .stall(hu_stall));
+                    .ex_mem_reg_dst(ex_mem_Write_Register), .potRAW_R(potRAW_R), .potRAW_I(potRAW_I), .stall(hu_stall));
    // Instantiate execute stage
    execute execute0 (.read1Data(id_ex_read_Data1), .read2Data(id_ex_read_Data2), .id_ex_PC_Updated(id_ex_PC_Updated), .imm5_ext_rst(id_ex_imm5_ext_rst), .imm8_ext_rst(id_ex_imm8_ext_rst), .imm11_sign_ext(id_ex_imm11_sign_ext),
                      .AluSrc1(id_ex_ALUSrc1), .AluSrc2(id_ex_ALUSrc2), .Oper(id_ex_ALU_op), .AluCin(id_ex_Cin), .InvA(id_ex_InvA), .InvB(id_ex_InvB), .Beq(id_ex_Beq), .Bne(id_ex_Bne),

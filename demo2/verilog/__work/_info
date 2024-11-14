@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 d/home/asish/private/aditi/ECE552-Project/demo2/verilog
 valu
-Z1 !s110 1731563055
+Z1 !s110 1731570529
 !i10b 1
 !s100 C34T3]@mMo1P_8EF5n`6f0
 ISe`XW=6LeB5g:g7JoZ7M43
@@ -23,7 +23,7 @@ Z5 OP;L;10.7c;67
 r1
 !s85 0
 31
-Z6 !s108 1731563055.000000
+Z6 !s108 1731570529.000000
 !s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile.v|regFile_hier.v|regFile_bypass.v|proc.v|proc_hier.v|proc_hier_pbench.v|proc_hier_bench.v|not1.v|nor2.v|nand2.v|mem_wb.v|memory.v|memory2c.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|ex_mem.v|execute.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu.v|alu_hier.v|
 Z7 !s90 +define+RANDSEED=3|-work|__work|alu_hier.v|alu.v|cla_16b.v|cla_4b.v|cla_adder_subtractor.v|clkrst.v|control.v|decode.v|dff.v|execute.v|ex_mem.v|fetch.v|fullAdder_1b.v|hazard_unit.v|id_ex.v|if_id.v|inv_logic.v|logic_unit.v|memory2c.v|memory.v|mem_wb.v|nand2.v|nor2.v|not1.v|proc_hier_bench.v|proc_hier_pbench.v|proc_hier.v|proc.v|regFile_bypass.v|regFile_hier.v|regFile.v|register.v|shifter.v|wb.v|xor2.v|zero_flag.v|
 !i113 1
@@ -143,11 +143,11 @@ R10
 vcontrol
 R1
 !i10b 1
-!s100 TZ@]Zk2=bT9NbMHg]NcSK2
-IEaYTF3;mV6o1YKHW33g2a1
+!s100 3CVKEhPV]5WWIJ8_F9EOT0
+I>jWMPF5=iE8PHTBj><HTd2
 R2
 R0
-w1731463831
+w1731570465
 8control.v
 Fcontrol.v
 L0 3
@@ -165,11 +165,11 @@ R10
 vdecode
 R1
 !i10b 1
-!s100 43giJ4cFIYIl_9BN@Y?ZA1
-I@l[E0R_SV=hT;dD97<_]50
+!s100 KETI?jUKzMcF;P;g<i3QA0
+IUe5RE09E8j2X7T_iV@:HJ0
 R2
 R0
-w1731555782
+w1731569860
 8decode.v
 Fdecode.v
 L0 8
@@ -298,11 +298,11 @@ nfull@adder_1b
 vhazard_unit
 R1
 !i10b 1
-!s100 1a`EgiV30J]]5oLi]JV7W1
-IaH93oOoMN`7KnBGY3ReN]2
+!s100 mb?Lnb0L<V>dTkWdi;AQ]3
+ISG>jP`j0VA>8983oTdn>f2
 R2
 R0
-w1731550984
+w1731569726
 8hazard_unit.v
 Fhazard_unit.v
 L0 3
@@ -434,7 +434,7 @@ R1
 IR?ZE?fiI8V^ngY_h]4`1O0
 R2
 R0
-w1731393002
+w1731566284
 8memory.v
 Fmemory.v
 L0 9
@@ -540,11 +540,11 @@ R10
 vproc
 R1
 !i10b 1
-!s100 i6W9IQ[>oDKDEN85_LeDV3
-I`<<Od@>1N<4Y6mRLoYM`33
+!s100 KMzH;FK;eLM7IFiIjLZYf2
+I8TzoN1V7ZnB4doRULUW_J2
 R2
 R0
-w1731563051
+w1731570411
 8proc.v
 Fproc.v
 L0 5
@@ -606,11 +606,11 @@ R10
 vproc_hier_pbench
 R1
 !i10b 1
-!s100 Vd=fa:S=l=SzfB@OHGRBL3
-IXHEQMP1PJzk0N9:jhEGU<1
+!s100 W79E>VIO;aBmlRX^=;H8>0
+IOZQ=_jElgALXVSANFkj<X1
 R2
 R0
-w1731562945
+w1731568136
 8proc_hier_pbench.v
 Fproc_hier_pbench.v
 L0 5

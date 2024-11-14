@@ -14,7 +14,6 @@ module decode (
     MemEnable,       // Memory read control signal
     MemWrite,      // Memory write control signal
     memRead,
-    PC_Updated,
     ALU_jump,      // ALU jump control signal
     InvA,          // Invert A control signal
     InvB,          // Invert B control signal
@@ -34,7 +33,8 @@ module decode (
     imm5_ext_rst,  // 5-bit immediate extended output
     imm8_ext_rst,  // 8-bit immediate extended output
     imm11_sign_ext,  // 11-bit immediate signed extended output
-    potRAW,
+    potRAW_R,
+    potRAW_I,
     RegWrite,
     Write_Register,
     mem_wb_RegWrite,
@@ -44,7 +44,7 @@ module decode (
    input wire clk;
    input wire rst;
    input wire [15:0] instruction;
-   input wire [15:0] Write_Data, PC_Updated;
+   input wire [15:0] Write_Data;
    input wire mem_wb_RegWrite;
    input wire [2:0] mem_wb_Write_Register;
 
@@ -56,7 +56,7 @@ module decode (
    output wire MemEnable;
    output wire MemWrite;
    output wire memRead;
-   output wire potRAW;
+   output wire potRAW_R, potRAW_I;
    output wire RegWrite;
    output wire [2:0] Write_Register;
 
@@ -113,7 +113,8 @@ module decode (
         .memWrite(MemWrite),
         .memRead(memRead),
         .ALU_jump(ALU_jump),
-        .potRAW(potRAW),
+        .potRAW_R(potRAW_R),
+        .potRAW_I(potRAW_I),
         .InvA(InvA),
         .InvB(InvB),
         .Cin(Cin),
