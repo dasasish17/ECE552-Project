@@ -64,7 +64,6 @@ module proc (/*AUTOARG*/
    wire [15:0] ex_mem_aluResult, ex_mem_writeData;
    wire ex_mem_memReadorWrite, ex_mem_memWrite, ex_mem_memRead;
    wire ex_mem_BrchCnd, ex_mem_ALU_Jump;
-   wire ex_mem_halt;
    wire ex_mem_RegWrite;
    wire [2:0] ex_mem_Write_Register;
 
@@ -130,7 +129,7 @@ module proc (/*AUTOARG*/
                  .id_ex_Write_Register(id_ex_Write_Register), .id_ex_RegWrite(id_ex_RegWrite), .id_ex_PC_Updated(id_ex_PC_Updated));
 
    hazard_unit hu0 (.instruction(if_id_instruction), .id_ex_reg_write(id_ex_RegWrite), .ex_mem_reg_write(ex_mem_RegWrite), .id_ex_reg_dst(id_ex_Write_Register),
-                    .ex_mem_reg_dst(ex_mem_Write_Register), .potRAW(potRAW), .stall(hu_stall))
+                    .ex_mem_reg_dst(ex_mem_Write_Register), .potRAW(potRAW), .stall(hu_stall));
    // Instantiate execute stage
    execute execute0 (.read1Data(id_ex_read_Data1), .read2Data(id_ex_read_Data2), .imm5_ext_rst(id_ex_imm5_ext_rst), .imm8_ext_rst(id_ex_imm8_ext_rst), .imm11_sign_ext(id_ex_imm11_sign_ext),
                      .AluSrc1(id_ex_ALUSrc1), .AluSrc2(id_ex_ALUSrc2), .Oper(id_ex_ALU_op), .AluCin(id_ex_Cin), .InvA(id_ex_InvA), .InvB(id_ex_InvB), .Beq(id_ex_Beq), .Bne(id_ex_Bne),

@@ -5,7 +5,7 @@
     1 input NOT
 */
 module not1 (out, in1);
-    output out;
-    input in1;
+    output wire out;
+    input wire in1;
     assign out = ~in1;
 endmodule

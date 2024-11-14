@@ -7,7 +7,7 @@ module ex_mem (
     id_ex_Imm8_Ext,
     id_ex_Imm11_Ext,
     aluResult,
-    id_ex_memReadeorWrite,
+    id_ex_memReadorWrite,
     id_ex_memWrite,
     id_ex_memRead,
     id_ex_writeData,
