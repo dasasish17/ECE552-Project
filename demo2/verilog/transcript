@@ -1,5 +1,5 @@
 # vsim -c proc_hier_pbench -lib __work -voptargs="+acc" -wlf dump.wlf -do "log -howmany -rec /* ; run -all" 
-# Start time: 01:52:29 on Nov 14,2024
+# Start time: 19:15:02 on Nov 14,2024
 # //  ModelSim DE 10.7c Aug 17 2018Linux 5.15.0-125-generic
 # //
 # //  Copyright 1991-2018 Mentor Graphics Corporation
@@ -52,36 +52,66 @@
 # Hello world...simulation starting
 # See verilogsim.log and verilogsim.ptrace for output
 # we are here
+# sum 0108
+# addr 012a
+# final pc incr 0130
+# ifid pc 012e
+# idex pc 012c
+# exmem pc 012a
+# idex pc 012a
+# pcadd 012a
+# pc_incr 0130
+# we are here
+# sum 012c
+# addr 012c
+# final pc incr 0130
+# ifid pc 012e
+# idex pc 012e
+# exmem pc 012c
+# idex pc 012c
+# pcadd 012c
+# pc_incr 0130
+# we are here
+# sum 0136
+# addr 012e
+# final pc incr 0130
+# ifid pc 012e
+# idex pc 012e
+# exmem pc 012e
+# idex pc 012e
+# pcadd 012e
+# pc_incr 0130
+# we are here
 # sum 0000
 # addr 0000
-# final pc incr 0006
-# ifid pc 0004
-# idex pc 0002
+# final pc incr 013c
+# ifid pc 013a
+# idex pc 0138
 # exmem pc 0000
 # idex pc 0000
 # pcadd 0000
-# pc_incr 0006
+# pc_incr 013c
 # we are here
-# sum 0002
-# addr 0002
-# final pc incr 0006
-# ifid pc 0004
-# idex pc 0004
-# exmem pc 0002
-# idex pc 0002
-# pcadd 0002
-# pc_incr 0006
+# sum 0198
+# addr 0138
+# final pc incr 013c
+# ifid pc 013a
+# idex pc 013a
+# exmem pc 0138
+# idex pc 0138
+# pcadd 0138
+# pc_incr 013c
 # we are here
-# sum 000a
-# addr 0004
-# final pc incr 0006
-# ifid pc 0004
-# idex pc 0004
-# exmem pc 0004
-# idex pc 0004
-# pcadd 0004
-# pc_incr 0006
+# sum 0142
+# addr 013a
+# final pc incr 013c
+# ifid pc 013a
+# idex pc 013a
+# exmem pc 013a
+# idex pc 013a
+# pcadd 013a
+# pc_incr 013c
 # ** Note: $finish    : proc_hier_pbench.v(139)
-#    Time: 1405 ns  Iteration: 0  Instance: /proc_hier_pbench
-# End time: 01:52:29 on Nov 14,2024, Elapsed time: 0:00:00
+#    Time: 19105 ns  Iteration: 0  Instance: /proc_hier_pbench
+# End time: 19:15:02 on Nov 14,2024, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
