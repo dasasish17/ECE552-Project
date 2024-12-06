@@ -1,0 +1,7 @@
+1 0 7000 12     // Write 12 to address 7000
+1 0 8000 34     // Write 34 to address 8000
+0 1 7000 0      // Read from address 7000
+0 1 8000 0      // Read from address 8000
+1 0 9000 56     // Write 56 to address 9000
+0 1 7000 0      // Read from address 7000 (test if still in cache)
+1 0 7000 78     // Write to address 7000 again (write-back test)

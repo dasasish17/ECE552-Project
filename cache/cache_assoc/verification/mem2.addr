@@ -1,0 +1,6 @@
+1 0 3000 123    // Write 123 to address 3000
+0 1 3000 0      // Read from address 3000 
+1 0 4000 456    // Write 456 to address 4000
+0 1 5000 0      // Read from address 5000 
+1 0 6000 789    // Write 789 to address 6000 
+0 1 3000 0      // Read from address 3000 

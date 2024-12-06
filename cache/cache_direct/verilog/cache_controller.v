@@ -74,7 +74,6 @@ module cache_controller (
         done = 1'b0;
         comp = 1'b0;
 
-		
 		case(curr_state)
 			IDLE: begin
 				// nxt_state = (Rd | Wr) ? ((hit & valid_in) ? IDLE : (~hit & valid_in & dirty) ? WB0 : ALLOC0) : IDLE;

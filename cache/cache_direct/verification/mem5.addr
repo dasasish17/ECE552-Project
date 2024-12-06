@@ -1,0 +1,8 @@
+1 0 4000 111    // Write 111 to address 4000
+1 0 4001 222    // Write 222 to address 4001
+1 0 4002 333    // Write 333 to address 4002
+1 0 4003 444    // Write 444 to address 4003
+0 1 4000 0      // Read from address 4000
+0 1 4001 0      // Read from address 4001
+0 1 4002 0      // Read from address 4002
+0 1 4003 0      // Read from address 4003
