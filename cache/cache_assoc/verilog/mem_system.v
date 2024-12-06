@@ -39,14 +39,23 @@ module mem_system(/*AUTOARG*/
    wire err_c0, err_c1, err_mem, err_fsm;
 
    // Victimway flip-flop
-   reg victimway;
-   always @(posedge clk or posedge rst) begin
-      if (rst) begin
-         victimway <= 1'b0;
-      end else if (Done) begin
-         victimway <= ~victimway; // Toggle only when Done is asserted
-      end
-   end
+   wire victimway;
+   wire victimway_d;
+   wire victimway_q;
+
+   // Compute next state
+   assign victimway_d = Done ? ~victimway_q : victimway_q;
+
+   // Instantiate the DFF
+   dff victimway_ff (
+      .q(victimway_q),
+      .d(victimway_d),
+      .clk(clk),
+      .rst(rst)
+   );
+
+   // Use victimway_q where you previously used victimway
+   assign victimway = victimway_q;
 
    // Compute hit signals
    wire hit;
