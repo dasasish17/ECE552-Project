@@ -7,9 +7,9 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/home/asish/private/aditi/ECE552-Project/cache/cache_assoc/verilog
+Z0 d/home/asish/private/aditi/ECE552-Project/cache/cache_direct/verilog
 vcache
-Z1 !s110 1733449479
+Z1 !s110 1733448911
 !i10b 1
 !s100 Wegio_bBhn^FdMBJ0jXY^2
 I5`>U<[dZjLX[zA0R@Ci9i3
@@ -23,7 +23,7 @@ Z4 OP;L;10.7c;67
 r1
 !s85 0
 31
-Z5 !s108 1733449479.000000
+Z5 !s108 1733448911.000000
 !s107 memv.v|mem_system.v|mem_system_ref.v|mem_system_randbench.v|mem_system_perfbench.v|mem_system_hier.v|memc.v|four_bank_mem.v|final_memory.v|dff.v|clkrst.v|cache.v|cache_controller.v|
 Z6 !s90 +define+RANDSEED=3|-work|__work|cache_controller.v|cache.v|clkrst.v|dff.v|final_memory.v|four_bank_mem.v|memc.v|mem_system_hier.v|mem_system_perfbench.v|mem_system_randbench.v|mem_system_ref.v|mem_system.v|memv.v|
 !i113 1
@@ -33,11 +33,11 @@ Z9 tCvgOpt 0
 vcache_controller
 R1
 !i10b 1
-!s100 S31O5[>Ib<6ClC_D6b43i0
-IhF=lX>C[WWzU8c0V>=jXW1
+!s100 lO02M=`TmPUh2X[EFB9Xz0
+IiBY8dDFXJlz2c@RYc3=`l3
 R2
 R0
-w1733397932
+w1733448122
 8cache_controller.v
 Fcache_controller.v
 L0 1
@@ -143,14 +143,14 @@ R9
 vmem_system
 R1
 !i10b 1
-!s100 X;iG75^Le1@0l:cAZFIGR0
-I<3?@N8Hb_<?<99`9=;J@W1
+!s100 OL8i9MFW^Sl@WNYPII9<B1
+Ik9<fOE2gjT:M>3hlAYJ7O0
 R2
 R0
-w1733446365
+w1733388992
 8mem_system.v
 Fmem_system.v
-L0 2
+L0 6
 R4
 r1
 !s85 0
