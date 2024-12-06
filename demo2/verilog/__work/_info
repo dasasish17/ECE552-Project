@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 d/home/asish/private/aditi/ECE552-Project/demo2/verilog
 valu
-Z1 !s110 1731633295
+Z1 !s110 1731635676
 !i10b 1
 !s100 C34T3]@mMo1P_8EF5n`6f0
 ISe`XW=6LeB5g:g7JoZ7M43
@@ -23,9 +23,9 @@ Z5 OP;L;10.7c;67
 r1
 !s85 0
 31
-Z6 !s108 1731633295.000000
-!s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile_hier.v|regFile_bypass.v|regFile.v|proc_hier_pbench.v|proc_hier_bench.v|proc_hier.v|proc.v|not1.v|nor2.v|nand2.v|memory2c.v|memory.v|mem_wb.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|execute.v|ex_mem.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu_hier.v|alu.v|
-Z7 !s90 +define+RANDSEED=3|-work|__work|alu.v|alu_hier.v|cla_16b.v|cla_4b.v|cla_adder_subtractor.v|clkrst.v|control.v|decode.v|dff.v|ex_mem.v|execute.v|fetch.v|fullAdder_1b.v|hazard_unit.v|id_ex.v|if_id.v|inv_logic.v|logic_unit.v|mem_wb.v|memory.v|memory2c.v|nand2.v|nor2.v|not1.v|proc.v|proc_hier.v|proc_hier_bench.v|proc_hier_pbench.v|regFile.v|regFile_bypass.v|regFile_hier.v|register.v|shifter.v|wb.v|xor2.v|zero_flag.v|
+Z6 !s108 1731635676.000000
+!s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile.v|regFile_hier.v|regFile_bypass.v|proc.v|proc_hier.v|proc_hier_pbench.v|proc_hier_bench.v|not1.v|nor2.v|nand2.v|mem_wb.v|memory.v|memory2c.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|ex_mem.v|execute.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu.v|alu_hier.v|
+Z7 !s90 +define+RANDSEED=3|-work|__work|alu_hier.v|alu.v|cla_16b.v|cla_4b.v|cla_adder_subtractor.v|clkrst.v|control.v|decode.v|dff.v|execute.v|ex_mem.v|fetch.v|fullAdder_1b.v|hazard_unit.v|id_ex.v|if_id.v|inv_logic.v|logic_unit.v|memory2c.v|memory.v|mem_wb.v|nand2.v|nor2.v|not1.v|proc_hier_bench.v|proc_hier_pbench.v|proc_hier.v|proc.v|regFile_bypass.v|regFile_hier.v|regFile.v|register.v|shifter.v|wb.v|xor2.v|zero_flag.v|
 !i113 1
 Z8 o-work __work
 Z9 !s92 +define+RANDSEED=3 -work __work
@@ -46,7 +46,7 @@ r1
 !s85 0
 31
 R6
-Z11 !s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile_hier.v|regFile_bypass.v|regFile.v|proc_hier_pbench.v|proc_hier_bench.v|proc_hier.v|proc.v|not1.v|nor2.v|nand2.v|memory2c.v|memory.v|mem_wb.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|execute.v|ex_mem.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu_hier.v|alu.v|
+Z11 !s107 zero_flag.v|xor2.v|wb.v|shifter.v|register.v|regFile.v|regFile_hier.v|regFile_bypass.v|proc.v|proc_hier.v|proc_hier_pbench.v|proc_hier_bench.v|not1.v|nor2.v|nand2.v|mem_wb.v|memory.v|memory2c.v|logic_unit.v|inv_logic.v|if_id.v|id_ex.v|hazard_unit.v|fullAdder_1b.v|fetch.v|ex_mem.v|execute.v|dff.v|decode.v|control.v|clkrst.v|cla_adder_subtractor.v|cla_4b.v|cla_16b.v|alu.v|alu_hier.v|
 R7
 !i113 1
 R8
@@ -430,8 +430,8 @@ R10
 vmemory
 R1
 !i10b 1
-!s100 MHSz_]A7N2_5NaXbZF_?g1
-I1UfjSHOBal9WEQogOHVNc0
+!s100 Te];hXHOem8D2d^B9HMKK2
+IR?ZE?fiI8V^ngY_h]4`1O0
 R2
 R0
 w1731566284
@@ -474,8 +474,8 @@ R10
 vnand2
 R1
 !i10b 1
-!s100 TS__H2`kdQWoY[jCZ1gA41
-I@AATRZ>VdNeSdc43^S2gk3
+!s100 6E9N3kXTE9[9k;`<M0ei22
+IZOh5^bO>[6;52DLPODmOD3
 R2
 R0
 w1731547017
@@ -496,8 +496,8 @@ R10
 vnor2
 R1
 !i10b 1
-!s100 Y@JQd6JbG8UaMHCVbQU2`2
-IcdiE6bdbe1cR1l3JIj?3M3
+!s100 :1^]4U0D_47EeQeX]lNa41
+I[YAX3gzTWUOVF:^FjdF]=2
 R2
 R0
 w1731547045
@@ -518,8 +518,8 @@ R10
 vnot1
 R1
 !i10b 1
-!s100 5?>4Cn[AbmGgFbUc:ZWmo3
-IQ^UTemP_TdUDYGS]0fAaT2
+!s100 @0?GHT8m:A]PjF2i2A[ZI2
+InfMRlzhS7z4FAZiz3gH;]2
 R2
 R0
 w1731547057
