@@ -1,6 +1,5 @@
-1 0 1000 50     // Write 50 to address 1000
-0 1 1000 0      // Read from address 1000 
-1 0 1001 25     // Write 25 to address 1001
-0 1 1001 0      // Read from address 1001
-0 1 2000 0      // Read from address 2000 
-1 0 1002 75     // Write 75 to address 1002
+1 0 348 24   // Write 24 to address 348
+0 1 348 0    // Read from address 348
+1 0 352 50   // Write 50 to address 352
+0 1 352 0    // Read from address 352
+
