@@ -5,14 +5,14 @@
    Description     : This is the overall module for the execute stage of the processor.
 */
 `default_nettype none
-module execute (read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext,
+module execute (read1Data, read2Data, imm5_ext_rst, id_ex_PC_Updated,imm8_ext_rst, imm11_sign_ext,
                 AluSrc1, AluSrc2, Oper, AluCin, InvA, InvB, Beq, Bne, Blt, Bgt,
                 AluRes, err, BrnchCnd);
 
 
    // TODO: Your code here
    parameter OPERAND_WIDTH = 16;
-   input wire [OPERAND_WIDTH-1:0] read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext;
+   input wire [OPERAND_WIDTH-1:0] read1Data, read2Data, imm5_ext_rst, imm8_ext_rst, imm11_sign_ext, id_ex_PC_Updated;
    input wire [1:0]AluSrc1, AluSrc2;
    input wire [3:0] Oper;
    input wire AluCin, InvA, InvB, Beq, Bne, Blt, Bgt;

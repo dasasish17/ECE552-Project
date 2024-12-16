@@ -34,13 +34,13 @@ module proc (/*AUTOARG*/
    wire mem_err, alu_err, decode_err;
    wire [15:0] finalPC;
    wire actualRead;
-   wire potRAW;
+   wire potRAW_R, potRAW_I;
 
    wire RegWrite;
    wire [2:0] WriteRegister;
 
    // if_id flop signals
-   wire [15:0]if_id_instruction, if_id_PC_updated;
+   wire [15:0]if_id_instruction;
 
   // id_ex flop signals
   wire [15:0] id_ex_read_Data1, id_ex_read_Data2;
@@ -106,12 +106,12 @@ module proc (/*AUTOARG*/
    fetch fetch0 (.clk(clk), .rst(rst), .halt(final_halt), .PC_intermediary(final_PC_incr), .instr(instruction), .PC_updated(PC_current), .stall(final_stall));
 
    // Instantiate the if_id flop
-   if_id if_id_0 (.instruction(instruction), .PC_updated(PC_current), .clk(clk), .rst(rst), .if_id_instruction(if_id_instruction), .if_id_PC_updated(if_id_PC_updated), .flush(flush), .stall(final_stall));
+   if_id if_id_0 (.instruction(instruction), .PC_updated(PC_current), .clk(clk), .rst(rst), .if_id_instruction(if_id_instruction), .if_id_PC_Updated(if_id_PC_Updated), .flush(flush), .stall(final_stall));
 
    // Instantiate decode stage
    decode decode0 (.clk(clk), .rst(rst), .instruction(if_id_instruction), .Write_Data(write_data), .ImmSrc(ImmSrc), .MemEnable(MemRead),
                     .mem_wb_RegWrite(mem_wb_RegWrite), .mem_wb_Write_Register(mem_wb_Write_Register), .MemWrite(MemWrite), .memRead(actualRead), .ALU_jump(ALU_jump),
-                    .potRAW(potRAW), .InvA(InvA), .InvB(InvB), .Cin(Cin), .Beq(Beq), .Bne(Bne), .Blt(Blt), .Bgt(Bgt), .Halt(halt),
+                    .potRAW_R(potRAW_R), .potRAW_I(potRAW_I), .InvA(InvA), .InvB(InvB), .Cin(Cin), .Beq(Beq), .Bne(Bne), .Blt(Blt), .Bgt(Bgt), .Halt(halt),
                     .MemToReg(MemToReg), .ALUSrc1(ALUSrc1), .ALUSrc2(ALUSrc2), .ALU_op(ALU_op), .err(decode_err), .read_Data1(read_data1),
                     .read_Data2(read_data2), .imm5_ext_rst(imm5_ext_rst), .imm8_ext_rst(imm8_ext_rst), .imm11_sign_ext(imm11_sign_ext),
                     .RegWrite(RegWrite), .Write_Register(WriteRegister));
@@ -129,9 +129,9 @@ module proc (/*AUTOARG*/
                  .id_ex_Write_Register(id_ex_Write_Register), .id_ex_RegWrite(id_ex_RegWrite), .id_ex_PC_Updated(id_ex_PC_Updated));
 
    hazard_unit hu0 (.instruction(if_id_instruction), .id_ex_reg_write(id_ex_RegWrite), .ex_mem_reg_write(ex_mem_RegWrite), .id_ex_reg_dst(id_ex_Write_Register),
-                    .ex_mem_reg_dst(ex_mem_Write_Register), .potRAW(potRAW), .stall(hu_stall));
+                    .ex_mem_reg_dst(ex_mem_Write_Register), .potRAW_R(potRAW_R), .potRAW_I(potRAW_I), .stall(hu_stall));
    // Instantiate execute stage
-   execute execute0 (.read1Data(id_ex_read_Data1), .read2Data(id_ex_read_Data2), .imm5_ext_rst(id_ex_imm5_ext_rst), .imm8_ext_rst(id_ex_imm8_ext_rst), .imm11_sign_ext(id_ex_imm11_sign_ext),
+   execute execute0 (.read1Data(id_ex_read_Data1), .read2Data(id_ex_read_Data2), .id_ex_PC_Updated(id_ex_PC_Updated), .imm5_ext_rst(id_ex_imm5_ext_rst), .imm8_ext_rst(id_ex_imm8_ext_rst), .imm11_sign_ext(id_ex_imm11_sign_ext),
                      .AluSrc1(id_ex_ALUSrc1), .AluSrc2(id_ex_ALUSrc2), .Oper(id_ex_ALU_op), .AluCin(id_ex_Cin), .InvA(id_ex_InvA), .InvB(id_ex_InvB), .Beq(id_ex_Beq), .Bne(id_ex_Bne),
                      .Blt(id_ex_Blt), .Bgt(id_ex_Bgt), .AluRes(ALU_result), .err(alu_err), .BrnchCnd(BrnchCnd));
 
@@ -149,10 +149,10 @@ module proc (/*AUTOARG*/
                    .writeData(ex_mem_writeData), .BrchCnd(ex_mem_BrchCnd), .final_new_PC(PC_flush), .Read_Data(mem_data_out), .halt(ex_mem_halt), .flush(flush));
 
    // Instnantiate the mem_wb flop
-   mem_wb mem_wb0 (.Read_Data(mem_data_out), .ex_mem_ALU_Result(ex_mem_aluResult), .ex_mem_MemToReg(ex_mem_MemToReg), .ex_mem_PC_Updated(PC_flush), .ex_mem_halt(ex_mem_halt), .ex_mem_RegWrite(ex_mem_RegWrite),
+   mem_wb mem_wb0 (.Read_Data(mem_data_out), .ex_mem_ALU_Result(ex_mem_aluResult), .ex_mem_MemToReg(ex_mem_MemToReg), .ex_mem_PC_Updated(ex_mem_PC_Updated), .ex_mem_halt(ex_mem_halt), .ex_mem_RegWrite(ex_mem_RegWrite),
                    .ex_mem_Write_Register(ex_mem_Write_Register), .clk(clk), .rst(rst), .mem_wb_Read_Data(mem_wb_Read_Data), .mem_wb_ALU_Result(mem_wb_ALU_Result), .mem_wb_MemToReg(mem_wb_MemToReg),
                    .mem_wb_PC_Updated(mem_wb_PC_Updated), .mem_wb_halt(mem_wb_halt), .mem_wb_Write_Register(mem_wb_Write_Register), .mem_wb_RegWrite(mem_wb_RegWrite));
-
+   // above originally it was pc_flush but we changed to ex_mem_PC_Updated
    // Instantiate write back stage
    wb wb0 (.PC_address(mem_wb_PC_Updated), .Read_Data(mem_wb_Read_Data), .ALU_Result(mem_wb_ALU_Result), .MemToReg(mem_wb_MemToReg), .Write_Data(write_data));
 

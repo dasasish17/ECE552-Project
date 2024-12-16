@@ -52,6 +52,9 @@ module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
    integer        mcd;
    integer        i;
 
+    // Notes
+    // enable = enable or disable the memory
+    // wr : 1 => write, 0 => read
 
    //    assign data_temp_0 = mem[addr];
    //    assign data_temp_2 = mem[{addr+8'h1];
