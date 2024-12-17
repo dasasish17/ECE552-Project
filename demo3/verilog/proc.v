@@ -85,6 +85,7 @@ module proc (/*AUTOARG*/
   wire final_halt, id_ex_halt, ex_mem_halt, mem_wb_halt;
   wire [15:0] final_PC_incr;
   wire final_stall;
+  wire dmem_stall;
 
   // forwarding wires
   wire [15:0] ex_ex_fwd_readData1, ex_ex_fwd_readData2, mem_ex_fwd_readData1, mem_ex_fwd_readData2;
@@ -92,13 +93,14 @@ module proc (/*AUTOARG*/
 
 
   // final halt logic
-  assign final_halt = (~flush) & (halt | id_ex_halt | ex_mem_halt | mem_wb_halt);
+  assign final_halt = (~flush) & (halt | id_ex_halt | ex_mem_halt | mem_wb_halt | isUnalignedFetch | isUnalignedMemory);
   // flush-based PC_increment logic
   assign final_PC_incr = flush ? PC_flush : PC_current;
   // final stall logic
-  assign final_stall = flush ? 1'b0 : hu_stall;
+  assign final_stall = flush ? 1'b0 : (hu_stall | dmem_stall);
 
   wire final_MemRead, final_MemWrite, final_MemEnable, final_RegWrite, final_Beq, final_Bne, final_Blt, final_Bgt, final_ALU_jump;
+  wire haltOrUnaligned;
 
   assign final_MemRead = final_stall ? 1'b0 : actualRead;
   assign final_MemWrite = final_stall ? 1'b0 : MemWrite;
@@ -110,19 +112,22 @@ module proc (/*AUTOARG*/
   assign final_Bgt = final_stall ? 1'b0 : Bgt;
   assign final_ALU_jump = final_stall ? 1'b0 : ALU_jump;
 
+  assign haltOrUnaligned = halt | isUnalignedFetch | isUnalignedMemory;
+
   // Forwarding Logic
-  
    assign ex_ex_fwd_readData1 = ex_ex_Rs_fwd ? ex_mem_aluResult : mem_ex_fwd_readData1;
    assign ex_ex_fwd_readData2 = ex_ex_Rt_fwd ? ex_mem_aluResult : mem_ex_fwd_readData2;
    assign mem_ex_fwd_readData1 = mem_ex_Rs_fwd ? write_data : id_ex_read_Data1;
    assign mem_ex_fwd_readData2 = mem_ex_Rt_fwd ? write_data : id_ex_read_Data2;
 
+   // Fetch, Memory Cache
+   wire isUnalignedFetch, isUnalignedMemory;
 
    // Instantiate fetch stage
-   fetch fetch0 (.clk(clk), .rst(rst), .halt(final_halt), .PC_intermediary(final_PC_incr), .instr(instruction), .PC_updated(PC_current), .stall(final_stall));
+   fetch fetch0 (.clk(clk), .rst(rst), .halt(final_halt), .IsUnaligned(isUnalignedFetch), .PC_intermediary(final_PC_incr), .instr(instruction), .PC_updated(PC_current), .stall(final_stall));
 
    // Instantiate the if_id flop
-   if_id if_id_0 (.instruction(instruction), .PC_updated(PC_current), .clk(clk), .rst(rst), .if_id_instruction(if_id_instruction), .if_id_PC_Updated(if_id_PC_Updated), .flush(flush), .stall(final_stall));
+   if_id if_id_0 (.instruction(instruction), .PC_updated(PC_current), .clk(clk), .rst(rst), .StallDMem(dmem_stall), .if_id_instruction(if_id_instruction), .if_id_PC_Updated(if_id_PC_Updated), .flush(flush), .stall(final_stall));
 
    // Instantiate decode stage
    decode decode0 (.clk(clk), .rst(rst), .instruction(if_id_instruction), .Write_Data(write_data), .ImmSrc(ImmSrc), .MemEnable(MemRead),
@@ -134,9 +139,9 @@ module proc (/*AUTOARG*/
 
 
    // Instantiate the id_ex flop
-   id_ex id_ex0 (.clk(clk), .rst(rst), .Flush(flush), .if_id_PC_Updated(if_id_PC_Updated), .read_Data1(read_data1), .read_Data2(read_data2), .ImmSrc(ImmSrc), .MemEnable(final_MemEnable),
+   id_ex id_ex0 (.clk(clk), .rst(rst), .Flush(flush), .if_id_PC_Updated(if_id_PC_Updated), .read_Data1(read_data1), .read_Data2(read_data2), .ImmSrc(ImmSrc), .MemEnable(final_MemEnable), .StallDMem(dmem_stall),
                  .MemWrite(final_MemWrite), .memRead(final_MemRead), .ALU_jump(final_ALU_jump), .InvA(InvA), .InvB(InvB), .Cin(Cin), .Beq(final_Beq), .Bne(final_Bne), .Blt(final_Blt),
-                 .Bgt(final_Bgt), .Halt(halt), .MemToReg(MemToReg), .ALUSrc1(ALUSrc1), .ALUSrc2(ALUSrc2), .ALU_op(ALU_op), .imm5_ext_rst(imm5_ext_rst),
+                 .Bgt(final_Bgt), .Halt(haltOrUnaligned), .MemToReg(MemToReg), .ALUSrc1(ALUSrc1), .ALUSrc2(ALUSrc2), .ALU_op(ALU_op), .imm5_ext_rst(imm5_ext_rst),
                  .imm8_ext_rst(imm8_ext_rst), .imm11_sign_ext(imm11_sign_ext), .Write_Register(WriteRegister), .RegWrite(final_RegWrite), .id_ex_read_Data1(id_ex_read_Data1),
                  .id_ex_read_Data2(id_ex_read_Data2), .id_ex_ImmSrc(id_ex_ImmSrc), .id_ex_MemEnable(id_ex_MemEnable), .id_ex_MemWrite(id_ex_MemWrite), .id_ex_memRead(id_ex_memRead),
                  .id_ex_ALU_jump(id_ex_ALU_jump), .id_ex_InvA(id_ex_InvA), .id_ex_InvB(id_ex_InvB), .id_ex_Cin(id_ex_Cin), .id_ex_Beq(id_ex_Beq), .id_ex_Bne(id_ex_Bne),
@@ -157,9 +162,9 @@ module proc (/*AUTOARG*/
                      .Blt(id_ex_Blt), .Bgt(id_ex_Bgt), .AluRes(ALU_result), .err(alu_err), .BrnchCnd(BrnchCnd));
 
    // Instnantiate the ex_mem flop
-   ex_mem ex_mem0 (.id_ex_PC_Updated(id_ex_PC_Updated), .id_ex_ImmSrc(id_ex_ImmSrc), .id_ex_Imm8_Ext(id_ex_imm8_ext_rst), .id_ex_Imm11_Ext(id_ex_imm11_sign_ext), .aluResult(ALU_result),
+   ex_mem ex_mem0 (.id_ex_PC_Updated(id_ex_PC_Updated), .id_ex_ImmSrc(id_ex_ImmSrc), .id_ex_Imm8_Ext(id_ex_imm8_ext_rst), .id_ex_Imm11_Ext(id_ex_imm11_sign_ext), .aluResult(ALU_result), .StallDMem(dmem_stall),
                    .id_ex_memReadorWrite(id_ex_MemEnable), .id_ex_memWrite(id_ex_MemWrite), .id_ex_memRead(id_ex_memRead), .id_ex_writeData(ex_ex_fwd_readData2), .id_ex_RegWrite(id_ex_RegWrite),
-                   .id_ex_Write_Register(id_ex_Write_Register), .BrchCnd(BrnchCnd), .id_ex_ALU_Jump(id_ex_ALU_jump), .clk(clk), .rst(rst), .Flush(flush), .id_ex_halt(id_ex_halt), .id_ex_MemToReg(id_ex_MemToReg),
+                   .id_ex_Write_Register(id_ex_Write_Register), .BrchCnd(BrnchCnd), .id_ex_ALU_Jump(id_ex_ALU_jump), .clk(clk), .rst(rst), .Flush(flush), .id_ex_halt(id_ex_halt | isUnalignedMemory), .id_ex_MemToReg(id_ex_MemToReg),
                    .ex_mem_MemToReg(ex_mem_MemToReg), .ex_mem_PC_Updated(ex_mem_PC_Updated), .ex_mem_ImmSrc(ex_mem_ImmSrc), .ex_mem_Imm8_Ext(ex_mem_Imm8_Ext), .ex_mem_Imm11_Ext(ex_mem_Imm11_Ext),
                    .ex_mem_aluResult(ex_mem_aluResult), .ex_mem_memReadorWrite(ex_mem_memReadorWrite), .ex_mem_memWrite(ex_mem_memWrite), .ex_mem_memRead(ex_mem_memRead), .ex_mem_writeData(ex_mem_writeData),
                    .ex_mem_BrchCnd(ex_mem_BrchCnd), .ex_mem_ALU_Jump(ex_mem_ALU_Jump), .ex_mem_halt(ex_mem_halt), .ex_mem_RegWrite(ex_mem_RegWrite), .ex_mem_Write_Register(ex_mem_Write_Register));
@@ -167,11 +172,11 @@ module proc (/*AUTOARG*/
    // Instantiate memory stage
    memory memory0 (.clk(clk), .rst(rst), .PC_add(ex_mem_PC_Updated), .ImmSrc(ex_mem_ImmSrc), .Imm8_Ext(ex_mem_Imm8_Ext), .Imm11_Ext(ex_mem_Imm11_Ext),
                    .aluResult(ex_mem_aluResult), .ALU_Jump(ex_mem_ALU_Jump), .memWrite(ex_mem_memWrite), .memRead(ex_mem_memRead), .memReadorWrite(ex_mem_memReadorWrite),
-                   .writeData(ex_mem_writeData), .BrchCnd(ex_mem_BrchCnd), .final_new_PC(PC_flush), .Read_Data(mem_data_out), .halt(ex_mem_halt), .flush(flush));
+                   .writeData(ex_mem_writeData), .BrchCnd(ex_mem_BrchCnd), .final_new_PC(PC_flush), .Read_Data(mem_data_out), .halt(ex_mem_halt), .flush(flush), .IsUnaligned(isUnalignedMemory), .StallDMem(dmem_stall));
 
    // Instnantiate the mem_wb flop
-   mem_wb mem_wb0 (.Read_Data(mem_data_out), .ex_mem_ALU_Result(ex_mem_aluResult), .ex_mem_MemToReg(ex_mem_MemToReg), .ex_mem_PC_Updated(ex_mem_PC_Updated), .ex_mem_halt(ex_mem_halt), .ex_mem_RegWrite(ex_mem_RegWrite),
-                   .ex_mem_Write_Register(ex_mem_Write_Register), .clk(clk), .rst(rst), .mem_wb_Read_Data(mem_wb_Read_Data), .mem_wb_ALU_Result(mem_wb_ALU_Result), .mem_wb_MemToReg(mem_wb_MemToReg),
+   mem_wb mem_wb0 (.Read_Data(mem_data_out), .ex_mem_ALU_Result(ex_mem_aluResult), .ex_mem_MemToReg(ex_mem_MemToReg), .ex_mem_PC_Updated(ex_mem_PC_Updated), .ex_mem_halt(ex_mem_halt | isUnalignedMemory), .ex_mem_RegWrite(ex_mem_RegWrite),
+                   .ex_mem_Write_Register(ex_mem_Write_Register), .clk(clk), .rst(rst), .mem_wb_Read_Data(mem_wb_Read_Data), .mem_wb_ALU_Result(mem_wb_ALU_Result), .mem_wb_MemToReg(mem_wb_MemToReg), .StallDMem(dmem_stall),
                    .mem_wb_PC_Updated(mem_wb_PC_Updated), .mem_wb_halt(mem_wb_halt), .mem_wb_Write_Register(mem_wb_Write_Register), .mem_wb_RegWrite(mem_wb_RegWrite));
    // above originally it was pc_flush but we changed to ex_mem_PC_Updated
    // Instantiate write back stage

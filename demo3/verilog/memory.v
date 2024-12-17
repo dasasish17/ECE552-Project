@@ -6,7 +6,7 @@
                      processor.
 */
 //Inputs: ImmSrc, PC_add, I
-module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jump, memReadorWrite, memWrite, memRead, writeData, BrchCnd, final_new_PC, Read_Data, halt, flush);
+module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jump, memReadorWrite, memWrite, memRead, writeData, BrchCnd, final_new_PC, Read_Data, halt, flush, IsUnaligned, StallDMem);
 
    input wire [15:0] PC_add;
    input wire ImmSrc;
@@ -28,12 +28,17 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jum
    // change the output below 
    // output wire [15:0] PC_value;
    output wire [15:0] Read_Data;
+   output wire IsUnaligned, StallDMem;
+
    // output wire [15:0] ALU;
    wire [15:0] value_to_shift;
    wire [15:0] shift_value;
    wire [15:0] sum;
    wire c_out;
    wire [15:0] address;
+
+   wire Done, CacheHit, err;
+   wire memread_aligned, memwrite_aligned;
 
    //write the ImmSrc Mux logic 
    //assign y = sel ? b : a; 
@@ -54,10 +59,17 @@ module memory (clk, rst, PC_add, ImmSrc, Imm8_Ext, Imm11_Ext, aluResult, ALU_Jum
    // wire enable; 
    // assign memRead = ~halt;
   
+  assign memread_aligned = memRead & ~aluResult[0];
+  assign memwrite_aligned = memWrite & ~aluResult[0];
+
    // read the main memory logic 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
    //enable = 1'b1 or ????
-   memory2c mem (.data_out(Read_Data), .data_in(writeData), .addr(aluResult), .enable(memReadorWrite), .wr(memWrite), .createdump(halt), .clk(clk), .rst(rst));
+   //memory2c mem (.data_out(Read_Data), .data_in(writeData), .addr(aluResult), .enable(memReadorWrite), .wr(memWrite), .createdump(halt), .clk(clk), .rst(rst));
+   mem_system #(1) mem (.DataOut(Read_Data), .Done(Done), .Stall(StallDMem), .CacheHit(CacheHit), .err(err), .Addr(aluResult), .DataIn(writeData), .Rd(memread_aligned), .Wr(memwrite_aligned), .createdump(halt), .clk(clk), .rst(rst));
+   
+   assign IsUnaligned = (err) | ((memRead | memWrite) & aluResult[0]);
+
    assign flush = ALU_Jump | BrchCnd;
    
 endmodule
