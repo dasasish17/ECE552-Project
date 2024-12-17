@@ -53,7 +53,11 @@ module id_ex (
     id_ex_Write_Register, // id_ex_writeRegSel
     id_ex_RegWrite,
     if_id_PC_Updated,
-    id_ex_PC_Updated
+    id_ex_PC_Updated,
+    Rs,
+    Rt,
+    id_ex_Rs,
+    id_ex_Rt
 );
     input wire clk;
     input wire rst;
@@ -83,6 +87,7 @@ module id_ex (
     input wire [15:0]imm11_sign_ext;
     input wire [2:0] Write_Register;
     input wire RegWrite;
+    input wire [2:0] Rs, Rt;
 
     output wire [15:0] id_ex_read_Data1;
     output wire [15:0] id_ex_read_Data2;
@@ -109,6 +114,7 @@ module id_ex (
     output wire [15:0] id_ex_imm11_sign_ext;
     output wire [2:0] id_ex_Write_Register;
     output wire id_ex_RegWrite;
+    output wire [2:0] id_ex_Rs, id_ex_Rt;
 
     input wire [15:0] if_id_PC_Updated;
     output wire [15:0] id_ex_PC_Updated;
@@ -142,5 +148,8 @@ module id_ex (
     register #(.WIDTH(3)) register23 (.out(id_ex_Write_Register), .in(Write_Register), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register #(.WIDTH(1)) register24 (.out(id_ex_RegWrite), .in(RegWrite), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
     register #(.WIDTH(16)) register25 (.out(id_ex_PC_Updated), .in(if_id_PC_Updated), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+
+    register #(.WIDTH(3)) register26 (.out(id_ex_Rs), .in(Rs), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(3)) register27 (.out(id_ex_Rt), .in(Rt), .wr_en(1'b1), .clk(clk), .rst(rst|Flush));
 
 endmodule

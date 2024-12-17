@@ -33,8 +33,10 @@ module decode (
     imm5_ext_rst,  // 5-bit immediate extended output
     imm8_ext_rst,  // 8-bit immediate extended output
     imm11_sign_ext,  // 11-bit immediate signed extended output
-    potRAW_R,
-    potRAW_I,
+    //potRAW_R,
+    //potRAW_I,
+    Rs,
+    Rt,
     RegWrite,
     Write_Register,
     mem_wb_RegWrite,
@@ -56,7 +58,8 @@ module decode (
    output wire MemEnable;
    output wire MemWrite;
    output wire memRead;
-   output wire potRAW_R, potRAW_I;
+   // output wire potRAW_R, potRAW_I;
+   output wire [2:0] Rs, Rt;
    output wire RegWrite;
    output wire [2:0] Write_Register;
 
@@ -113,8 +116,8 @@ module decode (
         .memWrite(MemWrite),
         .memRead(memRead),
         .ALU_jump(ALU_jump),
-        .potRAW_R(potRAW_R),
-        .potRAW_I(potRAW_I),
+        //.potRAW_R(potRAW_R),
+        //.potRAW_I(potRAW_I),
         .InvA(InvA),
         .InvB(InvB),
         .Cin(Cin),
@@ -152,6 +155,9 @@ module decode (
                            (RegDst == 2'b01) ? instruction[10:8] :
                            (RegDst == 2'b10) ? instruction[4:2] :
                            3'b111; // Default case
+
+   assign Rs = instruction[10:8];
+   assign Rt = instruction[7:5];
 
    // Register file instantiation
    regFile_bypass regFile0 (

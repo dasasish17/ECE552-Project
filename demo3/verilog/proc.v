@@ -34,7 +34,8 @@ module proc (/*AUTOARG*/
    wire mem_err, alu_err, decode_err;
    wire [15:0] finalPC;
    wire actualRead;
-   wire potRAW_R, potRAW_I;
+   //wire potRAW_R, potRAW_I;
+   wire [2:0] Rs, Rt;
 
    wire RegWrite;
    wire [2:0] WriteRegister;
@@ -55,6 +56,7 @@ module proc (/*AUTOARG*/
   wire [2:0] id_ex_Write_Register;
   wire id_ex_RegWrite;
   wire [15:0] if_id_PC_Updated, id_ex_PC_Updated;
+  wire [2:0] id_ex_Rs, id_ex_Rt;
 
   // ex_mem flop signals
    wire [1:0] ex_mem_MemToReg;
@@ -78,10 +80,16 @@ module proc (/*AUTOARG*/
 
   wire flush;
   wire hu_stall;
+  wire ex_ex_Rs_fwd, ex_ex_Rt_fwd, mem_ex_Rs_fwd, mem_ex_Rt_fwd;
 
   wire final_halt, id_ex_halt, ex_mem_halt, mem_wb_halt;
   wire [15:0] final_PC_incr;
   wire final_stall;
+
+  // forwarding wires
+  wire [15:0] ex_ex_fwd_readData1, ex_ex_fwd_readData2, mem_ex_fwd_readData1, mem_ex_fwd_readData2;
+  // wire [15:0] id_ex_fwd_readRs, id_ex_fwd_readRt;
+
 
   // final halt logic
   assign final_halt = (~flush) & (halt | id_ex_halt | ex_mem_halt | mem_wb_halt);
@@ -102,6 +110,14 @@ module proc (/*AUTOARG*/
   assign final_Bgt = final_stall ? 1'b0 : Bgt;
   assign final_ALU_jump = final_stall ? 1'b0 : ALU_jump;
 
+  // Forwarding Logic
+  
+   assign ex_ex_fwd_readData1 = ex_ex_Rs_fwd ? ex_mem_aluResult : mem_ex_fwd_readData1;
+   assign ex_ex_fwd_readData2 = ex_ex_Rt_fwd ? ex_mem_aluResult : mem_ex_fwd_readData2;
+   assign mem_ex_fwd_readData1 = mem_ex_Rs_fwd ? write_data : id_ex_read_Data1;
+   assign mem_ex_fwd_readData2 = mem_ex_Rt_fwd ? write_data : id_ex_read_Data2;
+
+
    // Instantiate fetch stage
    fetch fetch0 (.clk(clk), .rst(rst), .halt(final_halt), .PC_intermediary(final_PC_incr), .instr(instruction), .PC_updated(PC_current), .stall(final_stall));
 
@@ -111,7 +127,7 @@ module proc (/*AUTOARG*/
    // Instantiate decode stage
    decode decode0 (.clk(clk), .rst(rst), .instruction(if_id_instruction), .Write_Data(write_data), .ImmSrc(ImmSrc), .MemEnable(MemRead),
                     .mem_wb_RegWrite(mem_wb_RegWrite), .mem_wb_Write_Register(mem_wb_Write_Register), .MemWrite(MemWrite), .memRead(actualRead), .ALU_jump(ALU_jump),
-                    .potRAW_R(potRAW_R), .potRAW_I(potRAW_I), .InvA(InvA), .InvB(InvB), .Cin(Cin), .Beq(Beq), .Bne(Bne), .Blt(Blt), .Bgt(Bgt), .Halt(halt),
+                    .Rs(Rs), .Rt(Rt), .InvA(InvA), .InvB(InvB), .Cin(Cin), .Beq(Beq), .Bne(Bne), .Blt(Blt), .Bgt(Bgt), .Halt(halt),
                     .MemToReg(MemToReg), .ALUSrc1(ALUSrc1), .ALUSrc2(ALUSrc2), .ALU_op(ALU_op), .err(decode_err), .read_Data1(read_data1),
                     .read_Data2(read_data2), .imm5_ext_rst(imm5_ext_rst), .imm8_ext_rst(imm8_ext_rst), .imm11_sign_ext(imm11_sign_ext),
                     .RegWrite(RegWrite), .Write_Register(WriteRegister));
@@ -126,18 +142,23 @@ module proc (/*AUTOARG*/
                  .id_ex_ALU_jump(id_ex_ALU_jump), .id_ex_InvA(id_ex_InvA), .id_ex_InvB(id_ex_InvB), .id_ex_Cin(id_ex_Cin), .id_ex_Beq(id_ex_Beq), .id_ex_Bne(id_ex_Bne),
                  .id_ex_Blt(id_ex_Blt), .id_ex_Bgt(id_ex_Bgt), .id_ex_Halt(id_ex_halt), .id_ex_MemToReg(id_ex_MemToReg), .id_ex_ALUSrc1(id_ex_ALUSrc1), .id_ex_ALUSrc2(id_ex_ALUSrc2),
                  .id_ex_ALU_op(id_ex_ALU_op), .id_ex_imm5_ext_rst(id_ex_imm5_ext_rst), .id_ex_imm8_ext_rst(id_ex_imm8_ext_rst), .id_ex_imm11_sign_ext(id_ex_imm11_sign_ext),
-                 .id_ex_Write_Register(id_ex_Write_Register), .id_ex_RegWrite(id_ex_RegWrite), .id_ex_PC_Updated(id_ex_PC_Updated));
+                 .id_ex_Write_Register(id_ex_Write_Register), .id_ex_RegWrite(id_ex_RegWrite), .id_ex_PC_Updated(id_ex_PC_Updated), .Rs(Rs), .Rt(Rt), .id_ex_Rs(id_ex_Rs), .id_ex_Rt(id_ex_Rt));
 
-   hazard_unit hu0 (.instruction(if_id_instruction), .id_ex_reg_write(id_ex_RegWrite), .ex_mem_reg_write(ex_mem_RegWrite), .id_ex_reg_dst(id_ex_Write_Register),
-                    .ex_mem_reg_dst(ex_mem_Write_Register), .potRAW_R(potRAW_R), .potRAW_I(potRAW_I), .stall(hu_stall));
+   // hazard_unit hu0 (.instruction(if_id_instruction), .id_ex_reg_write(id_ex_RegWrite), .ex_mem_reg_write(ex_mem_RegWrite), .id_ex_reg_dst(id_ex_Write_Register),
+   //                  .ex_mem_reg_dst(ex_mem_Write_Register), .potRAW_R(potRAW_R), .potRAW_I(potRAW_I), .stall(hu_stall));
+   
+   hazard_unit hu0 (.instruction(if_id_instruction), .id_ex_reg_dst(id_ex_Write_Register), .ex_mem_reg_dst(ex_mem_Write_Register), .mem_wb_reg_dst(mem_wb_Write_Register), .id_ex_Rs(id_ex_Rs), .id_ex_Rt(id_ex_Rt), 
+               .id_ex_regWrite(id_ex_RegWrite), .ex_mem_regWrite(ex_mem_RegWrite), .mem_wb_regWrite(mem_wb_RegWrite), .id_ex_memRead(id_ex_memRead), .ex_mem_memRead(ex_mem_memRead), 
+               .stall(hu_stall), .ex_ex_Rs_fwd(ex_ex_Rs_fwd), .ex_ex_Rt_fwd(ex_ex_Rt_fwd), .mem_ex_Rs_fwd(mem_ex_Rs_fwd), .mem_ex_Rt_fwd(mem_ex_Rt_fwd));
+   
    // Instantiate execute stage
-   execute execute0 (.read1Data(id_ex_read_Data1), .read2Data(id_ex_read_Data2), .id_ex_PC_Updated(id_ex_PC_Updated), .imm5_ext_rst(id_ex_imm5_ext_rst), .imm8_ext_rst(id_ex_imm8_ext_rst), .imm11_sign_ext(id_ex_imm11_sign_ext),
+   execute execute0 (.read1Data(ex_ex_fwd_readData1), .read2Data(ex_ex_fwd_readData2), .id_ex_PC_Updated(id_ex_PC_Updated), .imm5_ext_rst(id_ex_imm5_ext_rst), .imm8_ext_rst(id_ex_imm8_ext_rst), .imm11_sign_ext(id_ex_imm11_sign_ext),
                      .AluSrc1(id_ex_ALUSrc1), .AluSrc2(id_ex_ALUSrc2), .Oper(id_ex_ALU_op), .AluCin(id_ex_Cin), .InvA(id_ex_InvA), .InvB(id_ex_InvB), .Beq(id_ex_Beq), .Bne(id_ex_Bne),
                      .Blt(id_ex_Blt), .Bgt(id_ex_Bgt), .AluRes(ALU_result), .err(alu_err), .BrnchCnd(BrnchCnd));
 
    // Instnantiate the ex_mem flop
    ex_mem ex_mem0 (.id_ex_PC_Updated(id_ex_PC_Updated), .id_ex_ImmSrc(id_ex_ImmSrc), .id_ex_Imm8_Ext(id_ex_imm8_ext_rst), .id_ex_Imm11_Ext(id_ex_imm11_sign_ext), .aluResult(ALU_result),
-                   .id_ex_memReadorWrite(id_ex_MemEnable), .id_ex_memWrite(id_ex_MemWrite), .id_ex_memRead(id_ex_memRead), .id_ex_writeData(id_ex_read_Data2), .id_ex_RegWrite(id_ex_RegWrite),
+                   .id_ex_memReadorWrite(id_ex_MemEnable), .id_ex_memWrite(id_ex_MemWrite), .id_ex_memRead(id_ex_memRead), .id_ex_writeData(ex_ex_fwd_readData2), .id_ex_RegWrite(id_ex_RegWrite),
                    .id_ex_Write_Register(id_ex_Write_Register), .BrchCnd(BrnchCnd), .id_ex_ALU_Jump(id_ex_ALU_jump), .clk(clk), .rst(rst), .Flush(flush), .id_ex_halt(id_ex_halt), .id_ex_MemToReg(id_ex_MemToReg),
                    .ex_mem_MemToReg(ex_mem_MemToReg), .ex_mem_PC_Updated(ex_mem_PC_Updated), .ex_mem_ImmSrc(ex_mem_ImmSrc), .ex_mem_Imm8_Ext(ex_mem_Imm8_Ext), .ex_mem_Imm11_Ext(ex_mem_Imm11_Ext),
                    .ex_mem_aluResult(ex_mem_aluResult), .ex_mem_memReadorWrite(ex_mem_memReadorWrite), .ex_mem_memWrite(ex_mem_memWrite), .ex_mem_memRead(ex_mem_memRead), .ex_mem_writeData(ex_mem_writeData),
