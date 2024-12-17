@@ -1,0 +1,10 @@
+0000 c000 lbi r0, 0
+0002 8822 ld r1, r0, 2
+0004 8864 ld r3, r0, 4
+0006 db04 add r1, r3, r0
+0008 d90c add r3, r1, r0
+000a 8824 ld r1, r0, 4
+000c d824 add r1, r0, r1
+000e d820 add r0, r0, r1
+0010 0000 halt
+          

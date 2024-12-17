@@ -1,7 +1,7 @@
 `default_nettype none
 
 module control (Opcode, Func, err, Halt,
-                zeroExt, ImmSrc, ALU_jump, RegWrite, memReadorWrite, memRead, memWrite, potRAW_R, potRAW_I,
+                zeroExt, ImmSrc, ALU_jump, RegWrite, memReadorWrite, memRead, memWrite, 
                 InvA, InvB, Cin, Beq, Bne, Blt, Bgt,
                 RegDst, MemtoReg, ALUSrc1, ALUSrc2, ALU_op);
 
@@ -28,8 +28,8 @@ module control (Opcode, Func, err, Halt,
     output reg memReadorWrite;
     output reg memRead;
     output reg memWrite;
-    output reg potRAW_R;
-    output reg potRAW_I;
+    //output reg potRAW_R;
+    //output reg potRAW_I;
 
     // Add/subtract
     output reg InvA;
@@ -43,6 +43,8 @@ module control (Opcode, Func, err, Halt,
     output reg Bgt;
 
     output reg Halt;
+
+    reg potRAW_R, potRAW_I;
 
     // Combinational logic block
     always @(*) begin

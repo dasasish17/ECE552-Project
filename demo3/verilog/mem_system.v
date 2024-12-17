@@ -167,7 +167,7 @@ module mem_system(/*AUTOARG*/
    );
 
    // Error handling
-   assign err = err_c0 | err_c1 | err_mem | err_fsm;
+   assign err = err_c0 | err_c1 | err_mem | err_fsm | ((Rd | Wr) & Addr[0]);
 
 endmodule // mem_system
 `default_nettype wire
