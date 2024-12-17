@@ -5,7 +5,7 @@
    Description     : This is the module for the overall fetch stage of the processor.
 */
 `default_nettype none
-module fetch (halt, stall, Flush, IsUnaligned clk, rst, PC_intermediary, instr, PC_updated);
+module fetch (halt, stall, Flush, IsUnaligned, clk, rst, PC_intermediary, instr, PC_updated);
 
    // TODO: Your code here
    input wire halt, clk, rst, Flush,stall;
@@ -15,7 +15,7 @@ module fetch (halt, stall, Flush, IsUnaligned clk, rst, PC_intermediary, instr, 
    output wire IsUnaligned;
 
    input wire [15:0] PC_intermediary;
-   wire [15:0] intermediate_instruction, savedNextPC;
+   wire [15:0] intermediate_instruction, savedNextPC, fin_next_PC;
    wire c_out;
    wire Done, CacheHit, IMemStall, savedFlush;
 

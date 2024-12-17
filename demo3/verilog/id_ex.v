@@ -136,7 +136,7 @@ module id_ex (
     register #(.WIDTH(1)) register11 (.out(id_ex_Bne), .in(Bne), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));
     register #(.WIDTH(1)) register12 (.out(id_ex_Blt), .in(Blt), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));
     register #(.WIDTH(1)) register13 (.out(id_ex_Bgt), .in(Bgt), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));
-    register #(.WIDTH(1)) register14 (.out(id_ex_Halt), .in(Halt), .wr_en(~StallDMem), .clk(clk), .rst(rst|(Flush&~StallDMem));
+    register #(.WIDTH(1)) register14 (.out(id_ex_Halt), .in(Halt), .wr_en(~StallDMem), .clk(clk), .rst(rst|(Flush&~StallDMem)));
    
     register #(.WIDTH(2)) register16 (.out(id_ex_MemToReg), .in(MemToReg), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));
     register #(.WIDTH(2)) register17 (.out(id_ex_ALUSrc1), .in(ALUSrc1), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));

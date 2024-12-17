@@ -1,6 +1,6 @@
 # vsim -c proc_hier_pbench -lib __work -voptargs="+acc" -wlf dump.wlf -do "log -howmany -rec /* ; run -all" 
-# Start time: 20:30:06 on Dec 16,2024
-# ** Warning: License feature 'msimpevsimvlog' will expire in 4 days.
+# Start time: 00:12:14 on Dec 17,2024
+# ** Warning: License feature 'msimpevsimvlog' will expire in 3 days.
 # Loading __work.proc_hier_pbench
 # Loading __work.proc_hier
 # Loading __work.clkrst
@@ -14,7 +14,14 @@
 # Loading __work.nand2
 # Loading __work.not1
 # Loading __work.nor2
-# Loading __work.memory2c
+# Loading __work.mem_system
+# Loading __work.dff
+# Loading __work.cache
+# Loading __work.memc
+# Loading __work.memv
+# Loading __work.four_bank_mem
+# Loading __work.final_memory
+# Loading __work.cache_controller
 # Loading __work.if_id
 # Loading __work.decode
 # Loading __work.control
@@ -33,13 +40,19 @@
 # Loading __work.memory
 # Loading __work.mem_wb
 # Loading __work.wb
-# Loading __work.dff
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'fetch0'.  Expected 9, found 8.
+#    Time: 0 ns  Iteration: 0  Instance: /proc_hier_pbench/DUT/p0/fetch0 File: proc.v Line: 128
+# ** Warning: (vsim-3722) proc.v(128): [TFMPC] - Missing connection for port 'Flush'.
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'cache_controller'.  Expected 28, found 24.
+#    Time: 0 ns  Iteration: 0  Instance: /proc_hier_pbench/DUT/p0/fetch0/mem0/cache_controller File: mem_system.v Line: 142
+# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'cache_controller'.  Expected 28, found 24.
+#    Time: 0 ns  Iteration: 0  Instance: /proc_hier_pbench/DUT/p0/memory0/mem/cache_controller File: mem_system.v Line: 142
 # log -howmany -rec /* 
-# 5479
+# 8643
 #  run -all
 # Hello world...simulation starting
 # See verilogsim.log and verilogsim.ptrace for output
 # ** Note: $finish    : proc_hier_pbench.v(139)
-#    Time: 10305 ns  Iteration: 0  Instance: /proc_hier_pbench
-# End time: 20:30:07 on Dec 16,2024, Elapsed time: 0:00:01
-# Errors: 0, Warnings: 0
+#    Time: 1405 ns  Iteration: 0  Instance: /proc_hier_pbench
+# End time: 00:12:15 on Dec 17,2024, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 4

@@ -91,6 +91,8 @@ module proc (/*AUTOARG*/
   wire [15:0] ex_ex_fwd_readData1, ex_ex_fwd_readData2, mem_ex_fwd_readData1, mem_ex_fwd_readData2;
   // wire [15:0] id_ex_fwd_readRs, id_ex_fwd_readRt;
 
+  // Fetch, Memory Cache
+  wire isUnalignedFetch, isUnalignedMemory;
 
   // final halt logic
   assign final_halt = (~flush) & (halt | id_ex_halt | ex_mem_halt | mem_wb_halt | isUnalignedFetch | isUnalignedMemory);
@@ -120,8 +122,7 @@ module proc (/*AUTOARG*/
    assign mem_ex_fwd_readData1 = mem_ex_Rs_fwd ? write_data : id_ex_read_Data1;
    assign mem_ex_fwd_readData2 = mem_ex_Rt_fwd ? write_data : id_ex_read_Data2;
 
-   // Fetch, Memory Cache
-   wire isUnalignedFetch, isUnalignedMemory;
+   
 
    // Instantiate fetch stage
    fetch fetch0 (.clk(clk), .rst(rst), .halt(final_halt), .IsUnaligned(isUnalignedFetch), .PC_intermediary(final_PC_incr), .instr(instruction), .PC_updated(PC_current), .stall(final_stall));
