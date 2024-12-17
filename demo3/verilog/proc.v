@@ -76,12 +76,11 @@ module proc (/*AUTOARG*/
   wire [2:0] mem_wb_Write_Register;
   wire mem_wb_RegWrite;
 
-  wire [15:0] PC_flush;
 
+  wire [15:0] PC_flush;
   wire flush;
   wire hu_stall;
   wire ex_ex_Rs_fwd, ex_ex_Rt_fwd, mem_ex_Rs_fwd, mem_ex_Rt_fwd;
-
   wire final_halt, id_ex_halt, ex_mem_halt, mem_wb_halt;
   wire [15:0] final_PC_incr;
   wire final_stall;
@@ -93,6 +92,8 @@ module proc (/*AUTOARG*/
 
   // Fetch, Memory Cache
   wire isUnalignedFetch, isUnalignedMemory;
+  wire final_MemRead, final_MemWrite, final_MemEnable, final_RegWrite, final_Beq, final_Bne, final_Blt, final_Bgt, final_ALU_jump;
+  wire haltOrUnaligned;
 
   // final halt logic
   assign final_halt = (~flush) & (halt | id_ex_halt | ex_mem_halt | mem_wb_halt | isUnalignedFetch | isUnalignedMemory);
@@ -100,9 +101,6 @@ module proc (/*AUTOARG*/
   assign final_PC_incr = flush ? PC_flush : PC_current;
   // final stall logic
   assign final_stall = flush ? 1'b0 : (hu_stall | dmem_stall);
-
-  wire final_MemRead, final_MemWrite, final_MemEnable, final_RegWrite, final_Beq, final_Bne, final_Blt, final_Bgt, final_ALU_jump;
-  wire haltOrUnaligned;
 
   assign final_MemRead = final_stall ? 1'b0 : actualRead;
   assign final_MemWrite = final_stall ? 1'b0 : MemWrite;
@@ -125,7 +123,7 @@ module proc (/*AUTOARG*/
    
 
    // Instantiate fetch stage
-   fetch fetch0 (.clk(clk), .rst(rst), .halt(final_halt), .IsUnaligned(isUnalignedFetch), .PC_intermediary(final_PC_incr), .instr(instruction), .PC_updated(PC_current), .stall(final_stall));
+   fetch fetch0 (.clk(clk), .rst(rst), .halt(final_halt), .IsUnaligned(isUnalignedFetch), .PC_intermediary(final_PC_incr), .instr(instruction), .PC_updated(PC_current), .stall(final_stall), .Flush(flush));
 
    // Instantiate the if_id flop
    if_id if_id_0 (.instruction(instruction), .PC_updated(PC_current), .clk(clk), .rst(rst), .StallDMem(dmem_stall), .if_id_instruction(if_id_instruction), .if_id_PC_Updated(if_id_PC_Updated), .flush(flush), .stall(final_stall));

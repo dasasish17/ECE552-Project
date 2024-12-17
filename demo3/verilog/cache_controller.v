@@ -1,180 +1,336 @@
-module cache_controller (
-	// Inputs
-	dirty, index, valid_in, tag_in, clk, Wr, hit, stall, tag_out, Rd, offset_in, rst,
+`define IDLE 0
+`define COMPARE_READ 1
+`define COMPARE_WRITE 2
+`define WB_0 3
+`define WB_1 4
+`define WB_2 5
+`define WB_3 6
+`define ALLOC_0 7
+`define ALLOC_1 8
+`define ALLOC_2 9
+`define ALLOC_3 10
+`define ALLOC_4 11
+`define ALLOC_5 12
+`define DONE 13
 
-     // Outputs
-	done, stall_out, cache_hit, err,
-	stall_out, write_cache, read_mem, addr, offset_out, err, write_mem, enable, cache_hit, valid_out, done, comp
-	);
-	
-	input dirty;
-    input [7:0] index;
-    input valid_in;
-    input [4:0] tag_in;
-    input clk;
-    input Wr;
-    input hit;
-    input stall;
-    input [4:0] tag_out;
-    input Rd;
-    input [2:0] offset_in;
-    input rst;
+`default_nettype none
+module mem_control(Rd, Wr, address, hit1, hit2, dirty1, dirty2, valid1, valid2, 
+                cache_data_out1, cache_data_out2, tag_out1, tag_out2, data_in_mem, proc_data_in,
+                clk, rst,
+                //Outputs
+                enable1, enable2, comp, write, tag_in, cache_data_in, valid_in, offset_in,
+                Done, mem_addr, mem_data, mem_wr, mem_rd, proc_data_out, proc_stall, CacheHit, Error);
+    
+    input wire clk, rst, Rd, Wr, hit1, hit2, dirty1, dirty2, valid1, valid2;
+    input wire [15:0] address, cache_data_out1, cache_data_out2, data_in_mem, proc_data_in;
+    input wire [4:0] tag_out1, tag_out2;
 
-	
-    output reg stall_out;
-    output reg write_cache;
-    output reg read_mem;
-    output reg [15:0] addr;
-    output reg [2:0] offset_out;
-    output reg err;
-    output reg write_mem;
-    output reg enable;
-    output reg cache_hit;
-    output reg valid_out;
-    output reg done;
-    output reg comp;
-    // 2 states
-	localparam IDLE = 4'b0000;
-	localparam WB0 = 4'b0001;
-	localparam WB1 = 4'b0010;
-	localparam WB2 = 4'b0011;
-	localparam WB3 = 4'b0100;
-	localparam ALLOC0 = 4'b0101;
-	localparam ALLOC1 = 4'b0110;
-	localparam ALLOC2 = 4'b0111;
-	localparam ALLOC3 = 4'b1000;
-	localparam ALLOC4 = 4'b1001;
-	localparam ALLOC5 = 4'b1010;
-	localparam CACHE_HANDLER= 4'b1011;
-	localparam FINAL = 4'b1100;
-	
-	// flip flop
-	wire [3:0] curr_state;
-	reg [3:0] nxt_state;
-	dff state_reg [3:0](
-		.q(curr_state),
-		.d(nxt_state),
-		.clk(clk),
-		.rst(rst)
-	);
-	
-	// Finite state machine
-	always @(*) begin
-		nxt_state = curr_state;
-        stall_out = 1'b1;
-        write_cache = 1'b0;
-        read_mem = 1'b0;
-        addr = 16'h0000;
-        offset_out = 3'b000;
-        err = 1'b0;
-        write_mem = 1'b0;
-        enable = 1'b1;
-        cache_hit = 1'b0;
-        valid_out = 1'b0;
-        done = 1'b0;
+    output reg enable1, enable2, comp, write, valid_in, Done, mem_wr, mem_rd, Error;
+    output reg [15:0] mem_addr, mem_data, cache_data_in;
+    output reg [4:0] tag_in;
+    output reg [2:0] offset_in;
+    output reg [15:0] proc_data_out;
+    output reg proc_stall;
+    output reg CacheHit;
+
+    wire [3:0] state;
+    reg [3:0] next_state;
+    reg [15:0] address_reg, proc_data_in_reg, data_out_reg;
+    reg rd_reg, wr_reg, dirty_reg, CacheHit1, CacheHit2, enable1_reg, enable2_reg, flip, hit_reg;
+    reg [4:0] tag_in_reg;
+
+    wire [4:0] tag;
+    wire [7:0] index;
+    wire [2:0] offset;
+    wire evictway, victimway;
+
+    assign tag = address_reg[15:11];
+    assign index = address_reg[10:3];
+    assign offset = address_reg[2:0];
+
+    reg_16b #(.REG_SIZE(1)) victimway_reg (.readData(victimway), .writeData(~victimway), .clk(clk), .rst(rst), .writeEn(flip));
+
+    assign evictway = valid1 ? (valid2 ? ~victimway : 1'b1) : 1'b0;
+
+    always @(*) begin
+        valid_in = 1'b0;
+        mem_wr = 1'b0; 
+        mem_rd = 1'b0;
+        Error = 1'b0;
+        enable1 = 1'b0;
+        enable2 = 1'b0;
         comp = 1'b0;
+        write = 1'b0;
+        Done = 1'b0;
+        flip = 1'b0;
+        proc_stall = ~Done;
+        CacheHit = 1'b0;
+        CacheHit1 = 1'b0;
+        CacheHit2 = 1'b0;
+        offset_in = (Rd | Wr) ? offset : 3'b000;
+        address_reg = address;
 
-		
-		case(curr_state)
-			IDLE: begin
-				// nxt_state = (Rd | Wr) ? ((hit & valid_in) ? IDLE : (~hit & valid_in & dirty) ? WB0 : ALLOC0) : IDLE;
-                //nxt_state = (Rd | Wr) && ~hit && valid_in ? (dirty ? WB0 : ALLOC0): IDLE;
-                nxt_state = (Rd | Wr) ? (valid_in ? (hit ? IDLE : (dirty ? WB0 : ALLOC0)) : ALLOC0) : IDLE;
+        casex(state)
+            `IDLE: begin
+                rd_reg = Rd;
+                wr_reg = Wr;
+                proc_stall = (Rd|Wr);
+                hit_reg = 1'b0;
+                next_state = Rd ? `COMPARE_READ : (Wr ? `COMPARE_WRITE : `IDLE);
+            end
+            `COMPARE_READ: begin
+                comp = 1'b1;
+                write = 1'b0;
+                enable1 = 1'b1;
+                enable2 = 1'b1;
+                tag_in = tag;
+                offset_in = offset;
+                valid_in = 1'b1;
+                cache_data_in = 1'b0;
+                flip = 1'b1;
 
-				comp = Rd | Wr;
-				offset_out = offset_in;
-				write_cache = Wr;
-				done = (Rd | Wr) & (hit & valid_in);
-				cache_hit = hit & valid_in;
-				stall_out = 1'b0;
-			end
-			
-			WB0: begin
-				nxt_state = stall ? WB0 : WB1;
-				write_mem = 1'b1;
-				addr = {tag_out, index, 3'b000};
-				offset_out = 3'b000;
-			end
-			
-			WB1: begin
-				nxt_state = stall ? WB1 : WB2;
-				write_mem = 1'b1;
-				addr = {tag_out, index, 3'b010};
-				offset_out = 3'b010;
-			end
-			
-			WB2: begin
-				nxt_state = stall ? WB2 : WB3;
-				write_mem = 1'b1;
-				addr = {tag_out, index, 3'b100};
-				offset_out = 3'b100;
-			end
-			
-			WB3: begin
-				nxt_state = stall ? WB3 : ALLOC0;
-				write_mem = 1'b1;
-				addr = {tag_out, index, 3'b110};
-				offset_out = 3'b110;
-			end
-			
-			ALLOC0: begin
-				nxt_state = stall ? ALLOC0 : ALLOC1;
-				read_mem = 1'b1;
-				addr = {tag_in, index, 3'b000};
-			end
-			
-			ALLOC1: begin
-				nxt_state = stall ? ALLOC1 : ALLOC2;
-				read_mem = 1'b1;
-				addr = {tag_in, index, 3'b010};
-			end
-			
-			ALLOC2: begin
-				nxt_state = stall ? ALLOC2 : ALLOC3;
-				write_cache = 1'b1;
-				read_mem = 1'b1;
-				addr ={tag_in, index, 3'b100};
-				offset_out = 3'b000;
-			end
-			
-			ALLOC3: begin
-				nxt_state = stall ? ALLOC3 : ALLOC4;
-				write_cache = 1'b1;
-				read_mem = 1'b1;
-				addr = {tag_in, index, 3'b110};
-				offset_out = 3'b010;
-			end
-			
-			ALLOC4: begin
-				nxt_state = ALLOC5;
-				write_cache = 1'b1;
-				offset_out = 3'b100;
-			end
-			
-			ALLOC5: begin
-				nxt_state = CACHE_HANDLER;
-				write_cache = 1'b1;
-				valid_out = 1'b1;
-				offset_out = 3'b110;
-			end
+                proc_data_in_reg = proc_data_in;
+                address_reg = address;
+                enable1_reg = evictway ? 1'b0 : 1'b1;
+                enable2_reg = evictway ? 1'b1 : 1'b0;
+                dirty_reg = evictway ? dirty2 : dirty1;
+                tag_in_reg = evictway ? tag_out2 : tag_out1;
 
-			CACHE_HANDLER: begin
-				nxt_state = FINAL;
-				comp = 1'b1;
-				write_cache = Wr;
-				offset_out = offset_in;
-			end
-			
-			FINAL: begin
-				nxt_state = IDLE;
-				done = 1'b1;
-				offset_out = offset_in;
-			end
-			
-			default: begin
-				err = 1'b1;
-			end
-		endcase
-	end
+                CacheHit1 = hit1 & valid1;
+                CacheHit2 = hit2 & valid2;
+                CacheHit = CacheHit1 | CacheHit2;
+                hit_reg = CacheHit;
+                data_out_reg = CacheHit1 ? cache_data_out1 : (CacheHit2 ? cache_data_out2 : data_out_reg);
+                // proc_stall = 1'b1;
+                proc_data_out = CacheHit1 ? cache_data_out1 : (CacheHit2 ? cache_data_out2 : 16'bxxxx_xxxx_xxxx_xxxx);
+                Done = (CacheHit) ? 1'b1 : 1'b0;
+                proc_stall = ~CacheHit;
+                next_state = (CacheHit) ? `IDLE : (((~evictway & ~CacheHit & dirty1) | (evictway & ~CacheHit & dirty2)) ? `WB_0 : 
+                                    (((~evictway & (~dirty1 | ~CacheHit)) | (evictway & (~dirty2 | ~CacheHit))) ? `ALLOC_0 : `COMPARE_READ));
+            end
+            `COMPARE_WRITE: begin
+                comp = 1'b1;
+                write = 1'b1;
+                enable1 = 1'b1;
+                enable2 = 1'b1;
+                tag_in = tag;
+                offset_in = offset;
+                valid_in = 1'b1;
+                cache_data_in = proc_data_in;
+                flip = 1'b1;
+
+                proc_data_in_reg = proc_data_in;
+                address_reg = address;
+                enable1_reg = evictway ? 1'b0 : 1'b1;
+                enable2_reg = evictway ? 1'b1 : 1'b0;
+                dirty_reg = evictway ? dirty2 : dirty1;
+                // data_out_reg = evictway ? cache_data_out2 : cache_data_out1;
+                tag_in_reg = evictway ? tag_out2 : tag_out1;
+
+                CacheHit1 = hit1 & valid1;
+                CacheHit2 = hit2 & valid2;
+                CacheHit = CacheHit1 | CacheHit2;
+                hit_reg = CacheHit;
+                data_out_reg = CacheHit1 ? cache_data_out1 : (CacheHit2 ? cache_data_out2 : data_out_reg);
+                // proc_stall = 1'b1;
+                proc_data_out = CacheHit1 ? cache_data_out1 : (CacheHit2 ? cache_data_out2 : 16'bxxxx_xxxx_xxxx_xxxx);
+                Done = (CacheHit) ? 1'b1 : 1'b0;
+                proc_stall = ~CacheHit;
+                next_state = (CacheHit) ? `IDLE : (((~evictway & ~CacheHit & dirty1) | (evictway & ~CacheHit & dirty2)) ? `WB_0 : 
+                                    (((~evictway & (~dirty1 | ~CacheHit)) | (evictway & (~dirty2 | ~CacheHit))) ? `ALLOC_0 : `COMPARE_WRITE));
+            end
+            `WB_0: begin
+                mem_wr = 1'b1;
+                mem_rd = 1'b0;
+                mem_addr = {tag_in_reg, index, 3'b000};
+                mem_data = enable1_reg ? cache_data_out1 : cache_data_out2;
+                proc_stall = 1'b1;
+                hit_reg = 1'b0;
+
+                enable1 = enable1_reg;
+                enable2 = enable2_reg;
+                write = 1'b0;
+                comp = 1'b1;
+                tag_in = tag_in_reg;
+                offset_in = 3'b000;
+                valid_in = 1'b1;
+                next_state = `WB_1;
+            end
+            `WB_1: begin
+                mem_wr = 1'b1;
+                mem_rd = 1'b0;
+                mem_addr = {tag_in_reg, index, 3'b010};
+                mem_data = enable1_reg ? cache_data_out1 : cache_data_out2;
+                proc_stall = 1'b1;
+
+                enable1 = enable1_reg;
+                enable2 = enable2_reg;
+                write = 1'b0;
+                comp = 1'b1;
+                tag_in = tag_in_reg;
+                offset_in = 3'b010;
+                valid_in = 1'b1;
+                next_state = `WB_2;
+            end
+            `WB_2: begin
+                mem_wr = 1'b1;
+                mem_rd = 1'b0;
+                mem_addr = {tag_in_reg, index, 3'b100};
+                mem_data = enable1_reg ? cache_data_out1 : cache_data_out2;
+                proc_stall = 1'b1;
+
+                enable1 = enable1_reg;
+                enable2 = enable2_reg;
+                write = 1'b0;
+                comp = 1'b1;
+                tag_in = tag_in_reg;
+                offset_in = 3'b100;
+                valid_in = 1'b1;
+                next_state = `WB_3;
+            end
+            `WB_3: begin
+                mem_wr = 1'b1;
+                mem_rd = 1'b0;
+                mem_addr = {tag_in_reg, index, 3'b110};
+                mem_data = enable1_reg ? cache_data_out1 : cache_data_out2;
+                proc_stall = 1'b1;
+
+                enable1 = enable1_reg;
+                enable2 = enable2_reg;
+                write = 1'b0;
+                comp = 1'b1;
+                tag_in = tag_in_reg;
+                offset_in = 3'b110;
+                valid_in = 1'b1;
+                next_state = `ALLOC_0;
+            end
+            `ALLOC_0: begin
+                mem_wr = wr_reg & (offset == 3'b000);
+                mem_rd = rd_reg | (wr_reg & (offset != 3'b000));
+                mem_addr = {address_reg[15:3], 3'b000}; 
+                mem_data = proc_data_in_reg;
+                proc_stall = 1'b1;
+                hit_reg = 1'b0;
+
+                enable1 = 1'b0;
+                enable2 = 1'b0;
+                write = 1'b0;
+                comp = 1'b0;
+                next_state = `ALLOC_1;
+            end
+            `ALLOC_1: begin
+                mem_wr = wr_reg & (offset == 3'b010);
+                mem_rd = rd_reg | (wr_reg & (offset != 3'b010));
+                mem_addr = {address_reg[15:3], 3'b010};
+                mem_data = proc_data_in_reg;
+                proc_stall = 1'b1;
+
+                enable1 = 1'b0;
+                enable2 = 1'b0;
+                write = 1'b0;
+                comp = 1'b0;
+                next_state = `ALLOC_2;
+            end
+            `ALLOC_2: begin
+                mem_wr = wr_reg & (offset == 3'b100);
+                mem_rd = rd_reg | (wr_reg & (offset != 3'b100));
+                mem_addr = {address_reg[15:3], 3'b100};
+                mem_data = proc_data_in_reg;
+
+                comp = 1'b0;
+                write = 1'b1;
+                tag_in = tag;
+                cache_data_in = rd_reg | (wr_reg & offset != 3'b000) ? data_in_mem : proc_data_in;
+                valid_in = 1'b1;
+                enable1 = enable1_reg;
+                enable2 = enable2_reg;
+                offset_in = 3'b000;
+
+                proc_stall = 1'b1;
+                // proc_data_out = (offset == 3'b000) ? data_in_mem : 16'bxxxx_xxxx_xxxx_xxxx;
+                data_out_reg = (offset == 3'b000) ? data_in_mem : data_out_reg;
+                // Done = (offset == 3'b000) ? 1'b1 : 1'b0;
+                next_state = `ALLOC_3;
+            end
+            `ALLOC_3: begin
+                mem_wr = wr_reg & (offset == 3'b110);
+                mem_rd = rd_reg | (wr_reg & (offset != 3'b110));
+                mem_addr = {address_reg[15:3], 3'b110};
+                mem_data = proc_data_in_reg;
+
+                comp = 1'b0;
+                write = 1'b1;
+                tag_in = tag;
+                cache_data_in = rd_reg | (wr_reg & offset != 3'b010) ? data_in_mem : proc_data_in;
+                valid_in = 1'b1;
+                enable1 = enable1_reg;
+                enable2 = enable2_reg;
+                offset_in = 3'b010;
+
+                proc_stall = 1'b1;
+                // proc_data_out = (offset == 3'b010) ? data_in_mem : 16'bxxxx_xxxx_xxxx_xxxx;
+                data_out_reg = (offset == 3'b010) ? data_in_mem : data_out_reg;
+                // Done = (offset == 3'b010) ? 1'b1 : 1'b0;
+                next_state = `ALLOC_4;
+            end
+            `ALLOC_4: begin
+                mem_wr = 1'b0;
+                mem_rd = 1'b0;
+
+                comp = 1'b0;
+                write = 1'b1;
+                tag_in = tag;
+                cache_data_in = rd_reg | (wr_reg & offset != 3'b100) ? data_in_mem : proc_data_in;
+                valid_in = 1'b1;
+                enable1 = enable1_reg;
+                enable2 = enable2_reg;
+                offset_in = 3'b100;
+
+                proc_stall = 1'b1;
+                // proc_data_out = (offset == 3'b100) ? data_in_mem : 16'bxxxx_xxxx_xxxx_xxxx;
+                data_out_reg = (offset == 3'b100) ? data_in_mem : data_out_reg;
+                // Done = (offset == 3'b100) ? 1'b1 : 1'b0;
+                next_state = `ALLOC_5;
+            end
+            `ALLOC_5: begin
+                mem_wr = 1'b0;
+                mem_rd = 1'b0;
+
+                comp = 1'b0;
+                write = 1'b1;
+                tag_in = tag;
+                cache_data_in = rd_reg | (wr_reg & offset != 3'b110) ? data_in_mem : proc_data_in;
+                valid_in = 1'b1;
+                enable1 = enable1_reg;
+                enable2 = enable2_reg;
+                offset_in = 3'b110;
+
+                // proc_stall = 1'b0;
+                // proc_data_out = (offset == 3'b110) ? data_in_mem : 16'bxxxx_xxxx_xxxx_xxxx;
+                data_out_reg = (offset == 3'b110) ? data_in_mem : data_out_reg;
+                // Done = (offset == 3'b110) ? 1'b1 : 1'b0;
+                next_state = `DONE;
+            end
+            `DONE: begin
+                proc_data_out = data_out_reg;
+                CacheHit = hit_reg;
+                Done = 1'b1;
+                rd_reg = Rd;
+                wr_reg = Wr;
+                proc_stall = 1'b0;
+                // proc_stall = 1'b0;
+                // hit_reg = 1'b0;
+                // next_state = Rd ? `COMPARE_READ : (Wr ? `COMPARE_WRITE : `IDLE);
+                next_state = `IDLE;
+            end
+            default: begin
+                next_state = `IDLE;
+            end
+        endcase
+    end
+
+// Next state flip-flop
+reg_16b #(.REG_SIZE(4)) state_reg (.readData(state), .writeData(next_state), .clk(clk), .rst(rst), .writeEn(1'b1));
 
 endmodule
+`default_nettype wire

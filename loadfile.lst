@@ -1,10 +1,46 @@
-0000 c000 lbi r0, 0
-0002 8822 ld r1, r0, 2
-0004 8864 ld r3, r0, 4
-0006 db04 add r1, r3, r0
-0008 d90c add r3, r1, r0
-000a 8824 ld r1, r0, 4
-000c d824 add r1, r0, r1
-000e d820 add r0, r0, r1
-0010 0000 halt
+0000 c402 lbi r4 2	// input m, DO NOT INCREASE
+0002 c502 lbi r5 2	// input n
+0004 c364 lbi r3 100 
+0006 3004 jal .Ackermann  // calls A(m,n)
+0008 42c0 addi r6 r2 0
+000a 0000 halt  
+           
+000c      .Ackermann:    
+000c 4366 addi r3 r3 6
+000e 8300 st r0 r3 0
+0010 8322 st r1 r3 2
+0012 4400 addi r0 r4 0
+0014 4520 addi r1 r5 0
+0016 601e beqz r0 .m_is_0 
+0018 6110 beqz r1 .n_is_0
+           
+001a      .m_n_positive:    
+          // A(m,n) = A(m-1, A(m,A(m,n-1)) if m>0, n>0
+001a 45bf addi r5 r5 -1
+001c 83e4 st r7 r3 4
+001e 37ec jal .Ackermann  // A(m,n-1)
+0020 42a0 addi r5 r2 0
+0022 409f addi r4 r0 -1
+0024 37e6 jal .Ackermann  // A(m-1, A(m,A(m,n-1))
+0026 8be4 ld r7 r3 4
+0028 200e j .prepareReturn 
+           
+002a      .n_is_0:    	
+          // A(m,0) = A(m-1,1) if m>0, n=0
+002a 409f addi r4 r0 -1
+002c c501 lbi r5 1 
+002e 83e4 st r7 r3 4
+0030 37da jal .Ackermann  
+0032 8be4 ld r7 r3 4
+0034 2002 j .prepareReturn
+            
+0036      .m_is_0:    	
+          // A(0,n) = n+1
+0036 4541 addi r2 r5 1
           
+0038      .prepareReturn:    
+0038 8b00 ld r0 r3 0
+003a 8b22 ld r1 r3 2
+003c 437a addi r3 r3 -6
+003e 2f00 jr r7 0
+0040 0000 halt   

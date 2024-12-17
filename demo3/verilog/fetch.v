@@ -40,7 +40,8 @@ module fetch (halt, stall, Flush, IsUnaligned, clk, rst, PC_intermediary, instr,
    // implement the instrcution memeory 
    //module memory2c (data_out, data_in, addr, enable, wr, createdump, clk, rst);
    
-   mem_system #(0) mem0 (.DataOut(intermediate_instruction), .Done(Done), .CacheHit(CacheHit), .DataIn(16'b0), .Addr(pcCurrent), .Rd(1'b1), .Wr(1'b0), .createdump(halt), .clk(clk), .rst(rst), .err(IsUnaligned), .Stall(IMemStall));
+   mem_system #(0) mem0 (.DataOut(intermediate_instruction), .Done(Done), .CacheHit(CacheHit), .DataIn(16'b0), .Addr(pcCurrent), .Rd(1'b1), 
+                        .Wr(1'b0), .createdump(halt), .clk(clk), .rst(rst), .err(IsUnaligned), .Stall(IMemStall));
    
    assign instr = (halt | rst | ~Done | (Done & savedFlush)) ? 16'b0000_1000_0000_0000 : intermediate_instruction; // ouput instruction
     
