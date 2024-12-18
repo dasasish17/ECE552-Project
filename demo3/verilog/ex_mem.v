@@ -87,7 +87,7 @@ module ex_mem (
     register #(.WIDTH(1)) register8 (.out(ex_mem_BrchCnd), .in(BrchCnd), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush | id_ex_halt) & ~StallDMem)));
     register #(.WIDTH(1)) register9 (.out(ex_mem_ALU_Jump), .in(id_ex_ALU_Jump), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush | id_ex_halt) & ~StallDMem)));
     register #(.WIDTH(16)) register10 (.out(ex_mem_writeData), .in(id_ex_writeData), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush | id_ex_halt) & ~StallDMem))); //read2Data
-    register #(.WIDTH(1)) register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(~StallDMem), .clk(clk), .rst(rst|(Flush & ~StallDMem)));
+    register #(.WIDTH(1)) register11 (.out(ex_mem_halt), .in(id_ex_halt), .wr_en(~StallDMem), .clk(clk), .rst(rst));
     register #(.WIDTH(3)) register12 (.out(ex_mem_Write_Register), .in(id_ex_Write_Register), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush | id_ex_halt) & ~StallDMem)));
     register #(.WIDTH(1)) register13 (.out(ex_mem_RegWrite), .in(id_ex_RegWrite), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush | id_ex_halt) & ~StallDMem))); //data to register
     register #(.WIDTH(2)) register14 (.out(ex_mem_MemToReg), .in(id_ex_MemToReg), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush | id_ex_halt) & ~StallDMem))); //data to register

@@ -1,0 +1,8 @@
+# vsim -c proc_hier_pbench -lib __work -voptargs="+acc" -wlf dump.wlf -do "log -howmany -rec /* ; run -all" 
+# Start time: 03:20:39 on Dec 17,2024
+# ** Error: (vsim-3170) Could not find 'proc_hier_pbench'.
+#         Searched libraries:
+#             /home/asish/private/aditi/ECE552-Project/demo3/__work
+# Error loading design
+# End time: 03:20:39 on Dec 17,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0

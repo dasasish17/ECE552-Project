@@ -122,7 +122,7 @@ module id_ex (
 
     //module register(out, in, wr_en, clk, rst);
     register #(.WIDTH(16)) register0 (.out(id_ex_read_Data1), .in(read_Data1), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));
-    register #(.WIDTH(16)) register1 (.out(id_ex_read_Data2), .in(read_Data2), .wr_en(~StallDMem), .clk(clk), .rst(rst|Flush));
+    register #(.WIDTH(16)) register1 (.out(id_ex_read_Data2), .in(read_Data2), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));
    
     register #(.WIDTH(1)) register2 (.out(id_ex_ImmSrc), .in(ImmSrc), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));
     register #(.WIDTH(1)) register3 (.out(id_ex_MemEnable), .in(MemEnable), .wr_en(~StallDMem), .clk(clk), .rst(rst|((Flush|Halt) & ~StallDMem)));

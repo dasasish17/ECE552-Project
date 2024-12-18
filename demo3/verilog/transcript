@@ -1,55 +1,7 @@
-# vsim -c proc_hier_pbench -lib __work -voptargs="+acc" -wlf dump.wlf -do "log -howmany -rec /* ; run -all" 
-# Start time: 02:16:37 on Dec 17,2024
-# ** Warning: License feature 'msimpevsimvlog' will expire in 3 days.
-# Loading __work.proc_hier_pbench
-# Loading __work.proc_hier
-# Loading __work.clkrst
-# Loading __work.proc
-# Loading __work.fetch
-# Loading __work.register
-# Loading __work.cla_16b
-# Loading __work.cla_4b
-# Loading __work.fullAdder_1b
-# Loading __work.xor2
-# Loading __work.nand2
-# Loading __work.not1
-# Loading __work.nor2
-# Loading __work.mem_system
-# Loading __work.dff
-# Loading __work.cache
-# Loading __work.memc
-# Loading __work.memv
-# Loading __work.four_bank_mem
-# Loading __work.final_memory
-# Loading __work.cache_controller
-# Loading __work.if_id
-# Loading __work.decode
-# Loading __work.control
-# Loading __work.regFile_bypass
-# Loading __work.regFile
-# Loading __work.id_ex
-# Loading __work.hazard_unit
-# Loading __work.execute
-# Loading __work.alu
-# Loading __work.inv_logic
-# Loading __work.cla_adder_subtractor
-# Loading __work.shifter
-# Loading __work.logic_unit
-# Loading __work.zero_flag
-# Loading __work.ex_mem
-# Loading __work.memory
-# Loading __work.mem_wb
-# Loading __work.wb
-# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'cache_controller'.  Expected 28, found 24.
-#    Time: 0 ns  Iteration: 0  Instance: /proc_hier_pbench/DUT/p0/fetch0/mem0/cache_controller File: mem_system.v Line: 142
-# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'cache_controller'.  Expected 28, found 24.
-#    Time: 0 ns  Iteration: 0  Instance: /proc_hier_pbench/DUT/p0/memory0/mem/cache_controller File: mem_system.v Line: 142
-# log -howmany -rec /* 
-# 8642
-#  run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.ptrace for output
-# ** Note: $finish    : proc_hier_pbench.v(139)
-#    Time: 1405 ns  Iteration: 0  Instance: /proc_hier_pbench
-# End time: 02:16:37 on Dec 17,2024, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 2
+# vsim -c /u/s/w/swamit/courses/cs552/fall2024/handouts/testprograms/public/inst_tests/add_0.asm -lib __work -voptargs="+acc" -wlf dump.wlf -do "log -howmany -rec /* ; run -all" 
+# Start time: 05:07:10 on Dec 17,2024
+# ** Error (suppressible): (vsim-19) Failed to access library '/u/s/w/swamit/courses/cs552/fall2024/handouts/testprograms/public/inst_tests/add_0' at "/u/s/w/swamit/courses/cs552/fall2024/handouts/testprograms/public/inst_tests/add_0".
+# No such file or directory. (errno = ENOENT)
+# Error loading design
+# End time: 05:07:10 on Dec 17,2024, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
